@@ -76,7 +76,7 @@
                    android:textColor="#555555" />
 
                <com.google.android.material.textfield.TextInputLayout
-                   android:id="@+id/loginFieldTil"
+                   android:id="@+id/loginField"
                    android:layout_width="match_parent"
                    android:layout_height="70dp"
                    android:layout_margin="20dp"
@@ -95,7 +95,7 @@
                </com.google.android.material.textfield.TextInputLayout>
 
                <com.google.android.material.textfield.TextInputLayout
-                   android:id="@+id/passwordFieldTil"
+                   android:id="@+id/passwordField"
                    android:layout_width="match_parent"
                    android:layout_height="70dp"
                    android:layout_marginLeft="20dp"
@@ -106,7 +106,6 @@
                    app:errorEnabled="true">
 
                   <com.google.android.material.textfield.TextInputEditText
-                      android:id="@+id/passwordField"
                       android:layout_width="match_parent"
                       android:layout_height="40dp"
                       android:background="@color/gray2"

@@ -1,5 +1,6 @@
 package com.example.tp2_rimaoui;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,20 +11,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Map;
 
+import myrequestt.Myrequest;
 
 
 public class NewAccount_Fragment extends Fragment {
 
-    private ProgressBar progress;
-    private Button nextButton ;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private String mParam1;
     private String mParam2;
+    private RequestQueue queue ;
+    private Myrequest request ;
 
     public NewAccount_Fragment() {
         // Required empty public constructor
@@ -60,19 +67,79 @@ public class NewAccount_Fragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_account, container, false);
         ProgressBar progressbar = view.findViewById(R.id.loading);
+        TextInputLayout login_field = view.findViewById(R.id.loginField);
+        TextInputLayout pass_field = view.findViewById(R.id.passwordField);
         Button nextButton = view.findViewById(R.id.nextButton);
+
+        progressbar.setVisibility(View.INVISIBLE);
+        //Le fait d'utiliser un singleton permet de ne pas réinstancier à chaque fois la requête queue, il va y en avoir une pour toute l'application
+
+
+        queue = VolleySingleton.getInstance(getContext()).getRequestQueue();
+        request = new Myrequest(getContext(), queue);
+
+
+
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String pseudo = login_field.getEditText().getText().toString().trim();
+                String password = pass_field.getEditText().getText().toString().trim();
+                Toast.makeText(getContext(),"queue :" +queue, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"request :" +request, Toast.LENGTH_SHORT).show();
+                if (pseudo.length() > 0 && password.length() > 0) {
+                    request.register(pseudo, password, new Myrequest.RegisterCallback() {
+
+                        @Override
+                        public void onSucces(String message) {
+                            progressbar.setVisibility(View.GONE);
+                            NewAccount_OTP_Send_Fragment fragmentB = new NewAccount_OTP_Send_Fragment();
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.replace(R.id.fragment_container, fragmentB);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+
+
+                        }
+
+                        @Override
+                        public void inputErrors(Map<String, String> errors) {
+                            progressbar.setVisibility(View.GONE);
+                            if (errors.get("pseudo") != null) {
+                                login_field.setError(errors.get("pseudo"));
+                            } else {
+                                login_field.setErrorEnabled(false);
+                            }
+                            if (errors.get("password") != null) {
+                                pass_field.setError(errors.get("password"));
+                            } else {
+                                pass_field.setErrorEnabled(false);
+                            }
+                        }
+
+                        @Override
+                        public void onError(String message) {
+                            progressbar.setVisibility(View.GONE);
+                            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(getContext(), "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+
+                /*
                 NewAccount_OTP_Send_Fragment fragmentB = new NewAccount_OTP_Send_Fragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragmentB);
                 transaction.addToBackStack(null);
                 transaction.commit();
-            }
+                 */
         });
+                return view ;
+        }
 
-        progressbar.setVisibility(View.INVISIBLE);
-        return view ;
-    }
+
+
 }
