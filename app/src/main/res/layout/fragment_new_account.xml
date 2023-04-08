@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/orange_gradient_background"
+    tools:context=".NewAccount_Fragment">
+
+   <androidx.core.widget.NestedScrollView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+
+
+         <ImageView
+             android:id="@+id/imageView3"
+             android:layout_width="247dp"
+             android:layout_height="74dp"
+             android:layout_marginTop="16dp"
+             android:src="@drawable/logo3"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toTopOf="parent" />
+
+
+
+         <TextView
+             android:id="@+id/textView4"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginStart="24dp"
+             android:layout_marginTop="24dp"
+             android:layout_marginEnd="24dp"
+             android:fontFamily="@font/cambria"
+             android:text="CREATE YOUR ACCOUNT"
+             android:gravity="center"
+             android:textColor="@color/brown"
+             android:textSize="40sp"
+             android:textStyle="bold"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+         <androidx.cardview.widget.CardView
+             android:id="@+id/cardView"
+             android:layout_width="match_parent"
+             android:layout_height="450dp"
+             android:layout_marginTop="24dp"
+             app:cardCornerRadius="30dp"
+             app:cardElevation="05dp"
+             app:cardUseCompatPadding="true"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/textView4">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_margin="20dp"
+                   android:layout_marginTop="20dp"
+                   android:fontFamily="@font/comfortaa_regular"
+                   android:gravity="center"
+                   android:text="This application offers a secure end-to-end encrypted communications whithin private servers."
+                   android:textColor="#555555" />
+
+               <com.google.android.material.textfield.TextInputLayout
+                   android:id="@+id/loginFieldTil"
+                   android:layout_width="match_parent"
+                   android:layout_height="70dp"
+                   android:layout_margin="20dp"
+                   android:background="@color/white"
+                   app:errorEnabled="true"
+                   tools:hint="   Username">
+
+                  <com.google.android.material.textfield.TextInputEditText
+                      android:id="@+id/usernameField"
+                      android:layout_width="match_parent"
+                      android:layout_height="40dp"
+                      android:background="@color/gray2"
+                      android:inputType="textEmailAddress"
+                      android:maxLines="1" />
+
+               </com.google.android.material.textfield.TextInputLayout>
+
+               <com.google.android.material.textfield.TextInputLayout
+                   android:id="@+id/passwordFieldTil"
+                   android:layout_width="match_parent"
+                   android:layout_height="70dp"
+                   android:layout_marginLeft="20dp"
+                   android:layout_marginRight="20dp"
+                   android:background="@color/white"
+                   android:hint="   Password"
+                   app:endIconMode="password_toggle"
+                   app:errorEnabled="true">
+
+                  <com.google.android.material.textfield.TextInputEditText
+                      android:id="@+id/passwordField"
+                      android:layout_width="match_parent"
+                      android:layout_height="40dp"
+                      android:background="@color/gray2"
+                      android:imeOptions="actionDone"
+                      android:inputType="textPassword"
+                      android:maxLines="1"
+                      android:paddingEnd="48dp"
+                      tools:ignore="RtlSymmetry" />
+
+               </com.google.android.material.textfield.TextInputLayout>
+
+
+               <FrameLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_margin="22dp">
+
+                  <TextView
+                      android:id="@+id/forgetPasswordButton"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="start"
+                      android:layout_marginTop="10dp"
+                      android:minHeight="52dp"
+                      android:text="Already have an account"
+                      android:textAllCaps="false"
+                      android:textColor="#255355"
+                      android:textStyle="bold" />
+
+                  <Button
+                      android:id="@+id/nextButton"
+                      android:layout_width="140dp"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="end"
+                      android:background="@drawable/round_button"
+                      android:backgroundTint="@color/brown"
+                      android:minHeight="52dp"
+                      android:text="Next"
+                      android:textAllCaps="false"
+                      android:textColor="@color/white"
+                      android:textStyle="bold"
+                      tools:enabled="false"
+                      tools:ignore="RelativeOverlap" />
+
+                  <ProgressBar
+                      android:id="@+id/loading"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="center" />
+
+
+               </FrameLayout>
+
+
+            </LinearLayout>
+
+         </androidx.cardview.widget.CardView>
+
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+   </androidx.core.widget.NestedScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

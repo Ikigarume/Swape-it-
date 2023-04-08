@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">TP2_RIMAOUI</string>
+    <string name="bonjour_tout_le_monde">Bonjour tout le monde</string>
+    <string name="login">Login</string>
+    <string name="mot_de_passe">Mot de passe</string>
+    <string name="connecter">Connecter</string>
+    <string name="nouveau_compte">Nouveau compte</string>
+    <string name="on">ON</string>
+    <string name="app_title">Find your pet</string>
+    <string name="login_to_findyourpet">Login to FindYourPet</string>
+    <string name="login_in">Login in</string>
+    <string name="app_description">Need a bestfriend for life ? Join our community of pet lovers.</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot password ?</string>
+    <string name="new_account">New account</string>
+    <string name="sing_up_to_findyourpet">Sing up to FindYourPet</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="find_your_pet">Find your pet</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
