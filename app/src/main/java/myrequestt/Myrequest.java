@@ -1,6 +1,7 @@
 package myrequestt;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -63,11 +64,15 @@ public class Myrequest {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.d("APP","ERROR :"+error);
+                /*
                 if(error instanceof NetworkError){
                     callback.onError("Impossible de se connecter");
                 } else if(error instanceof VolleyError){
                     callback.onError("Une erreur s'est produite");
                 }
+
+                 */
 
 
             }

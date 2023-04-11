@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "410832897199",
+    "project_id": "swapeit",
+    "storage_bucket": "swapeit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:410832897199:android:342ee3926ca8a75367805a",
+        "android_client_info": {
+          "package_name": "com.example.tp2_rimaoui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "410832897199-9d8clfmdejn21o0ubno6jcu4h9e92639.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoadYASJlIl7xbYzYldft0RmK4S5PFMfA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "410832897199-9d8clfmdejn21o0ubno6jcu4h9e92639.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

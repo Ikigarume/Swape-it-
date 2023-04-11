@@ -85,8 +85,7 @@ public class NewAccount_Fragment extends Fragment {
             public void onClick(View view) {
                 String pseudo = login_field.getEditText().getText().toString().trim();
                 String password = pass_field.getEditText().getText().toString().trim();
-                Toast.makeText(getContext(),"queue :" +queue, Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(),"request :" +request, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"pseudo :" +pseudo+ "pass :"+password, Toast.LENGTH_SHORT).show();
                 if (pseudo.length() > 0 && password.length() > 0) {
                     request.register(pseudo, password, new Myrequest.RegisterCallback() {
 
