@@ -66,7 +66,8 @@
                     android:fontFamily="@font/amiri"
                     android:textColor="@color/dark_gray"
                     android:textSize="28sp"
-                    android:text="Registration" />
+                    android:textStyle="bold"
+                    android:text="Verification" />
 
 
                 <TextView
@@ -189,7 +190,7 @@
                             android:layout_marginTop="30dp">
 
                             <Button
-                                android:id="@+id/button_get_otp"
+                                android:id="@+id/button_verify_otp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:backgroundTint="@color/light_brown"

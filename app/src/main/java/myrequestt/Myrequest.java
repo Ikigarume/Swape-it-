@@ -2,6 +2,7 @@ package myrequestt;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -29,7 +30,7 @@ public class Myrequest {
 
     public void register(String pseudo, String password, RegisterCallback callback ) {
         //URL pour aller chercher le script PHP
-        String url = "http://10.1.4.232/swapeit/register.php" ;
+        String url = "http://192.168.17.8/swapeit/register.php" ;
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -65,14 +66,14 @@ public class Myrequest {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("APP","ERROR :"+error);
-                /*
+
                 if(error instanceof NetworkError){
                     callback.onError("Impossible de se connecter");
                 } else if(error instanceof VolleyError){
                     callback.onError("Une erreur s'est produite");
                 }
 
-                 */
+
 
 
             }
@@ -98,4 +99,70 @@ public class Myrequest {
         void inputErrors(Map<String,String> errors);
         void onError(String message);
     }
+
+
+    public void connection(String pseudo, String password, LoginCallback callback){
+
+            String url = "http://192.168.17.8/swapeit/login.php" ;
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject json = new JSONObject(response);
+                    Boolean error = json.getBoolean("error");
+
+                    if(!error){
+                        String pseudo = json.getString("pseudo");
+                        //Si on a une classe USER FAIRE
+                        //user user= new user(id, pseudo...) ;
+                        callback.onSuccess(pseudo);
+
+                    } else {
+                        callback.onError(json.getString("message"));
+
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context,"error"+e,Toast.LENGTH_SHORT);
+                    callback.onError("JSONException");
+                    e.printStackTrace();
+
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("VolleyError");
+                }
+
+
+            }
+        }) {
+            //C'est dans cette méthode qu'on envoie les paramètres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<java.lang.String, java.lang.String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("pseudo", pseudo); // correspond à $_POST('pseudo')
+                map.put("password",password);
+                return map;
+            }
+        } ;
+
+        queue.add(request) ;
+
+    }
+
+    public interface LoginCallback{
+        //Si on avait une classe user on aurat fait void onSuccess(User user)
+        void onSuccess(String pseudo);
+        void onError(String message);
+    }
+
+
+
+
 }

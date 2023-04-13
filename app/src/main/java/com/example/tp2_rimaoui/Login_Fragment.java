@@ -1,5 +1,6 @@
 package com.example.tp2_rimaoui;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
+
+import com.android.volley.RequestQueue;
+import com.google.android.material.textfield.TextInputLayout;
+
+import myrequestt.Myrequest;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +31,9 @@ public class Login_Fragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private RequestQueue queue ;
+    private Myrequest request ;
+
 
     public Login_Fragment() {
         // Required empty public constructor
@@ -59,6 +70,49 @@ public class Login_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        TextInputLayout login_field = view.findViewById(R.id.loginFieldTil);
+        TextInputLayout pass_field = view.findViewById(R.id.passwordFieldTil);
+        Button loginButton = view.findViewById(R.id.loginButton);
+
+        queue = VolleySingleton.getInstance(getContext()).getRequestQueue();
+        request = new Myrequest(getContext(), queue);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String pseudo = login_field.getEditText().getText().toString().trim();
+                String password = pass_field.getEditText().getText().toString().trim();
+                if(pseudo.length()>0 && password.length()>0) {
+                    //  handler.postDelayed(new Runnable(){
+                    //   @Override
+                    //   public void run() {
+                    request.connection(pseudo, password, new Myrequest.LoginCallback() {
+                        @Override
+                        public void onSuccess(String pseudo) {
+                            Intent intent = new Intent(getContext(), Home_page.class);
+                            intent.putExtra("pseudo",pseudo);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onError(String message) {
+                            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
+                //},1000);
+                //}
+                else {
+                    Toast.makeText(getContext(), "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+
+
+        return view ;
     }
 }
