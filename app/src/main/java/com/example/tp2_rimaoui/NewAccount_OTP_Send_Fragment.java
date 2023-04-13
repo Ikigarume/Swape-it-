@@ -1,15 +1,28 @@
 package com.example.tp2_rimaoui;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthOptions;
+import com.google.firebase.auth.PhoneAuthProvider;
+
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,6 +35,11 @@ public class NewAccount_OTP_Send_Fragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private FirebaseAuth auth ;
+    private String storedVerificationId ;
+    private PhoneAuthProvider.ForceResendingToken resendToken ;
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks ;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -64,18 +82,75 @@ public class NewAccount_OTP_Send_Fragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_account_otp_send, container, false);
         Button getCode = view.findViewById(R.id.button_get_otp);
+        auth=FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        EditText mobileNumber = view.findViewById(R.id.mobile_number);
+
+
         getCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String number = mobileNumber.getText().toString().trim();
+
+                if (!number.isEmpty()) {
+                    number = "+212" + number;
+                    PhoneAuthOptions options = PhoneAuthOptions.newBuilder(auth)
+                            .setPhoneNumber(number) // Numéro de téléphone à vérifier
+                            .setTimeout(60L, TimeUnit.SECONDS) // Délai d'attente et unité
+                            .setActivity(getActivity()) // Activité (pour la liaison de rappel)
+                            .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks
+                            .build();
+                    PhoneAuthProvider.verifyPhoneNumber(options);
+
+                } else {
+                    Toast.makeText(getContext(), "Enter mobile number", Toast.LENGTH_SHORT).show();
+                }
+                
+            }
+        });
+
+        callbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            @Override
+            public void onVerificationCompleted(PhoneAuthCredential credential) {
+                // Créer un objet Intent pour l'activité de destination
+                Intent intent = new Intent(getActivity(), Home_page.class);
+                startActivity(intent);
+                getActivity().finish();
+
+            }
+
+            @Override
+            public void onVerificationFailed(FirebaseException e) {
+                Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
+                Log.d("TAG","onCodeSent:" + verificationId);
+                storedVerificationId = verificationId;
+                resendToken = token;
                 NewAccount_OTP_Receive_Fragment fragmentB = new NewAccount_OTP_Receive_Fragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("storedVerificationId",storedVerificationId); //ajouter des données dans le bundle
+
+                fragmentB.setArguments(bundle); //ajouter le bundle à l'objet fragment
+
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragmentB);
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
-        });
+        };
+
+
+
+        
+        
         return view ;
 
 
     }
+
+
 }

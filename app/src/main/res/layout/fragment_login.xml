@@ -92,7 +92,9 @@
                     android:layout_height="70dp"
                     android:layout_margin="20dp"
                     app:errorEnabled="true"
-                    tools:hint="   Username">
+                    app:hintAnimationEnabled="true"
+                    app:hintTextAppearance="@style/CustomHintTextAppearance"
+                    android:hint="   Username">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/usernameField"
@@ -100,6 +102,7 @@
                         android:layout_height="55dp"
                         android:background="@drawable/round_button_gray"
                         android:inputType="textEmailAddress"
+                        android:paddingLeft="15dp"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -112,6 +115,8 @@
                     android:layout_marginLeft="20dp"
                     android:hint="   Password"
                     app:endIconMode="password_toggle"
+                    app:hintAnimationEnabled="true"
+                    app:hintTextAppearance="@style/CustomHintTextAppearance"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -123,6 +128,7 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:paddingEnd="48dp"
+                        android:paddingLeft="15dp"
                         tools:ignore="RtlSymmetry" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -154,7 +160,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:background="@drawable/round_button"
-                        android:backgroundTint="@color/brown"
+                        android:backgroundTint="@color/GreenButton"
                         android:minHeight="52dp"
                         android:text="Login"
                         android:textAllCaps="false"

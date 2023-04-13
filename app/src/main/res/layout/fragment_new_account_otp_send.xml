@@ -66,6 +66,7 @@
                 android:fontFamily="@font/amiri"
                 android:textColor="@color/dark_gray"
                 android:textSize="28sp"
+                android:textStyle="bold"
                 android:text="Registration" />
 
 
@@ -121,7 +122,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/inputMobile"
+                    android:id="@+id/mobile_number"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:hint="123456789"

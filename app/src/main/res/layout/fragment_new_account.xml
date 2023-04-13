@@ -82,7 +82,10 @@
                    android:layout_margin="20dp"
                    android:background="@color/white"
                    app:errorEnabled="true"
-                   tools:hint="   Username">
+                   app:hintEnabled="true"
+                   app:hintAnimationEnabled="true"
+                   app:hintTextAppearance="@style/CustomHintTextAppearance"
+                   android:hint="Username">
 
                   <com.google.android.material.textfield.TextInputEditText
                       android:id="@+id/usernameField"
@@ -90,9 +93,11 @@
                       android:layout_height="40dp"
                       android:background="@color/gray2"
                       android:inputType="textEmailAddress"
+                      android:paddingLeft="15dp"
                       android:maxLines="1" />
 
                </com.google.android.material.textfield.TextInputLayout>
+
 
                <com.google.android.material.textfield.TextInputLayout
                    android:id="@+id/passwordField"
@@ -101,7 +106,9 @@
                    android:layout_marginLeft="20dp"
                    android:layout_marginRight="20dp"
                    android:background="@color/white"
-                   android:hint="   Password"
+                   android:hint="Password"
+                   app:hintAnimationEnabled="true"
+                   app:hintTextAppearance="@style/CustomHintTextAppearance"
                    app:endIconMode="password_toggle"
                    app:errorEnabled="true">
 
@@ -113,6 +120,7 @@
                       android:inputType="textPassword"
                       android:maxLines="1"
                       android:paddingEnd="48dp"
+                      android:paddingLeft="15dp"
                       tools:ignore="RtlSymmetry" />
 
                </com.google.android.material.textfield.TextInputLayout>
@@ -141,7 +149,7 @@
                       android:layout_height="wrap_content"
                       android:layout_gravity="end"
                       android:background="@drawable/round_button"
-                      android:backgroundTint="@color/brown"
+                      android:backgroundTint="@color/GreenButton"
                       android:minHeight="52dp"
                       android:text="Next"
                       android:textAllCaps="false"
