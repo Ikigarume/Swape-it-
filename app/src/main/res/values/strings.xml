@@ -17,6 +17,8 @@
     <string name="sing_up_to_findyourpet">Sing up to FindYourPet</string>
     <string name="sign_up">Sign Up</string>
     <string name="find_your_pet">Find your pet</string>
+    <string name="welc">Welcome pseudo !</string>
+    <string name="rechercher">Rechercher</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

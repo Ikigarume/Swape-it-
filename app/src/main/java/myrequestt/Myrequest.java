@@ -29,7 +29,7 @@ public class Myrequest {
 
     public void register(String pseudo, String password, RegisterCallback callback ) {
         //URL pour aller chercher le script PHP
-        String url = "http://192.168.1.27/swapeit/register.php" ;
+        String url = "http://10.1.4.232/swapeit/register.php" ;
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
