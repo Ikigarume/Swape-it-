@@ -65,8 +65,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         Pet Animal = (com.example.database_animals.Pet) Animalerie.get(position);
-        holder.name.setText(Animal.getName());
-        holder.label.setText(Animal.getLabel());
+        //holder.name.setText(Animal.getName());
+        //holder.label.setText(Animal.getLabel());
         holder.img.setImageResource(Animal.getImg());
 
     }
@@ -81,8 +81,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     public class MyViewHolder extends RecyclerView.ViewHolder  {
 
-        private final TextView label;
-        private final TextView name;
+        //private final TextView label;
+        //private final TextView name;
         private final ImageView img;
 
         //  private Pair<String, String> currentPair;
@@ -92,8 +92,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         public MyViewHolder(final View itemView) {
             super(itemView);
-            label = itemView.findViewById(R.id.label);
-            name = itemView.findViewById(R.id.name);
+           // label = itemView.findViewById(R.id.label);
+           // name = itemView.findViewById(R.id.name);
             img=  itemView.findViewById(R.id.img);
 
             //         itemView.setOnClickListener(this);

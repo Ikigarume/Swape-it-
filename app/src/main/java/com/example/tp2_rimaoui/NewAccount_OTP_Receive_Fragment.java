@@ -75,7 +75,7 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_new_account__otp__receive_, container, false);
+        View view = inflater.inflate(R.layout.fragment_new_account_otp_receive, container, false);
         EditText inputCode1 = view.findViewById(R.id.inputCode1);
         EditText inputCode2 = view.findViewById(R.id.inputCode2);
         EditText inputCode3 = view.findViewById(R.id.inputCode3);
