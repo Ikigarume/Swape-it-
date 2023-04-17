@@ -82,6 +82,8 @@ public class NewAccount_OTP_Send_Fragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_account_otp_send, container, false);
         Button getCode = view.findViewById(R.id.button_get_otp);
+        ProgressBar loading = view.findViewById(R.id.loading);
+        loading.setVisibility(View.INVISIBLE);
         auth=FirebaseAuth.getInstance();
         FirebaseUser currentUser = auth.getCurrentUser();
         EditText mobileNumber = view.findViewById(R.id.mobile_number);
@@ -90,9 +92,12 @@ public class NewAccount_OTP_Send_Fragment extends Fragment {
         getCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 String number = mobileNumber.getText().toString().trim();
 
                 if (!number.isEmpty()) {
+                    getCode.setVisibility(View.INVISIBLE);
+                    loading.setVisibility(View.VISIBLE);
                     number = "+212" + number;
                     PhoneAuthOptions options = PhoneAuthOptions.newBuilder(auth)
                             .setPhoneNumber(number) // Numéro de téléphone à vérifier
@@ -121,6 +126,8 @@ public class NewAccount_OTP_Send_Fragment extends Fragment {
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
+                getCode.setVisibility(View.VISIBLE);
+                loading.setVisibility(View.INVISIBLE);
                 Toast.makeText(getContext(), "Failed", Toast.LENGTH_LONG).show();
             }
 
@@ -140,6 +147,7 @@ public class NewAccount_OTP_Send_Fragment extends Fragment {
                 transaction.replace(R.id.fragment_container, fragmentB);
                 transaction.addToBackStack(null);
                 transaction.commit();
+
             }
         };
 

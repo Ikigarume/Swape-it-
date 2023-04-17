@@ -30,7 +30,7 @@ public class Myrequest {
 
     public void register(String pseudo, String password, RegisterCallback callback ) {
         //URL pour aller chercher le script PHP
-        String url = "http://192.168.17.8/swapeit/register.php" ;
+        String url = "http://10.1.31.146/swapeit/register.php" ;
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -103,7 +103,7 @@ public class Myrequest {
 
     public void connection(String pseudo, String password, LoginCallback callback){
 
-            String url = "http://192.168.17.8/swapeit/login.php" ;
+            String url = "http://10.1.31.146/swapeit/login.php" ;
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

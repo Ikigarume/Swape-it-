@@ -7,10 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".Home_page">
 
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -37,6 +37,7 @@
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/profile_image"
                 app:layout_constraintTop_toBottomOf="@+id/imageView" />
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
@@ -53,20 +54,13 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/state_connect"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="309dp"
-                tools:layout_editor_absoluteY="168dp" />
-
-            <LinearLayout
-                android:layout_marginTop="30dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/textView4"
-                tools:ignore="MissingConstraints">
+                app:layout_constraintTop_toBottomOf="@id/profile_image"
+                app:layout_constraintEnd_toEndOf="@id/profile_image"
+                android:layout_marginTop="-20dp"
+                 />
 
                 <LinearLayout
+                    android:id="@+id/linearseach"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:background="@drawable/curved_border"
@@ -74,6 +68,7 @@
                     android:layout_margin="30dp"
                     android:gravity="center"
                     android:padding="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4"
                     android:layout_marginEnd="60dp"
                     android:orientation="horizontal">
 
@@ -85,38 +80,58 @@
 
                     <EditText
                         android:id="@+id/recherche"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:hint="Rechercher"
-                        android:layout_marginLeft="20dp"
+                        android:gravity="center"
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         android:background="@null"
                         android:textStyle="bold" />
-
-
                 </LinearLayout>
 
                 <TextView
                     android:id="@+id/Annonces"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/linearseach"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="30dp"
                     android:textStyle="bold"
                     android:textSize="30dp"
-                    android:textColor="@color/brown"
+                    android:textColor="@color/black"
                     android:layout_gravity="start"
                     android:layout_marginLeft="29dp"
                     android:fontFamily="@font/cambria"
                     android:text="Annonces"/>
 
+                <Button
+                    android:id="@+id/newPost"
+                    android:layout_width="120dp"
+                    android:layout_height="50dp"
+                    android:text="New Post"
+                    android:fontFamily="@font/comfortaa_regular"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:backgroundTint="@color/peche"
+                    app:layout_constraintTop_toTopOf="@id/Annonces"
+                    app:layout_constraintBottom_toBottomOf="@id/Annonces"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/Annonces"
+                    />
+
+
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_marginTop="20dp"
                     android:id="@+id/list"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/Annonces"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
 
-            </LinearLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

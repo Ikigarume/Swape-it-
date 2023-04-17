@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -76,6 +77,7 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_account_otp_receive, container, false);
+        ProgressBar loading = view.findViewById(R.id.loading);
         EditText inputCode1 = view.findViewById(R.id.inputCode1);
         EditText inputCode2 = view.findViewById(R.id.inputCode2);
         EditText inputCode3 = view.findViewById(R.id.inputCode3);
@@ -83,6 +85,7 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
         EditText inputCode5 = view.findViewById(R.id.inputCode5);
         EditText inputCode6 = view.findViewById(R.id.inputCode6);
         Button verify_otp = view.findViewById(R.id.button_verify_otp);
+        loading.setVisibility(View.INVISIBLE);
 
         auth= FirebaseAuth.getInstance();
         Bundle bundle = getArguments();
@@ -180,6 +183,8 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
         verify_otp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                verify_otp.setVisibility(View.INVISIBLE);
+                loading.setVisibility(View.VISIBLE);
                 if (inputCode1.getText().toString().trim().isEmpty()
                         || inputCode2.getText().toString().trim().isEmpty()
                         || inputCode3.getText().toString().trim().isEmpty()
@@ -189,6 +194,8 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
                 ) {
                     Toast.makeText(requireContext(), "Please enter valid code", Toast.LENGTH_SHORT)
                             .show();
+                    verify_otp.setVisibility(View.VISIBLE);
+                    loading.setVisibility(View.INVISIBLE);
                 }
 
                 String code = inputCode1.getText().toString() +
@@ -205,7 +212,7 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
                 PhoneAuthCredential credential = PhoneAuthProvider.getCredential(
                         storedVerificationId, code);
 
-                signInWithPhoneAuthCredential(credential);
+                signInWithPhoneAuthCredential(credential,verify_otp,loading);
 
             }
         });
@@ -214,7 +221,7 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
         return view ;
     }
 
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential, Button verify_otp, ProgressBar loading) {
             auth.signInWithCredential(credential)
                     .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
                         @Override
@@ -229,6 +236,8 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
 
                                 if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                     Toast.makeText(requireContext(), "Invalid OTP", Toast.LENGTH_SHORT).show();
+                                    verify_otp.setVisibility(View.VISIBLE);
+                                    loading.setVisibility(View.INVISIBLE);
                                 }
                             }
                         }

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -34,6 +35,7 @@ public class Login_Fragment extends Fragment {
     private RequestQueue queue ;
     private Myrequest request ;
 
+    private ProgressBar loading ;
 
     public Login_Fragment() {
         // Required empty public constructor
@@ -73,11 +75,12 @@ public class Login_Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         TextInputLayout login_field = view.findViewById(R.id.loginFieldTil);
         TextInputLayout pass_field = view.findViewById(R.id.passwordFieldTil);
+        loading = view.findViewById(R.id.loading);
         Button loginButton = view.findViewById(R.id.loginButton);
 
         queue = VolleySingleton.getInstance(getContext()).getRequestQueue();
         request = new Myrequest(getContext(), queue);
-
+        loading.setVisibility(View.INVISIBLE);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,6 +90,7 @@ public class Login_Fragment extends Fragment {
                     //  handler.postDelayed(new Runnable(){
                     //   @Override
                     //   public void run() {
+                    loading.setVisibility(View.VISIBLE);
                     request.connection(pseudo, password, new Myrequest.LoginCallback() {
                         @Override
                         public void onSuccess(String pseudo) {

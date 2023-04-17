@@ -23,6 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/subcontainer"
                 android:layout_width="match_parent"
@@ -75,12 +77,20 @@
                         android:layout_marginLeft="05dp"
                         android:layout_marginTop="8dp"
                         android:src="@drawable/chien" />
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:src="@drawable/state_connect"
+                        android:layout_marginTop="50dp"
+                        android:layout_marginLeft="-18dp"
+                        />
+
 
                     <TextView
                         android:id="@+id/login_user"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="07dp"
+                        android:layout_marginLeft="10dp"
                         android:fontFamily="@font/comfortaa_regular"
                         android:gravity="center"
                         android:text="Login"
