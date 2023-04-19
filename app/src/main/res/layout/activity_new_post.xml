@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="20dp"
+    android:background="#fefcfb"
     tools:context=".NewPost_Activity">
 
     <androidx.core.widget.NestedScrollView
@@ -13,13 +15,14 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
     <androidx.cardview.widget.CardView
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:elevation="4dp"
-        app:cardBackgroundColor="@color/white"
+        app:cardBackgroundColor="#F6ECEA"
         app:cardCornerRadius="00dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,6 +33,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="10dp">
         <ImageView
+            android:id="@+id/btnGoBack"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:src="@drawable/go_back"
@@ -48,7 +52,7 @@
             android:layout_marginTop="10dp"
             android:textStyle="bold"
             android:textSize="30dp"
-            android:textColor="@color/black"
+            android:textColor="#41466B"
             android:layout_gravity="start"
             android:layout_marginLeft="29dp"
             android:fontFamily="@font/cambria"
@@ -68,8 +72,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:textStyle="italic"
         android:padding="20dp"
+        android:textColor="#41466B"
         android:fontFamily="@font/comfortaa_regular"
-        android:textSize="18dp"
+        android:textSize="14dp"
         android:gravity="center"/>
 
     <androidx.cardview.widget.CardView
@@ -95,9 +100,9 @@
 
             <ImageView
                 android:id="@+id/btnCamera"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/add_picture"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/new_picture"
                 app:layout_constraintBottom_toBottomOf="@id/imgGallery"
                 app:layout_constraintEnd_toEndOf="@id/imgGallery"
                 android:layout_margin="10dp"/>
@@ -119,24 +124,34 @@
         android:layout_marginTop="24dp"
         android:fontFamily="@font/cambria"
         android:text="Offer Title"
-        android:textColor="@color/brown"
+        android:textColor="#3C4166"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/subtitle" />
 
-    <EditText
-        android:id="@+id/edittext1"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/edittext1"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="05dp"
+                app:layout_constraintTop_toBottomOf="@id/titre1"
+                app:layout_constraintStart_toStartOf="parent" >
+
+
+            <EditText
+                android:id="@+id/TitrePost"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="45dp"
         android:hint="Title"
-        app:layout_constraintTop_toBottomOf="@id/titre1"
-        app:layout_constraintStart_toStartOf="parent"
+        android:padding="10dp"
         android:background="@drawable/curved_border"
-        android:layout_margin="10dp"
         android:backgroundTint="@color/white"
-        android:paddingLeft="20dp"
         />
+
+            </androidx.cardview.widget.CardView>
+
 
             <TextView
                 android:id="@+id/titre_photo"
@@ -146,7 +161,7 @@
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/cambria"
                 android:text="Offer Picture"
-                android:textColor="@color/brown"
+                android:textColor="#3C4166"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -160,26 +175,35 @@
         android:layout_marginTop="24dp"
         android:fontFamily="@font/cambria"
         android:text="Offer Description"
-        android:textColor="@color/brown"
+        android:textColor="#3C4166"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/photo_annonce" />
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/edittext2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="05dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/titre2">
 
-    <EditText
-        android:id="@+id/edittext2"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/curved_border"
-        android:backgroundTint="@color/white"
-        android:hint="Description"
-        android:inputType="textMultiLine"
-        android:paddingLeft="20dp"
-        android:singleLine="false"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titre2"/>
+                <EditText
+                    android:id="@+id/DescPost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/curved_border"
+                    android:backgroundTint="@color/white"
+                    android:hint="Description"
+                    android:inputType="textMultiLine"
+                    android:minHeight="40dp"
+                    android:padding="15dp"
+                    android:paddingLeft="20dp"
+                    android:singleLine="false" />
+
+            </androidx.cardview.widget.CardView>
 
 
     <TextView
@@ -190,41 +214,120 @@
         android:layout_marginTop="24dp"
         android:fontFamily="@font/cambria"
         android:text="Offer Categories"
-        android:textColor="@color/brown"
+        android:textColor="#3C4166"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edittext2" />
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/spinnercont"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="30dp"
+                app:layout_constraintTop_toBottomOf="@id/titre3"
+                app:layout_constraintStart_toStartOf="parent" >
 
-    <Spinner
-        android:id="@+id/spinner1"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        app:layout_constraintTop_toBottomOf="@id/titre3"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="20dp"
-        android:background="@drawable/curved_border"
-        android:backgroundTint="@color/white"
-        />
+
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/curved_border"
+                android:backgroundTint="@color/white"
+                android:spinnerMode="dropdown"/>
+            </androidx.cardview.widget.CardView>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/categories"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_margin="10dp"
-                app:layout_constraintTop_toBottomOf="@id/spinner1" />
+                android:layout_margin="15dp"
+                android:padding="05dp"
+                app:layout_constraintTop_toBottomOf="@id/spinnercont" />
+
+            <TextView
+                android:id="@+id/titre4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/cambria"
+                android:text="Offer Type"
+                android:textColor="#3C4166"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/categories" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/type_annonce"
+                android:layout_width="match_parent"
+                android:layout_margin="7dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/titre4" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="03dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/donationText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textColor="@color/darker_brown"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:padding="10dp"
+                        android:layout_margin="05dp"
+                        android:fontFamily="@font/comfortaa_regular"
+                        android:text="Donation" />
+
+                    <TextView
+                        android:id="@+id/echangeText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_margin="05dp"
+                        android:textColor="@color/darker_brown"
+                        android:textSize="15sp"
+                        android:padding="10dp"
+                        android:background="@color/light_peche"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/comfortaa_regular"
+                        android:gravity="center"
+                        android:text="Exchange" />
+
+                </LinearLayout>
+
+
+
+
+
+
+            </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/button_upload"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_margin="30dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
         android:text="Upload"
+        android:background="@drawable/round_button_gray"
+        android:backgroundTint="@color/dark_blue"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/categories" />
+        app:layout_constraintTop_toBottomOf="@id/type_annonce" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -40,6 +40,7 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private FirebaseAuth auth ;
+    private SessionManager  sessionManager ;
 
     public NewAccount_OTP_Receive_Fragment() {
         // Required empty public constructor
@@ -227,6 +228,7 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+
                                 Intent intent = new Intent(getActivity(), Home_page.class);
                                 startActivity(intent);
                                 getActivity().finish();

@@ -6,7 +6,7 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="gray1">#D3D3D3</color>
     <color name="gray2">#E0E0E0</color>
     <color name="button_gray">#CDCACA</color>
@@ -22,6 +22,9 @@
     <color name="light_brown"> #905741</color>
     <color name="dark_brown">#492c21</color>
     <color name="GreenButton">#3F9411</color>
+    <color name="dark_blue">#34305c</color>
+    <color name="darker_brown">#3f3227</color>
+    <color name="light_peche">#F6ECEA</color>
 
 
 </resources>

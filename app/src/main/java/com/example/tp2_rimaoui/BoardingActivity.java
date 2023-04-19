@@ -15,6 +15,7 @@ public class BoardingActivity extends AppCompatActivity {
     private String option ;
     private Button button_create ;
     private TextView button_login ;
+    private SessionManager  sessionManager ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,14 @@ public class BoardingActivity extends AppCompatActivity {
 
         button_create = findViewById(R.id.button_create);
         button_login = findViewById(R.id.button_login);
+
+        sessionManager = new SessionManager(this);
+
+        if(sessionManager.isLogged()){
+            Intent intent = new Intent(this, Home_page.class);
+            startActivity(intent);
+            finish();
+        }
 
         button_create.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="05dp"
+    >
 
     <androidx.cardview.widget.CardView
         android:id="@+id/container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:elevation="4dp"
-        app:cardBackgroundColor="@color/black"
-        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@color/light_peche"
+        app:cardCornerRadius="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -23,7 +23,7 @@
         android:layout_margin="10dp"
         android:text="Categorie"
         android:textSize="15dp"
-        android:textColor="@color/white"
+        android:textColor="@color/dark_blue"
         android:fontFamily="@font/comfortaa_regular"/>
 
     </androidx.cardview.widget.CardView>

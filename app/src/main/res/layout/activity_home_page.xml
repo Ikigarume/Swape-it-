@@ -15,11 +15,11 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="247dp"
-                android:layout_height="74dp"
-                android:layout_marginTop="16dp"
+                android:layout_width="195dp"
+                android:layout_height="43dp"
                 android:src="@drawable/logo2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -27,22 +27,23 @@
 
             <TextView
                 android:id="@+id/textView4"
-                android:layout_width="170dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="05dp"
                 android:fontFamily="@font/comfortaa_regular"
                 android:gravity="center"
-                android:text="@string/welc"
-                android:textSize="30sp"
+                android:text="Welcome pseudo"
+                android:textSize="25sp"
                 android:textStyle="bold"
+                android:textColor="#34305c"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/profile_image"
+                app:layout_constraintBottom_toBottomOf="@id/profile_image"
                 app:layout_constraintEnd_toStartOf="@id/profile_image"
                 app:layout_constraintTop_toBottomOf="@+id/imageView" />
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/chien"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +63,7 @@
                 <LinearLayout
                     android:id="@+id/linearseach"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
+                    android:layout_height="45dp"
                     android:background="@drawable/curved_border"
                     android:layout_marginStart="60dp"
                     android:layout_margin="30dp"
@@ -74,17 +75,17 @@
 
                     <ImageView
                         android:layout_width="wrap_content"
-                        android:layout_height="40dp"
+                        android:layout_height="match_parent"
                         android:src="@drawable/search"
                         android:layout_gravity="right" />
 
                     <EditText
                         android:id="@+id/recherche"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:hint="Rechercher"
+                        android:layout_height="wrap_content"
+                        android:hint="Search"
                         android:gravity="center"
-                        android:textColor="@color/black"
+                        android:textColor="#34305c"
                         android:textSize="18sp"
                         android:background="@null"
                         android:textStyle="bold" />
@@ -98,12 +99,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginTop="30dp"
                     android:textStyle="bold"
-                    android:textSize="30dp"
-                    android:textColor="@color/black"
+                    android:textSize="33dp"
+                    android:textColor="#34305c"
                     android:layout_gravity="start"
                     android:layout_marginLeft="29dp"
                     android:fontFamily="@font/cambria"
-                    android:text="Annonces"/>
+                    android:text="Offers"/>
 
                 <Button
                     android:id="@+id/newPost"
@@ -112,12 +113,13 @@
                     android:text="New Post"
                     android:fontFamily="@font/comfortaa_regular"
                     android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:backgroundTint="@color/peche"
+                    android:textColor="@color/dark_blue"
+                    android:background="@drawable/round_button_gray"
+                    android:backgroundTint="@color/light_peche"
                     app:layout_constraintTop_toTopOf="@id/Annonces"
                     app:layout_constraintBottom_toBottomOf="@id/Annonces"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/Annonces"
+                    android:layout_margin="20dp"
                     />
 
 

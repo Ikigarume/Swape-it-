@@ -1,5 +1,6 @@
 package com.example.tp2_rimaoui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -36,6 +37,17 @@ public class Login_Fragment extends Fragment {
     private Myrequest request ;
 
     private ProgressBar loading ;
+    private SessionManager  sessionManager ;
+
+    private AccountActivity mActivity;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof AccountActivity) {
+            mActivity = (AccountActivity) context;
+        }
+    }
 
     public Login_Fragment() {
         // Required empty public constructor
@@ -77,9 +89,13 @@ public class Login_Fragment extends Fragment {
         TextInputLayout pass_field = view.findViewById(R.id.passwordFieldTil);
         loading = view.findViewById(R.id.loading);
         Button loginButton = view.findViewById(R.id.loginButton);
+        sessionManager = new SessionManager(getContext()) ;
+
+        ServeurIP app = (ServeurIP) mActivity.getApplicationContext();
+        String IPV4_serv = app.getIPV4_serveur();
 
         queue = VolleySingleton.getInstance(getContext()).getRequestQueue();
-        request = new Myrequest(getContext(), queue);
+        request = new Myrequest(getContext(), queue, IPV4_serv);
         loading.setVisibility(View.INVISIBLE);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +109,8 @@ public class Login_Fragment extends Fragment {
                     loading.setVisibility(View.VISIBLE);
                     request.connection(pseudo, password, new Myrequest.LoginCallback() {
                         @Override
-                        public void onSuccess(String pseudo) {
+                        public void onSuccess(String id, String pseudo) {
+                            sessionManager.insertUser(id,pseudo);
                             Intent intent = new Intent(getContext(), Home_page.class);
                             intent.putExtra("pseudo",pseudo);
                             startActivity(intent);

@@ -1,5 +1,6 @@
 package com.example.tp2_rimaoui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -31,6 +32,16 @@ public class NewAccount_Fragment extends Fragment {
     private String mParam2;
     private RequestQueue queue ;
     private Myrequest request ;
+
+    private AccountActivity mActivity;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof AccountActivity) {
+            mActivity = (AccountActivity) context;
+        }
+    }
 
     public NewAccount_Fragment() {
         // Required empty public constructor
@@ -74,9 +85,11 @@ public class NewAccount_Fragment extends Fragment {
         progressbar.setVisibility(View.INVISIBLE);
         //Le fait d'utiliser un singleton permet de ne pas réinstancier à chaque fois la requête queue, il va y en avoir une pour toute l'application
 
+        ServeurIP app = (ServeurIP) mActivity.getApplicationContext();
+        String IPV4_serv = app.getIPV4_serveur();
 
         queue = VolleySingleton.getInstance(getContext()).getRequestQueue();
-        request = new Myrequest(getContext(), queue);
+        request = new Myrequest(getContext(), queue, IPV4_serv);
 
 
 

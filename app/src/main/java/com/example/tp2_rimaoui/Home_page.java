@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.RecyclerView.AnnonceAdapter;
 import com.example.database_animals.Annonce;
@@ -19,6 +21,8 @@ public class Home_page extends AppCompatActivity {
 
     private AnnonceAdapter annonceAdapter ;
     private Button new_post ;
+    private SessionManager  sessionManager ;
+    private ImageView profile_image ;
 
 
 
@@ -37,10 +41,26 @@ public class Home_page extends AppCompatActivity {
         setContentView(R.layout.activity_home_page);
 
         RecyclerView rv = findViewById(R.id.list);
+        sessionManager = new SessionManager(this);
         annonceAdapter = new AnnonceAdapter(this, Annonces);
         rv.setLayoutManager(new LinearLayoutManager(this));
+        profile_image = findViewById(R.id.profile_image);
         rv.setAdapter(annonceAdapter);
         new_post = findViewById(R.id.newPost);
+
+
+        if(sessionManager.isLogged()) {
+            String id_user = sessionManager.getId();
+        }
+
+        profile_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Intent intent = new Intent(this, profile_page.class);
+                //startActivity(intent);
+            }
+        });
+
 
         new_post.setOnClickListener(new View.OnClickListener() {
             @Override
