@@ -25,7 +25,8 @@
              android:src="@drawable/logo3"
              app:layout_constraintEnd_toEndOf="parent"
              app:layout_constraintStart_toStartOf="parent"
-             app:layout_constraintTop_toTopOf="parent" />
+             app:layout_constraintTop_toTopOf="parent"/>
+
 
 
 
@@ -93,7 +94,8 @@
                       android:background="@color/gray2"
                       android:inputType="textEmailAddress"
                       android:paddingLeft="15dp"
-                      android:maxLines="1" />
+                      android:maxLines="1"
+                      />
 
                </com.google.android.material.textfield.TextInputLayout>
 
@@ -109,7 +111,8 @@
                    app:hintAnimationEnabled="true"
                    app:hintTextAppearance="@style/CustomHintTextAppearance"
                    app:endIconMode="password_toggle"
-                   app:errorEnabled="true">
+                   app:errorEnabled="true"
+                   >
 
                   <com.google.android.material.textfield.TextInputEditText
                       android:layout_width="match_parent"
@@ -140,7 +143,8 @@
                       android:text="Already have an account"
                       android:textAllCaps="false"
                       android:textColor="#255355"
-                      android:textStyle="bold" />
+                      android:textStyle="bold"
+                      />
 
                   <Button
                       android:id="@+id/nextButton"
@@ -155,13 +159,15 @@
                       android:textColor="@color/white"
                       android:textStyle="bold"
                       tools:enabled="false"
-                      tools:ignore="RelativeOverlap" />
+                      tools:ignore="RelativeOverlap"
+                      />
 
                   <ProgressBar
                       android:id="@+id/loading"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:layout_gravity="center" />
+                      android:layout_gravity="center"
+                      />
 
 
                </FrameLayout>
