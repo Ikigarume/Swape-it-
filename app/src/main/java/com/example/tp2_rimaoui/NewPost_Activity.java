@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,6 +70,7 @@ public class NewPost_Activity extends AppCompatActivity {
     private EditText TitrePost ;
     private EditText DescPost ;
     private int TypePost = 13 ;
+    private ProgressBar loading ;
 
 
 
@@ -88,6 +90,7 @@ public class NewPost_Activity extends AppCompatActivity {
 
 
         btnCamera = findViewById(R.id.btnCamera);
+        loading = findViewById(R.id.loading);
         btnGoBack = findViewById(R.id.btnGoBack);
         ImgGallery = findViewById(R.id.imgGallery);
         spinner = findViewById(R.id.spinner1);
@@ -96,6 +99,8 @@ public class NewPost_Activity extends AppCompatActivity {
         UploadPost = findViewById(R.id.button_upload);
         TitrePost = findViewById(R.id.TitrePost);
         DescPost = findViewById(R.id.DescPost);
+
+        loading.setVisibility(View.INVISIBLE);
 
         btnGoBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,54 +222,14 @@ public class NewPost_Activity extends AppCompatActivity {
             }
         });
 
-        /*
-        upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-                if(bitmap!= null){
-                    bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArray);
-                    byte[] bytes = byteArray.toByteArray();
-                    final String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
-                    RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                    String url ="http://192.168.179.8/swapeit/upload.php";
 
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    if(response.equals("success")){
-                                        Toast.makeText(getApplicationContext(), "Image uploaded", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getApplicationContext(), error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }){
-                        protected Map<String, String> getParams(){
-                            Map<String, String> paramV = new HashMap<>();
-                            paramV.put("image", base64Image);
-                            return paramV;
-                        }
-                    };
-                    queue.add(stringRequest);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Select tge image first", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-
-         */
 
 
         UploadPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
 
                 ArrayList<Integer> categories = new ArrayList<>();
                 for ( Categorie categorie : Categories_choisies ) {
@@ -285,7 +250,9 @@ public class NewPost_Activity extends AppCompatActivity {
                 String desc = DescPost.getText().toString().trim();
 
                 if (titre.length() > 0 && desc.length() > 0 && base64Image.length() > 0) {
-                    request.newPost(sessionManager.getId(),titre,base64Image,desc, categories, new Myrequest.newPostCallback() {
+                    loading.setVisibility(View.VISIBLE);
+                    UploadPost.setVisibility(View.INVISIBLE);
+                    request.newPost(sessionManager.getPseudo(),titre,base64Image,desc, categories, new Myrequest.newPostCallback() {
 
                         @Override
                         public void onSucces(String message) {
@@ -297,6 +264,8 @@ public class NewPost_Activity extends AppCompatActivity {
                         @Override
                         public void inputErrors(Map<String, String> errors) {
                             //progressbar.setVisibility(View.GONE);
+                            loading.setVisibility(View.INVISIBLE);
+                            UploadPost.setVisibility(View.VISIBLE);
 
                         }
 
@@ -304,6 +273,8 @@ public class NewPost_Activity extends AppCompatActivity {
                         public void onError(String message) {
                             //progressbar.setVisibility(View.GONE);
                             Toast.makeText(NewPost_Activity.this, message, Toast.LENGTH_SHORT).show();
+                            loading.setVisibility(View.INVISIBLE);
+                            UploadPost.setVisibility(View.VISIBLE);
 
                         }
                     });

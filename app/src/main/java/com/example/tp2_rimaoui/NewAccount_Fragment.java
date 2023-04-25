@@ -98,13 +98,18 @@ public class NewAccount_Fragment extends Fragment {
             public void onClick(View view) {
                 String pseudo = login_field.getEditText().getText().toString().trim();
                 String password = pass_field.getEditText().getText().toString().trim();
+
                 if (pseudo.length() > 0 && password.length() > 0) {
-                    request.register(pseudo, password, new Myrequest.RegisterCallback() {
+                    request.verify_registration(pseudo, password, new Myrequest.VerifyRegistrationCallback() {
 
                         @Override
                         public void onSucces(String message) {
                             progressbar.setVisibility(View.GONE);
                             NewAccount_OTP_Send_Fragment fragmentB = new NewAccount_OTP_Send_Fragment();
+                            Bundle args = new Bundle();
+                            args.putString("pseudo", pseudo);
+                            args.putString("password", password);
+                            fragmentB.setArguments(args);
                             FragmentTransaction transaction = getFragmentManager().beginTransaction();
                             transaction.replace(R.id.fragment_container, fragmentB);
                             transaction.addToBackStack(null);
@@ -134,6 +139,7 @@ public class NewAccount_Fragment extends Fragment {
                             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
                         }
                     });
+
                 } else {
                     Toast.makeText(getContext(), "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
                 }

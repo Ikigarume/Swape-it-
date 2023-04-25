@@ -83,11 +83,13 @@
                         android:id="@+id/recherche"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Search"
+                        android:background="@null"
                         android:gravity="center"
+                        android:hint="Search"
+                        android:singleLine="true"
+                        android:imeOptions="actionSearch"
                         android:textColor="#34305c"
                         android:textSize="18sp"
-                        android:background="@null"
                         android:textStyle="bold" />
                 </LinearLayout>
 

@@ -1,5 +1,7 @@
 package myrequestt;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
@@ -11,8 +13,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.tp2_rimaoui.Categorie;
+import com.example.tp2_rimaoui.NewPost_Activity;
 import com.example.tp2_rimaoui.ServeurIP;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -104,6 +110,79 @@ public class Myrequest {
         void onError(String message);
     }
 
+    public void verify_registration(String pseudo, String password, VerifyRegistrationCallback callback ) {
+        //URL pour aller chercher le script PHP
+        String url = "http://"+IPV4_serv+"/swapeit/verify_registration.php" ;
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Map<String, String> errors = new HashMap<>();
+
+                try {
+                    JSONObject json = new JSONObject(response);
+                    Boolean error = json.getBoolean("error");
+
+                    if(!error){
+                        //l'inscription s'est bien déroulée
+                        callback.onSucces("Informations conformes.");
+                    }
+                    else{
+                        JSONObject messages = json.getJSONObject("message");
+                        if(messages.has("pseudo")){
+                            errors.put("pseudo", messages.getString("pseudo"));
+                        }
+                        if(messages.has("password")){
+                            errors.put("password", messages.getString("password"));
+                        }
+                        callback.inputErrors(errors);
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("APP","ERROR :"+error);
+
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("Une erreur s'est produite");
+                }
+
+
+
+
+            }
+        }) {
+            //C'est dans cette méthode qu'on envoie les paramètres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<java.lang.String, java.lang.String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("pseudo", pseudo); // correspond à $_POST('pseudo')
+                map.put("password",password);
+
+
+                return map;
+            }
+        } ;
+
+        queue.add(request) ;
+    }
+
+
+    public interface VerifyRegistrationCallback{
+        void onSucces(String message);
+        void inputErrors(Map<String,String> errors);
+
+        void onError(String message);
+    }
+
 
     public void connection(String pseudo, String password, LoginCallback callback){
 
@@ -168,7 +247,7 @@ public class Myrequest {
     }
 
 
-    public void newPost(String id_utilisateur, String titre, String image, String description, ArrayList<Integer> categories, newPostCallback callback ) {
+    public void newPost(String pseudo_utilisateur, String titre, String image, String description, ArrayList<Integer> categories, newPostCallback callback ) {
         //URL pour aller chercher le script PHP
         String url = "http://"+IPV4_serv+"/swapeit/newPost.php" ;
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -212,7 +291,7 @@ public class Myrequest {
             @Override
             protected Map<java.lang.String, java.lang.String> getParams() throws AuthFailureError {
                 Map<String,String> map = new HashMap<>();
-                map.put("id_utilisateur", id_utilisateur);
+                map.put("pseudo_utilisateur", pseudo_utilisateur);
                 map.put("titre",titre);
                 map.put("description", description);
                 map.put("image", image);
@@ -220,6 +299,7 @@ public class Myrequest {
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < categories.size(); i++) {
                     sb.append(categories.get(i));
+                    sb.append(" ");
                 }
                 String categoriesStr = sb.toString();
                 map.put("categories", categoriesStr);
@@ -238,6 +318,15 @@ public class Myrequest {
         void inputErrors(Map<String,String> errors);
         void onError(String message);
     }
+
+
+
+
+
+
+
+
+
 
 
 

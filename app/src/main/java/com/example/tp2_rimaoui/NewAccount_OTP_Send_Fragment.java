@@ -89,6 +89,12 @@ public class NewAccount_OTP_Send_Fragment extends Fragment {
         EditText mobileNumber = view.findViewById(R.id.mobile_number);
 
 
+        Bundle args = getArguments();
+        String pseudo = args.getString("pseudo");
+        String password = args.getString("password");
+
+
+
         getCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,11 +142,14 @@ public class NewAccount_OTP_Send_Fragment extends Fragment {
                 Log.d("TAG","onCodeSent:" + verificationId);
                 storedVerificationId = verificationId;
                 resendToken = token;
-                NewAccount_OTP_Receive_Fragment fragmentB = new NewAccount_OTP_Receive_Fragment();
 
+                Toast.makeText(getContext(), "LVL1 : pseudo : "+pseudo+ " et mdp : "+password, Toast.LENGTH_SHORT).show();
+
+                NewAccount_OTP_Receive_Fragment fragmentB = new NewAccount_OTP_Receive_Fragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("storedVerificationId",storedVerificationId); //ajouter des données dans le bundle
-
+                bundle.putString("pseudo", pseudo);
+                bundle.putString("password", password);
                 fragmentB.setArguments(bundle); //ajouter le bundle à l'objet fragment
 
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();

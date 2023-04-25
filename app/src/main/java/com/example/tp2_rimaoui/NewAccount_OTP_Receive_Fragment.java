@@ -1,5 +1,6 @@
 package com.example.tp2_rimaoui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -15,7 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
+import myrequestt.Myrequest;
+import com.android.volley.RequestQueue;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -23,6 +25,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,6 +45,18 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
     private String mParam2;
     private FirebaseAuth auth ;
     private SessionManager  sessionManager ;
+    private RequestQueue queue ;
+    private Myrequest request ;
+    private AccountActivity mActivity;
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof AccountActivity) {
+            mActivity = (AccountActivity) context;
+        }
+    }
 
     public NewAccount_OTP_Receive_Fragment() {
         // Required empty public constructor
@@ -87,6 +103,19 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
         EditText inputCode6 = view.findViewById(R.id.inputCode6);
         Button verify_otp = view.findViewById(R.id.button_verify_otp);
         loading.setVisibility(View.INVISIBLE);
+
+        sessionManager = new SessionManager(getContext()) ;
+
+        ServeurIP app = (ServeurIP) mActivity.getApplicationContext() ;
+        String IPV4_serv = app.getIPV4_serveur();
+
+        queue = VolleySingleton.getInstance(getContext()).getRequestQueue();
+        request = new Myrequest(getContext(), queue, IPV4_serv);
+
+        Bundle args = getArguments();
+        String pseudo = args.getString("pseudo");
+        String password = args.getString("password");
+
 
         auth= FirebaseAuth.getInstance();
         Bundle bundle = getArguments();
@@ -213,7 +242,9 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
                 PhoneAuthCredential credential = PhoneAuthProvider.getCredential(
                         storedVerificationId, code);
 
-                signInWithPhoneAuthCredential(credential,verify_otp,loading);
+
+                signInWithPhoneAuthCredential(pseudo, password, credential,verify_otp,loading);
+
 
             }
         });
@@ -222,16 +253,36 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
         return view ;
     }
 
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential, Button verify_otp, ProgressBar loading) {
+    private void signInWithPhoneAuthCredential(String pseudo, String password, PhoneAuthCredential credential, Button verify_otp, ProgressBar loading) {
             auth.signInWithCredential(credential)
                     .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                request.register(pseudo, password, new Myrequest.RegisterCallback() {
 
-                                Intent intent = new Intent(getActivity(), Home_page.class);
-                                startActivity(intent);
-                                getActivity().finish();
+                                    @Override
+                                    public void onSucces(String message) {
+                                        loading.setVisibility(View.GONE);
+                                        sessionManager.insertUser(pseudo);
+                                        Intent intent = new Intent(getActivity(), Home_page.class);
+                                        startActivity(intent);
+                                        getActivity().finish();
+                                    }
+
+                                    @Override
+                                    public void inputErrors(Map<String, String> errors) {
+                                        loading.setVisibility(View.GONE);
+                                        Toast.makeText(getContext(), "Input Errors", Toast.LENGTH_SHORT).show();
+
+                                    }
+
+                                    @Override
+                                    public void onError(String message) {
+                                        loading.setVisibility(View.GONE);
+                                        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
 
 
                             } else {

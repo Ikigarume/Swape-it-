@@ -39,6 +39,12 @@ public class SessionManager {
         editor.commit() ;
     }
 
+    public void insertUser(String pseudo) {
+        editor.putBoolean(IS_LOGGED, true) ;
+        editor.putString(PSEUDO, pseudo);
+        editor.commit() ;
+    }
+
     public void logout(){
         editor.clear().commit();
     }

@@ -3,16 +3,21 @@ package com.example.RecyclerView;
 import android.app.AlertDialog;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.*;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.database_animals.Annonce;
 import com.example.tp2_rimaoui.R;
+import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -55,6 +60,20 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.MyViewHo
         holder.login_user.setText(annonce.getLogin_utilisateur());
         holder.titre_annonce.setText(annonce.getTitre());
         holder.desc_annonce.setText(annonce.getDescription());
+        holder.ratingBar.setRating(annonce.getNote());
+        holder.nbr_vote.setText(annonce.getNbr_vote()+" votes");
+        // Charger l'image avec Picasso
+        Picasso.get()
+                .load(annonce.getPhoto_de_profil())
+                .placeholder(R.drawable.placeholder) // Image de placeholder
+                .error(R.drawable.errorimage) // Image d'erreur
+                .into(holder.photo_user);
+        Picasso.get()
+                .load(annonce.getChemin_image())
+                .placeholder(R.drawable.placeholder) // Image de placeholder
+                .error(R.drawable.errorimage) // Image d'erreur
+                .into(holder.photo_annonce);
+
 
     }
 
@@ -63,6 +82,10 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.MyViewHo
         private final TextView login_user;
         private final TextView titre_annonce;
         private final TextView desc_annonce;
+        private final ImageView photo_user ;
+        private final ImageView photo_annonce ;
+        private final RatingBar ratingBar ;
+        private final TextView nbr_vote ;
 
         //  private Pair<String, String> currentPair;
         private Annonce currentAnnonce;
@@ -73,6 +96,10 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.MyViewHo
             login_user = itemView.findViewById(R.id.login_user);
             titre_annonce = itemView.findViewById(R.id.titre_annonce);
             desc_annonce=  itemView.findViewById(R.id.description_annonce);
+            photo_annonce = itemView.findViewById(R.id.img);
+            photo_user = itemView.findViewById(R.id.profile_image);
+            ratingBar = itemView.findViewById(R.id.ratingBar);
+            nbr_vote = itemView.findViewById(R.id.nbr_vote);
 
             //         itemView.setOnClickListener(this);
             //  item = (TextView) itemView.findViewById(R.id.row_item);
