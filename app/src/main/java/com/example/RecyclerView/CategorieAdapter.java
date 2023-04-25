@@ -1,18 +1,14 @@
 package com.example.RecyclerView;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.database_animals.Annonce;
-import com.example.database_animals.Pet;
 import com.example.tp2_rimaoui.Categorie;
 import com.example.tp2_rimaoui.R;
 

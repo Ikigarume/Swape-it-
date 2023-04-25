@@ -5,7 +5,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/orange_gradient_background"
-    tools:context=".NewAccount_OTP_Send_Fragment">
+    tools:context=".NewAccount_OTP_Send_Fragment"
+    android:accessibilityTraversalBefore="@+id/imageView"
+    android:accessibilityTraversalAfter="@+id/button_get_otp">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -21,9 +23,12 @@
         android:layout_height="74dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/logo2"
+        android:contentDescription="the application's logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:accessibilityTraversalBefore="@+id/textView3"
+        android:accessibilityTraversalAfter="@+id/button_get_otp"/>
 
         <TextView
             android:id="@+id/textView3"
@@ -37,7 +42,10 @@
             android:fontFamily="@font/cambria"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            android:contentDescription="a follow up to creating an account "
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            android:accessibilityTraversalBefore="@+id/OTPsend_text"
+            android:accessibilityTraversalAfter="@+id/imageView"/>
 
         <LinearLayout
             android:layout_marginTop="20dp"
@@ -80,7 +88,10 @@
                 android:fontFamily="@font/comfortaa_regular"
                 android:gravity="center"
                 android:text="A one time code will be sent to your mobile number"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:contentDescription="A one time code will be sent to your mobile number"
+                android:accessibilityTraversalBefore="@+id/mobile_number"
+                android:accessibilityTraversalAfter="@+id/textView3"/>
 
             <androidx.cardview.widget.CardView
                 android:layout_height="250dp"
@@ -96,6 +107,7 @@
                     android:orientation="vertical">
 
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/gray_border"
@@ -131,7 +143,10 @@
                     android:inputType="number"
                     android:textColor="@color/black"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:contentDescription="insert your phone number "
+                    android:accessibilityTraversalBefore="@+id/button_get_otp"
+                    android:accessibilityTraversalAfter="@+id/textView3"/>
 
 
 
@@ -153,7 +168,9 @@
                         android:layout_marginLeft="30dp"
                         android:layout_marginRight="30dp"
                         tools:enabled="false"
-                        tools:ignore="RelativeOverlap" />
+                        tools:ignore="RelativeOverlap"
+                        android:contentDescription="click this button to get the code sent to your number "
+                        android:accessibilityTraversalAfter="@+id/mobile_number"/>
 
                     <ProgressBar
                         android:id="@+id/loading"

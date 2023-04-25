@@ -5,5 +5,7 @@
         <item name="android:textColor">@color/GreenButton</item>
         <item name="android:translationY">-4dp</item>
     </style>
-
+    <style name="BoldTextStyle">
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

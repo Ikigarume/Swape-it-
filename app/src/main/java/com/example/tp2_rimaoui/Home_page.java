@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.RecyclerView.AnnonceAdapter;
 import com.example.database_animals.Annonce;
@@ -33,8 +32,6 @@ public class Home_page extends AppCompatActivity {
              ));
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +53,7 @@ public class Home_page extends AppCompatActivity {
         profile_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(this, profile_page.class);
+                Intent intent = new Intent(getApplicationContext(), MyProfileActivity.class);
                 //startActivity(intent);
             }
         });
@@ -69,10 +66,6 @@ public class Home_page extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-
-
 
 
 

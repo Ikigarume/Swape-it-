@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_profile_navigation">
+
+
+    <fragment
+        android:id="@+id/navigation_Disscussions"
+        android:name="com.example.tp2_rimaoui.ui.dashboard.DashboardFragment"
+        android:label="offers"
+        tools:layout="@layout/fragment_discussions"
+        />
+
+    <fragment
+        android:id="@+id/navigation_Offers"
+        android:name="com.example.tp2_rimaoui.ui.notifications.NotificationsFragment"
+        android:label="offers"
+        tools:layout="@layout/fragment_offers"
+        />
+
+
+</navigation>
