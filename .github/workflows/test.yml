@@ -1,0 +1,29 @@
+name: TestWorkflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print date Job1
+        run: date
+  job2:
+    runs-on: windows-latest
+    steps:
+      - name: Print date
+        run: Get-Date
+  job3:
+    runs-on: macOS-latest
+    steps:
+      - name: Print date Job3
+        run: date
+  job4:
+    runs-on: windows-latest
+    needs: [job1, job2, job3]
+    steps:
+      - name: Job4
+        run: echo "Job 4 running"
