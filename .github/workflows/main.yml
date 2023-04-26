@@ -14,7 +14,7 @@ jobs:
   job2:
     runs-on: windows-latest
     steps:
-      - name: Print date Job2
+      - name: Print date
         run: Get-Date
   job3:
     runs-on: macOS-latest
