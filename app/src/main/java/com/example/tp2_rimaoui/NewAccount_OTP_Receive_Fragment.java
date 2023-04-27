@@ -115,6 +115,7 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
         Bundle args = getArguments();
         String pseudo = args.getString("pseudo");
         String password = args.getString("password");
+        String number = args.getString("number");
 
 
         auth= FirebaseAuth.getInstance();
@@ -243,7 +244,7 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
                         storedVerificationId, code);
 
 
-                signInWithPhoneAuthCredential(pseudo, password, credential,verify_otp,loading);
+                signInWithPhoneAuthCredential(pseudo, password, number,credential,verify_otp,loading);
 
 
             }
@@ -253,13 +254,13 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
         return view ;
     }
 
-    private void signInWithPhoneAuthCredential(String pseudo, String password, PhoneAuthCredential credential, Button verify_otp, ProgressBar loading) {
+    private void signInWithPhoneAuthCredential(String pseudo, String password,String number, PhoneAuthCredential credential, Button verify_otp, ProgressBar loading) {
             auth.signInWithCredential(credential)
                     .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                request.register(pseudo, password, new Myrequest.RegisterCallback() {
+                                request.register(pseudo, password,number, new Myrequest.RegisterCallback() {
 
                                     @Override
                                     public void onSucces(String message) {

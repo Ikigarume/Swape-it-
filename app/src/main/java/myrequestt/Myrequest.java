@@ -38,7 +38,7 @@ public class Myrequest {
         this.IPV4_serv = IPV4_serv;
     }
 
-    public void register(String pseudo, String password, RegisterCallback callback ) {
+    public void register(String pseudo, String password,String number,  RegisterCallback callback ) {
         //URL pour aller chercher le script PHP
         String url = "http://"+IPV4_serv+"/swapeit/register.php" ;
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -94,6 +94,7 @@ public class Myrequest {
                 Map<String,String> map = new HashMap<>();
                 map.put("pseudo", pseudo); // correspond à $_POST('pseudo')
                 map.put("password",password);
+                map.put("number",number);
 
 
                 return map;

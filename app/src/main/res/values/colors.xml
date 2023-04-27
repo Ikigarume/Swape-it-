@@ -9,6 +9,7 @@
     <color name="white">#FFFFFF</color>
     <color name="gray1">#D3D3D3</color>
     <color name="gray2">#E0E0E0</color>
+    <color name="gray3">#F0F0F0</color>
     <color name="button_gray">#CDCACA</color>
     <color name="dark_gray">#282828</color>
     <color name="pink_button">#ef7c9c</color>
@@ -25,6 +26,7 @@
     <color name="dark_blue">#34305c</color>
     <color name="darker_brown">#3f3227</color>
     <color name="light_peche">#F6ECEA</color>
+
 
 
 </resources>

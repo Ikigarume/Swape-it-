@@ -1,17 +1,16 @@
 package com.example.RecyclerView;
 
-import android.app.AlertDialog;
-
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.view.LayoutInflater;
-import android.view.*;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.database_animals.Annonce;
@@ -19,17 +18,15 @@ import com.example.tp2_rimaoui.DetailedOfferActivity;
 import com.example.tp2_rimaoui.R;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 
-public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.MyViewHolder> {
+public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.MyViewHolder> {
 
     private Context context ;
     private ArrayList<Annonce> Annonces ;
 
-    public AnnonceAdapter(Context context, ArrayList<Annonce> Annonces){
+    public OfferAdapter(Context context, ArrayList<Annonce> Annonces){
         this.context = context ;
         this.Annonces = Annonces ;
     }
@@ -48,7 +45,7 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.MyViewHo
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //pour créer un laouyt depuis un XML
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.item, parent, false);
+        View view = inflater.inflate(R.layout.item_offers, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -59,49 +56,39 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         Annonce annonce= (Annonce) Annonces.get(position);
-        holder.login_user.setText(annonce.getLogin_utilisateur());
         holder.titre_annonce.setText(annonce.getTitre());
         holder.desc_annonce.setText(annonce.getDescription());
-        holder.ratingBar.setRating(annonce.getNote());
-        holder.nbr_vote.setText(annonce.getNbr_vote()+" votes");
-        // Charger l'image avec Picasso
-        Picasso.get()
-                .load(annonce.getPhoto_de_profil())
-                .placeholder(R.drawable.placeholder) // Image de placeholder
-                .error(R.drawable.errorimage) // Image d'erreur
-                .into(holder.photo_user);
         Picasso.get()
                 .load(annonce.getChemin_image())
-                .placeholder(R.drawable.placeholder) // Image de placeholder
-                .error(R.drawable.errorimage) // Image d'erreur
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.errorimage)
                 .into(holder.photo_annonce);
+        if(annonce.getEtat()==0){
+            holder.completed_text.setVisibility(View.INVISIBLE);
+            holder.principal_cardview.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
+        }
 
 
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder  {
 
-        private final TextView login_user;
         private final TextView titre_annonce;
         private final TextView desc_annonce;
-        private final ImageView photo_user ;
         private final ImageView photo_annonce ;
-        private final RatingBar ratingBar ;
-        private final TextView nbr_vote ;
-
-        //  private Pair<String, String> currentPair;
+        private final TextView completed_text ;
+        private final CardView principal_cardview ;
         private Annonce currentAnnonce;
 
 
         public MyViewHolder(final View itemView) {
             super(itemView);
-            login_user = itemView.findViewById(R.id.login_user);
-            titre_annonce = itemView.findViewById(R.id.titre_annonce);
+            titre_annonce = itemView.findViewById(R.id.offer_title);
             desc_annonce=  itemView.findViewById(R.id.description_annonce);
             photo_annonce = itemView.findViewById(R.id.img);
-            photo_user = itemView.findViewById(R.id.profile_image);
-            ratingBar = itemView.findViewById(R.id.ratingBar);
-            nbr_vote = itemView.findViewById(R.id.nbr_vote);
+            completed_text = itemView.findViewById(R.id.completed_text);
+            principal_cardview = itemView.findViewById(R.id.principal_cardview);
+
 
             //         itemView.setOnClickListener(this);
             //  item = (TextView) itemView.findViewById(R.id.row_item);
@@ -125,7 +112,6 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.MyViewHo
                     intent.putExtra("id_annonce", currentAnnonce.getId_annonce());
                     intent.putExtra("number", currentAnnonce.getNumber());
                     intent.putExtra("etat",currentAnnonce.getEtat());
-
 
 
 

@@ -143,13 +143,13 @@ public class NewAccount_OTP_Send_Fragment extends Fragment {
                 storedVerificationId = verificationId;
                 resendToken = token;
 
-                Toast.makeText(getContext(), "LVL1 : pseudo : "+pseudo+ " et mdp : "+password, Toast.LENGTH_SHORT).show();
 
                 NewAccount_OTP_Receive_Fragment fragmentB = new NewAccount_OTP_Receive_Fragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("storedVerificationId",storedVerificationId); //ajouter des données dans le bundle
                 bundle.putString("pseudo", pseudo);
                 bundle.putString("password", password);
+                bundle.putString("number", mobileNumber.getText().toString().trim());
                 fragmentB.setArguments(bundle); //ajouter le bundle à l'objet fragment
 
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();

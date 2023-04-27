@@ -276,8 +276,11 @@ public class Home_page extends AppCompatActivity {
                                 String rate = String.valueOf(note);
                                 float rating = Float.valueOf(rate);
                                 int nbr_vote = object.getInt("nbr_vote");
+                                String id_categories = object.getString("id_categories");
+                                int id_annonce = object.getInt("id_annonce");
+                                String number = object.getString("telephone");
 
-                                Annonce annonce = new Annonce(login, photo_de_profil, chemin_image,titre, description, rating, nbr_vote);
+                                Annonce annonce = new Annonce(id_annonce,login, photo_de_profil, chemin_image,titre, description, rating, nbr_vote,id_categories,number,0);
                                 Annonces.add(annonce);
 
                                 callback.onSucces("Informations downloaded successfully.");
