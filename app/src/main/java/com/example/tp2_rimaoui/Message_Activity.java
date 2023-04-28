@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.RecyclerView.MessageAdapter;
 import com.example.database_animals.Message;
 
 import java.util.ArrayList;
@@ -19,9 +20,11 @@ import java.util.Arrays;
 public class Message_Activity extends AppCompatActivity {
         private ImageView uploadPictureButton ;
         private ImageView takePictureButton ;
+        private int currentUserId  , otherUserId ;
 
-        /*
-        private MessageListAdapter MessageAdapter;
+        private RecyclerView rv ;
+
+        private com.example.RecyclerView.MessageAdapter myAdapter;
 
 
 
@@ -42,12 +45,17 @@ public class Message_Activity extends AppCompatActivity {
             // initializes and sets the layout for the Activity
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_messagerie);
+            Bundle bundle = getIntent().getExtras();
+            if(bundle!=null){
+                currentUserId = bundle.getInt("CurrentUser");
+                otherUserId = bundle.getInt("otherUser");
 
+            }
 
-            RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_gchat);
-            MessageAdapter = new MessageListAdapter(this, messages);
+            rv = (RecyclerView) findViewById(R.id.recycler_gchat);
+            myAdapter = new MessageAdapter(this, messages,currentUserId,otherUserId);
             rv.setLayoutManager(new LinearLayoutManager(this));
-            rv.setAdapter(MessageAdapter);
+            rv.setAdapter(myAdapter);
 
 
             takePictureButton = (ImageView) findViewById(R.id.take_picture_button);
@@ -77,7 +85,7 @@ public class Message_Activity extends AppCompatActivity {
 
         }
 
-*/
+
 
     }
 

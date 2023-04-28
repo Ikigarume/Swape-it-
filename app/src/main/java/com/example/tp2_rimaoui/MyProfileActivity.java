@@ -2,53 +2,88 @@ package com.example.tp2_rimaoui;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.tp2_rimaoui.ui.home.HomeFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 //import com.example.tp2_rimaoui.databinding.ActivityMyProfileBinding;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
 
-public class MyProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MyProfileActivity extends AppCompatActivity {
 
-    //private ActivityMyProfileBinding binding;
 
-    private BottomNavigationView bottomNavigationView;
+    public static final String USER_KEY = "user_id";
+    Bundle bundle = new Bundle() ;
+    //bundle.putInt("user_id", userId);
+    private Button buttonDiscussion , buttonOffers , buttonFavorites , buttonGoBack, buttonMore;
+    private SessionManager sessionManager ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_my_profile);
+        buttonDiscussion = findViewById(R.id.discussions_button);
+        buttonOffers = findViewById(R.id.offers_button);
+        buttonFavorites = findViewById(R.id.favorites_button);
+        buttonGoBack = findViewById(R.id.imageBack) ;
+        buttonMore = findViewById(R.id.imagemore) ; // to log out and to edit informations
 
-        //binding = ActivityMyProfileBinding.inflate(getLayoutInflater());
-        //setContentView(binding.getRoot());
+        sessionManager = new SessionManager(this);
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        bottomNavigationView.setOnItemSelectedListener((NavigationBarView.OnItemSelectedListener) this);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+        replaceFragment(new fragment_Favorites());
+        buttonDiscussion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                replaceFragment(new Fragment_Discussions());
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        //AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-        //        R.id.navigation_Discussions, R.id.navigation_Offers)
-        //        .build();
-        //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_my_profile);
-        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        //NavigationUI.setupWithNavController(binding.navView, navController);
+            }
+        });
+
+        buttonOffers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                replaceFragment(new Fragement_Offers());
+
+            }
+        });
+
+        buttonFavorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                replaceFragment(new fragment_Favorites());
+
+            }
+        });
+
+        buttonGoBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
 
     }
 
+    private void replaceFragment(Fragment fragment) {
 
+        FragmentManager fragmentManager = getSupportFragmentManager() ;
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayout,fragment);
+        fragmentTransaction.commit();
+    }
+/*
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.navigation_Discussions:
@@ -60,4 +95,7 @@ public class MyProfileActivity extends AppCompatActivity implements NavigationVi
         }
         return false;
     }
+ */
+
+    
 }

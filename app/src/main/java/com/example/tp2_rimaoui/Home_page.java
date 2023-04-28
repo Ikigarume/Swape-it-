@@ -168,8 +168,9 @@ public class Home_page extends AppCompatActivity {
         profile_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(this, profile_page.class);
-                //startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(), MyProfileActivity.class);
+                //Intent intent = new Intent(getApplicationContext(), OtherProfileActivity.class);
+                startActivity(intent);
             }
         });
 
