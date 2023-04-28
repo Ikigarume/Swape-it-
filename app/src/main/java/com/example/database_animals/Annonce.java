@@ -14,8 +14,9 @@ public class Annonce {
     private String id_categories;
     private String number ;
     private int etat ;
+    private int favorite ;
 
-    public Annonce(int id_annonce, String login, String photo_de_profil, String chemin_image, String titre, String description,float note, int nbr_vote, String id_categories,String number, int etat){
+    public Annonce(int id_annonce, String login, String photo_de_profil, String chemin_image, String titre, String description,float note, int nbr_vote, String id_categories,String number, int etat, int favorite){
         this.id_annonce = id_annonce;
         this.description = description;
         this.photo_de_profil = photo_de_profil;
@@ -27,6 +28,7 @@ public class Annonce {
         this.id_categories = id_categories;
         this.number = number ;
         this.etat = etat ;
+        this.favorite = favorite;
     }
 
     public int getId_annonce(){ return this.id_annonce ; }
@@ -48,6 +50,7 @@ public class Annonce {
     public String getId_categories(){return this.id_categories;}
     public String getNumber() {return this.number;}
     public int getEtat(){return this.etat;}
+    public int getFavorite(){return this.favorite;}
 
 
 

@@ -7,7 +7,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -50,8 +54,10 @@ public class DetailedOfferActivity extends AppCompatActivity {
     private SessionManager  sessionManager ;
     private ArrayList<Categorie> Categories ;
     private TextView Textcompleted ;
+    private ImageView Imagefavorie;
     private TextView TextpostType ;
     private CardView Cardprincipal ;
+    private ImageView Imageback ;
 
 
     @Override
@@ -75,6 +81,7 @@ public class DetailedOfferActivity extends AppCompatActivity {
         int id_annonce = intent.getIntExtra("id_annonce", 0);
         String number = intent.getStringExtra("number");
         int etat = intent.getIntExtra("etat",0);
+        int favorite = intent.getIntExtra("favorite",0);
 
 
         TextOfferTitle = findViewById(R.id.offer_title);
@@ -87,6 +94,15 @@ public class DetailedOfferActivity extends AppCompatActivity {
         Textcompleted = findViewById(R.id.completed_text);
         TextpostType = findViewById(R.id.type_post);
         Cardprincipal = findViewById(R.id.offer_details_container);
+        Imagefavorie = findViewById(R.id.icone_favorie);
+        Imageback = findViewById(R.id.imageBack);
+
+        Imageback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         TextOfferTitle.setText(titre);
         Textlogin.setText(login);
@@ -96,14 +112,44 @@ public class DetailedOfferActivity extends AppCompatActivity {
         TextnbrVote.setText("(" + nbr_vote + ")");
         ratingBar.setRating(note);
 
+        if(favorite==0){
+            Imagefavorie.setImageDrawable(ContextCompat.getDrawable(DetailedOfferActivity.this,R.drawable.favorite_gray));
+        } else {
+            Imagefavorie.setImageDrawable(ContextCompat.getDrawable(DetailedOfferActivity.this,R.drawable.favorite_gold));
+        }
+
         RecyclerView rv = (RecyclerView) findViewById(R.id.categories);
 
-        int spanCount = 3; // Nombre de colonnes dans la grille
+        int spanCount = 3;
         GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount);
         rv.setLayoutManager(layoutManager);
 
         MySpanSizeLookup spanSizeLookup = new MySpanSizeLookup();
         layoutManager.setSpanSizeLookup(spanSizeLookup);
+
+        Imagefavorie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Drawable currentDrawable = Imagefavorie.getDrawable();
+                if (currentDrawable.getConstantState().equals(getResources().getDrawable(R.drawable.favorite_gold).getConstantState())) {
+                    Imagefavorie.setImageResource(R.drawable.favorite_gray);
+                    removeFavorite(IPV4_serv, sessionManager.getPseudo(), id_annonce);
+
+                } else {
+                    Imagefavorie.setImageResource(R.drawable.favorite_gold);
+                    // On ajoute le favorie à la base de donnée
+                    addFavorite(IPV4_serv,sessionManager.getPseudo(), id_annonce);
+                }
+                // On ajoute une petite animation
+                ObjectAnimator scaleX = ObjectAnimator.ofFloat(Imagefavorie, "scaleX", 1f, 1.2f, 1f);
+                ObjectAnimator scaleY = ObjectAnimator.ofFloat(Imagefavorie, "scaleY", 1f, 1.2f, 1f);
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.setDuration(300);
+                animatorSet.playTogether(scaleX, scaleY);
+                animatorSet.start();
+
+            }
+        });
 
 
         //rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -234,6 +280,102 @@ public class DetailedOfferActivity extends AppCompatActivity {
 
         void onError(String message);
     }
+
+    private void addFavorite(String IPV4_serv, String pseudo, int id_annonce) {
+        String BASE_URL = "http://" + IPV4_serv + "/swapeit/add_favorite.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                           // Toast.makeText(DetailedOfferActivity.this, "Success", Toast.LENGTH_SHORT).show();
+
+                        } catch (Exception e) {
+                            Toast.makeText(DetailedOfferActivity.this, "Volley Error", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(Home_page.this, "Volley Error", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(Home_page.this, error.toString(),Toast.LENGTH_LONG).show();
+                Log.d("APP", "ERROR :" + error);
+
+                if (error instanceof NetworkError) {
+                    Toast.makeText(DetailedOfferActivity.this, "Impossible de se connecter", Toast.LENGTH_SHORT).show();
+                } else if (error instanceof VolleyError) {
+                    Toast.makeText(DetailedOfferActivity.this, "Une erreur s'est produite", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }) {
+            //C'est dans cette mÃ©thode qu'on envoie les paramÃ¨tres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("id_annonce", String.valueOf(id_annonce));
+                map.put("pseudo", pseudo);
+                return map;
+            }
+        };
+
+        Volley.newRequestQueue(DetailedOfferActivity.this).add(stringRequest);
+
+    }
+
+    private void removeFavorite(String IPV4_serv, String pseudo, int id_annonce) {
+        String BASE_URL = "http://" + IPV4_serv + "/swapeit/remove_favorite.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+
+
+                            Toast.makeText(DetailedOfferActivity.this, "Success", Toast.LENGTH_SHORT).show();
+
+
+                        } catch (Exception e) {
+                            Toast.makeText(DetailedOfferActivity.this, "Volley Error", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(Home_page.this, "Volley Error", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(Home_page.this, error.toString(),Toast.LENGTH_LONG).show();
+                Log.d("APP", "ERROR :" + error);
+
+                if (error instanceof NetworkError) {
+                    Toast.makeText(DetailedOfferActivity.this, "Impossible de se connecter", Toast.LENGTH_SHORT).show();
+                } else if (error instanceof VolleyError) {
+                    Toast.makeText(DetailedOfferActivity.this, "Une erreur s'est produite", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }) {
+            //C'est dans cette mÃ©thode qu'on envoie les paramÃ¨tres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("id_annonce", String.valueOf(id_annonce));
+                map.put("pseudo", pseudo);
+                return map;
+            }
+        };
+
+        Volley.newRequestQueue(DetailedOfferActivity.this).add(stringRequest);
+
+    }
+
+
 
 
 }

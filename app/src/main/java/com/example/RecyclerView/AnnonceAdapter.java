@@ -1,5 +1,6 @@
 package com.example.RecyclerView;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.database_animals.Annonce;
@@ -75,6 +77,11 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.MyViewHo
                 .placeholder(R.drawable.placeholder) // Image de placeholder
                 .error(R.drawable.errorimage) // Image d'erreur
                 .into(holder.photo_annonce);
+        if(annonce.getFavorite()==1){
+            holder.favorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.favorite_gold));
+        } else {
+            holder.favorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.favorite_gray));
+        }
 
 
     }
@@ -88,6 +95,7 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.MyViewHo
         private final ImageView photo_annonce ;
         private final RatingBar ratingBar ;
         private final TextView nbr_vote ;
+        private final ImageView favorite ;
 
         //  private Pair<String, String> currentPair;
         private Annonce currentAnnonce;
@@ -102,6 +110,7 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.MyViewHo
             photo_user = itemView.findViewById(R.id.profile_image);
             ratingBar = itemView.findViewById(R.id.ratingBar);
             nbr_vote = itemView.findViewById(R.id.nbr_vote);
+            favorite = itemView.findViewById(R.id.favorite);
 
             //         itemView.setOnClickListener(this);
             //  item = (TextView) itemView.findViewById(R.id.row_item);
@@ -125,11 +134,13 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.MyViewHo
                     intent.putExtra("id_annonce", currentAnnonce.getId_annonce());
                     intent.putExtra("number", currentAnnonce.getNumber());
                     intent.putExtra("etat",currentAnnonce.getEtat());
+                    intent.putExtra("favorite",currentAnnonce.getFavorite());
 
 
 
 
                     context.startActivity(intent);
+
 
 
 

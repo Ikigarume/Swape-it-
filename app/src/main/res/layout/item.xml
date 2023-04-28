@@ -36,21 +36,30 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/img"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/chats" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:elevation="1dp"
+                    app:cardCornerRadius="10dp">
 
-                <ImageView
-                    android:id="@+id/favorite"
-                    android:layout_width="49dp"
-                    android:layout_height="55dp"
-                    android:layout_marginEnd="5dp"
-                    android:src="@drawable/favorite_gray"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="-10dp"/>
+                    <ImageView
+                        android:id="@+id/img"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/chats" />
+
+                    <ImageView
+                        android:id="@+id/favorite"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_marginEnd="25dp"
+                        android:src="@drawable/favorite_gray"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="-10dp"/>
+
+                </RelativeLayout>
+
             </androidx.cardview.widget.CardView>
 
 
