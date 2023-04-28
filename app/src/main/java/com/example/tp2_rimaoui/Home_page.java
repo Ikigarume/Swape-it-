@@ -40,6 +40,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import myrequestt.Myrequest;
@@ -54,9 +55,10 @@ public class Home_page extends AppCompatActivity {
     private TextView welcometext ;
     private Myrequest request;
     String cheminImage ;
+    String userFavorites ;
     private ArrayList<Annonce> Annonces ;
     private EditText editSearch ;
-
+    private RecyclerView rv;
 
 
     /*
@@ -68,25 +70,41 @@ public class Home_page extends AppCompatActivity {
      */
 
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_page);
-
+    protected void onResume() {
+        super.onResume();
         ServeurIP app = (ServeurIP) getApplicationContext();
         String IPV4_serv = app.getIPV4_serveur();
 
-        queue = VolleySingleton.getInstance(this).getRequestQueue();
-        request = new Myrequest(this, queue, IPV4_serv);
-
-
-        getUserImage(IPV4_serv, new GetUserImageCallback() {
+        getUserImgFav(IPV4_serv, new GetUserImgFavCallback() {
             @Override
             public void onSucces(String message) {
                 Picasso.get().load(cheminImage).into(profile_image, new Callback() {
                     @Override
                     public void onSuccess() {
+                        String[] favoritesTab = userFavorites.split(" ");
+                        Annonces = getPostsInfo(IPV4_serv, favoritesTab, new GetPostsInfoCallback() {
+                            @Override
+                            public void onSucces(String message) {
+                                annonceAdapter = new AnnonceAdapter(getApplicationContext(), Annonces);
+                                rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                                rv.setAdapter(annonceAdapter);
+                            }
+
+                            @Override
+                            public void inputErrors(Map<String, String> errors) {
+                                Toast.makeText(Home_page.this, "inputErrors", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                            @Override
+                            public void onError(String message) {
+                                Toast.makeText(Home_page.this, message, Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+
+
                     }
 
                     @Override
@@ -105,28 +123,70 @@ public class Home_page extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home_page);
+
+        ServeurIP app = (ServeurIP) getApplicationContext();
+        String IPV4_serv = app.getIPV4_serveur();
+
+        queue = VolleySingleton.getInstance(this).getRequestQueue();
+        request = new Myrequest(this, queue, IPV4_serv);
 
 
-        RecyclerView rv = findViewById(R.id.list);
+
+
+
+        rv = findViewById(R.id.list);
         sessionManager = new SessionManager(this);
-        Annonces = getPostsInfo(IPV4_serv, new GetPostsInfoCallback() {
+        getUserImgFav(IPV4_serv, new GetUserImgFavCallback() {
             @Override
             public void onSucces(String message) {
-                annonceAdapter = new AnnonceAdapter(getApplicationContext(), Annonces);
-                rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                rv.setAdapter(annonceAdapter);
+                Picasso.get().load(cheminImage).into(profile_image, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        String[] favoritesTab = userFavorites.split(" ");
+                        Annonces = getPostsInfo(IPV4_serv, favoritesTab, new GetPostsInfoCallback() {
+                            @Override
+                            public void onSucces(String message) {
+                                annonceAdapter = new AnnonceAdapter(getApplicationContext(), Annonces);
+                                rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                                rv.setAdapter(annonceAdapter);
+                            }
+
+                            @Override
+                            public void inputErrors(Map<String, String> errors) {
+                                Toast.makeText(Home_page.this, "inputErrors", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                            @Override
+                            public void onError(String message) {
+                                Toast.makeText(Home_page.this, message, Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        // Erreur lors du chargement de l'image
+                    }
+                });
             }
 
             @Override
             public void inputErrors(Map<String, String> errors) {
-                Toast.makeText(Home_page.this, "inputErrors", Toast.LENGTH_SHORT).show();
-
             }
 
             @Override
             public void onError(String message) {
-                Toast.makeText(Home_page.this, message, Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -191,7 +251,7 @@ public class Home_page extends AppCompatActivity {
     }
 
 
-    private void getUserImage (String IPV4_serv, GetUserImageCallback callback){
+    private void getUserImgFav (String IPV4_serv, GetUserImgFavCallback callback){
         String BASE_URL = "http://"+IPV4_serv+"/swapeit/user_info.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL,
                 new Response.Listener<String>() {
@@ -203,6 +263,7 @@ public class Home_page extends AppCompatActivity {
                             JSONArray array = new JSONArray(response);
                             JSONObject object = array.getJSONObject(0);
                             cheminImage = object.getString("chemin");
+                            userFavorites = object.getString("favorites");
                             callback.onSucces("Informations downloaded successfully.");
 
                             //Toast.makeText(Home_page.this, "piste1 :"+cheminImage, Toast.LENGTH_SHORT).show();
@@ -246,14 +307,14 @@ public class Home_page extends AppCompatActivity {
 
     }
 
-    public interface GetUserImageCallback{
+    public interface GetUserImgFavCallback{
         void onSucces(String message);
         void inputErrors(Map<String,String> errors);
         void onError(String message);
     }
 
 
-    private ArrayList<Annonce> getPostsInfo (String IPV4_serv, GetPostsInfoCallback callback){
+    private ArrayList<Annonce> getPostsInfo (String IPV4_serv, String[] favoritesTab, GetPostsInfoCallback callback){
         String BASE_URL = "http://"+IPV4_serv+"/swapeit/posts_info.php";
         ArrayList<Annonce> Annonces = new ArrayList<>();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL,
@@ -280,7 +341,15 @@ public class Home_page extends AppCompatActivity {
                                 int id_annonce = object.getInt("id_annonce");
                                 String number = object.getString("telephone");
 
-                                Annonce annonce = new Annonce(id_annonce,login, photo_de_profil, chemin_image,titre, description, rating, nbr_vote,id_categories,number,0);
+                                int favorite = 0 ;
+                                List<String> favoritesList = Arrays.asList(favoritesTab);
+                                if (favoritesList.contains(String.valueOf(id_annonce))) {
+                                    favorite = 1 ;
+                                } else {
+                                    favorite = 0 ;
+                                }
+
+                                Annonce annonce = new Annonce(id_annonce,login, photo_de_profil, chemin_image,titre, description, rating, nbr_vote,id_categories,number,0, favorite);
                                 Annonces.add(annonce);
 
                                 callback.onSucces("Informations downloaded successfully.");

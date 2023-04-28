@@ -141,7 +141,7 @@ public class OtherProfileActivity extends AppCompatActivity {
                                 String number = object.getString("telephone");
                                 int etat = object.getInt("etat");
 
-                                Annonce annonce = new Annonce(id_annonce,login, photo_de_profil, chemin_image,titre, description, rating, nbr_vote,id_categories,number,etat);
+                                Annonce annonce = new Annonce(id_annonce,login, photo_de_profil, chemin_image,titre, description, rating, nbr_vote,id_categories,number,etat,0);
                                 Annonces.add(annonce);
 
                                 callback.onSucces("Informations downloaded successfully.");
