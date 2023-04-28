@@ -67,6 +67,11 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.MyViewHolder
             holder.completed_text.setVisibility(View.INVISIBLE);
             holder.principal_cardview.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
         }
+        if(annonce.getFavorite()==1){
+            holder.favorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.favorite_gold));
+        } else {
+            holder.favorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.favorite_gray));
+        }
 
 
     }
@@ -78,7 +83,9 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.MyViewHolder
         private final ImageView photo_annonce ;
         private final TextView completed_text ;
         private final CardView principal_cardview ;
+        private final ImageView favorite ;
         private Annonce currentAnnonce;
+
 
 
         public MyViewHolder(final View itemView) {
@@ -88,6 +95,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.MyViewHolder
             photo_annonce = itemView.findViewById(R.id.img);
             completed_text = itemView.findViewById(R.id.completed_text);
             principal_cardview = itemView.findViewById(R.id.principal_cardview);
+            favorite = itemView.findViewById(R.id.favorite);
 
 
             //         itemView.setOnClickListener(this);
@@ -112,6 +120,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.MyViewHolder
                     intent.putExtra("id_annonce", currentAnnonce.getId_annonce());
                     intent.putExtra("number", currentAnnonce.getNumber());
                     intent.putExtra("etat",currentAnnonce.getEtat());
+                    intent.putExtra("favorite", currentAnnonce.getFavorite());
 
 
 

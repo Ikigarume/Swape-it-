@@ -32,6 +32,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class OtherProfileActivity extends AppCompatActivity {
@@ -45,6 +46,52 @@ public class OtherProfileActivity extends AppCompatActivity {
     private TextView user_nbr_vote ;
     private ArrayList<Annonce> Annonces ;
     private OfferAdapter offerAdapter ;
+    private RecyclerView rv ;
+    private List<Integer> Favoris ;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ServeurIP app = (ServeurIP) getApplicationContext();
+        String IPV4_serv = app.getIPV4_serveur();
+        Intent intent = getIntent();
+        String login = intent.getStringExtra("user_login");
+        Favoris = getFavoris(IPV4_serv, new GetFavorisCallback() {
+            @Override
+            public void onSucces(String message) {
+                Annonces = getPostsInfo(IPV4_serv,login, Favoris, new GetPostsInfoCallback() {
+                    @Override
+                    public void onSucces(String message) {
+                        offerAdapter = new OfferAdapter(getApplicationContext(), Annonces);
+                        rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        rv.setAdapter(offerAdapter);
+                    }
+
+                    @Override
+                    public void inputErrors(Map<String, String> errors) {
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        Toast.makeText(OtherProfileActivity.this, "Erreur : " + message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+
+            @Override
+            public void inputErrors(Map<String, String> errors) {
+
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+        });
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +116,7 @@ public class OtherProfileActivity extends AppCompatActivity {
         ServeurIP app = (ServeurIP) getApplicationContext();
         String IPV4_serv = app.getIPV4_serveur();
 
-        RecyclerView rv =findViewById(R.id.offers_list);
+        rv =findViewById(R.id.offers_list);
         sessionManager = new SessionManager(this);
 
         Intent intent = getIntent();
@@ -85,27 +132,42 @@ public class OtherProfileActivity extends AppCompatActivity {
         user_nbr_vote.setText("("+nbr_vote+")");
         user_number.setText("+212"+number);
 
-        Annonces = getPostsInfo(IPV4_serv, login, new GetPostsInfoCallback() {
-            @Override
-            public void onSucces(String message) {
+        Favoris = getFavoris(IPV4_serv, new GetFavorisCallback() {
+                    @Override
+                    public void onSucces(String message) {
+                        Annonces = getPostsInfo(IPV4_serv,login, Favoris, new GetPostsInfoCallback() {
+                            @Override
+                            public void onSucces(String message) {
+                                offerAdapter = new OfferAdapter(getApplicationContext(), Annonces);
+                                rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                                rv.setAdapter(offerAdapter);
+                            }
 
-                offerAdapter = new OfferAdapter(getApplicationContext(), Annonces);
-                rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                rv.setAdapter(offerAdapter);
+                            @Override
+                            public void inputErrors(Map<String, String> errors) {
+                            }
 
-            }
+                            @Override
+                            public void onError(String message) {
+                                Toast.makeText(OtherProfileActivity.this, "Erreur : " + message, Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
-            @Override
-            public void inputErrors(Map<String, String> errors) {
+                    }
 
-            }
+                    @Override
+                    public void inputErrors(Map<String, String> errors) {
 
-            @Override
-            public void onError(String message) {
-                Toast.makeText(OtherProfileActivity.this, "Erreur : "+message, Toast.LENGTH_SHORT).show();
+                    }
 
-            }
-        });
+                    @Override
+                    public void onError(String message) {
+
+                    }
+                });
+
+
+
 
 
 
@@ -113,7 +175,7 @@ public class OtherProfileActivity extends AppCompatActivity {
     }
 
 
-    private ArrayList<Annonce> getPostsInfo (String IPV4_serv,String user_login, GetPostsInfoCallback callback){
+    private ArrayList<Annonce> getPostsInfo (String IPV4_serv, String pseudo, List Favoris, GetPostsInfoCallback callback){
         String BASE_URL = "http://"+IPV4_serv+"/swapeit/users_posts.php";
         ArrayList<Annonce> Annonces = new ArrayList<>();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL,
@@ -141,7 +203,14 @@ public class OtherProfileActivity extends AppCompatActivity {
                                 String number = object.getString("telephone");
                                 int etat = object.getInt("etat");
 
-                                Annonce annonce = new Annonce(id_annonce,login, photo_de_profil, chemin_image,titre, description, rating, nbr_vote,id_categories,number,etat,0);
+                                int favorite = 0 ;
+                                if (Favoris.contains(id_annonce)) {
+                                    favorite = 1 ;
+                                } else {
+                                    favorite = 0 ;
+                                }
+
+                                Annonce annonce = new Annonce(id_annonce,login, photo_de_profil, chemin_image,titre, description, rating, nbr_vote,id_categories,number,etat,favorite);
                                 Annonces.add(annonce);
 
                                 callback.onSucces("Informations downloaded successfully.");
@@ -178,7 +247,7 @@ public class OtherProfileActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> map = new HashMap<>();
                 map.put("serveurIP", IPV4_serv);
-                map.put("user_login",user_login);
+                map.put("user_login", pseudo);
                 return map;
             }
         };
@@ -194,4 +263,74 @@ public class OtherProfileActivity extends AppCompatActivity {
         void inputErrors(Map<String,String> errors);
         void onError(String message);
     }
+
+    private List<Integer> getFavoris (String IPV4_serv, GetFavorisCallback callback){
+        String BASE_URL = "http://"+IPV4_serv+"/swapeit/user_favoris.php";
+        List<Integer> Favoris = new ArrayList<>();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONArray array = new JSONArray(response);
+                            for (int i =0 ; i<array.length(); i++){
+
+                                JSONObject object = array.getJSONObject(i);
+                                int id_annonce = object.getInt("id_annonce");
+                                Favoris.add(id_annonce);
+
+
+                            }
+                            callback.onSucces("Informations downloaded successfully.");
+
+                            //Toast.makeText(Home_page.this, "piste1 :"+cheminImage, Toast.LENGTH_SHORT).show();
+
+
+
+
+                        }catch (Exception e){
+                            callback.onError("Volley Error.");
+                            //Toast.makeText(Home_page.this, "Volley Error", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(Home_page.this, error.toString(),Toast.LENGTH_LONG).show();
+                Log.d("APP","ERROR :"+error);
+
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("Une erreur s'est produite");
+                }
+
+            }
+        }){
+            //C'est dans cette mÃ©thode qu'on envoie les paramÃ¨tres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("pseudo", sessionManager.getPseudo());
+                return map;
+            }
+        };
+
+        Volley.newRequestQueue(OtherProfileActivity.this).add(stringRequest);
+        return Favoris ;
+
+
+    }
+
+    public interface GetFavorisCallback{
+        void onSucces(String message);
+        void inputErrors(Map<String,String> errors);
+        void onError(String message);
+    }
+
+
 }

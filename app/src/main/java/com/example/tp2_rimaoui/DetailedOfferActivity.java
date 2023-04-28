@@ -133,12 +133,12 @@ public class DetailedOfferActivity extends AppCompatActivity {
                 Drawable currentDrawable = Imagefavorie.getDrawable();
                 if (currentDrawable.getConstantState().equals(getResources().getDrawable(R.drawable.favorite_gold).getConstantState())) {
                     Imagefavorie.setImageResource(R.drawable.favorite_gray);
-                    removeFavorite(IPV4_serv, sessionManager.getPseudo(), id_annonce);
+                    removeFavorite(IPV4_serv, id_annonce);
 
                 } else {
                     Imagefavorie.setImageResource(R.drawable.favorite_gold);
                     // On ajoute le favorie à la base de donnée
-                    addFavorite(IPV4_serv,sessionManager.getPseudo(), id_annonce);
+                    addFavorite(IPV4_serv, id_annonce);
                 }
                 // On ajoute une petite animation
                 ObjectAnimator scaleX = ObjectAnimator.ofFloat(Imagefavorie, "scaleX", 1f, 1.2f, 1f);
@@ -281,8 +281,8 @@ public class DetailedOfferActivity extends AppCompatActivity {
         void onError(String message);
     }
 
-    private void addFavorite(String IPV4_serv, String pseudo, int id_annonce) {
-        String BASE_URL = "http://" + IPV4_serv + "/swapeit/add_favorite.php";
+    private void addFavorite(String IPV4_serv,  int id_annonce) {
+        String BASE_URL = "http://" + IPV4_serv + "/swapeit/add_favorite2.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -317,7 +317,7 @@ public class DetailedOfferActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
                 map.put("id_annonce", String.valueOf(id_annonce));
-                map.put("pseudo", pseudo);
+                map.put("pseudo", sessionManager.getPseudo());
                 return map;
             }
         };
@@ -326,19 +326,14 @@ public class DetailedOfferActivity extends AppCompatActivity {
 
     }
 
-    private void removeFavorite(String IPV4_serv, String pseudo, int id_annonce) {
-        String BASE_URL = "http://" + IPV4_serv + "/swapeit/remove_favorite.php";
+    private void removeFavorite(String IPV4_serv, int id_annonce) {
+        String BASE_URL = "http://" + IPV4_serv + "/swapeit/remove_favorite2.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
                         try {
-
-
-
-                            Toast.makeText(DetailedOfferActivity.this, "Success", Toast.LENGTH_SHORT).show();
-
 
                         } catch (Exception e) {
                             Toast.makeText(DetailedOfferActivity.this, "Volley Error", Toast.LENGTH_SHORT).show();
@@ -366,7 +361,7 @@ public class DetailedOfferActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
                 map.put("id_annonce", String.valueOf(id_annonce));
-                map.put("pseudo", pseudo);
+                map.put("pseudo", sessionManager.getPseudo());
                 return map;
             }
         };
