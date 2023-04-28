@@ -191,6 +191,14 @@ public class Home_page extends AppCompatActivity {
         welcometext = findViewById(R.id.textView4);
         editSearch = findViewById(R.id.recherche);
 
+        profile_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MyProfileActivity.class);
+                startActivity(intent);finish();
+            }
+        });
+
         welcometext.setText("Welcome "+sessionManager.getPseudo());
 
         editSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {

@@ -43,6 +43,7 @@ public class OtherProfileActivity extends AppCompatActivity {
     private TextView user_number ;
     private ImageView user_image ;
     private RatingBar user_ratingBar ;
+    private Button MessageButton ;
     private TextView user_nbr_vote ;
     private ArrayList<Annonce> Annonces ;
     private OfferAdapter offerAdapter ;
@@ -104,6 +105,15 @@ public class OtherProfileActivity extends AppCompatActivity {
         user_image = findViewById(R.id.profile_image);
         user_ratingBar = findViewById(R.id.ratingBar);
         user_nbr_vote = findViewById(R.id.nbr_vote);
+        messageButton = findViewById(R.id.MessageButton);
+
+        messageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Message_Activity.class);
+                startActivity(intent);
+            }
+        });
 
         messageButton.setOnClickListener(new View.OnClickListener() {
             @Override
