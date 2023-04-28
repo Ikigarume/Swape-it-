@@ -9,33 +9,68 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.example.RecyclerView.FavAdapter;
 import com.example.RecyclerView.FavoriteAdapter;
+import com.example.RecyclerView.OfferAdapter;
+import com.example.database_animals.Annonce;
 import com.example.database_animals.Favorites;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
+
+import myrequestt.Myrequest;
 
 
 public class fragment_Favorites extends Fragment {
 
-    private RecyclerView rv ;
-    private FavoriteAdapter myAdapter ;
+    private RecyclerView recyclerview ;
+    private FavAdapter myAdapter ;
+    private SessionManager sessionManager ;
+    private ArrayList<Annonce> AnnoncesFav ;
+    private Myrequest request ;
+    private RequestQueue queue ;
 
-    private ArrayList<Favorites> favorites = new ArrayList<>(Arrays.asList(
-            new Favorites("Samia BOULFAAE","new hat"),
-            new Favorites("Rachida RACHAD","new boots"),
-            new Favorites("Hanae AL-MALHI","old prada bag")
-    ));
     private View view ;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment__favorites, container, false);
-        rv = view.findViewById(R.id.my_profile_Favorites);
-        myAdapter = new FavoriteAdapter(this.getContext() , favorites);
-        rv.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        rv.setAdapter(myAdapter);
+
+        ServeurIP app = (ServeurIP) getActivity().getApplicationContext();
+        String IPV4_serv = app.getIPV4_serveur();
+        sessionManager = new SessionManager(getContext());
+        queue = VolleySingleton.getInstance(getContext()).getRequestQueue();
+        request = new Myrequest(getContext(), queue, IPV4_serv);
+
+        recyclerview = view.findViewById(R.id.my_profile_Favorites);
+
+        AnnoncesFav = request.getFavPosts(sessionManager.getPseudo(), new Myrequest.GetFavPostsCallback() {
+            @Override
+            public void onSucces(String message) {
+                myAdapter = new FavAdapter(getContext(), AnnoncesFav);
+                recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerview.setAdapter(myAdapter);
+            }
+
+            @Override
+            public void inputErrors(Map<String, String> errors) {
+
+            }
+
+            @Override
+            public void onError(String message) {
+                Toast.makeText(getContext(), "Favorites fragment : "+message, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+
+
         return view;
 
     }

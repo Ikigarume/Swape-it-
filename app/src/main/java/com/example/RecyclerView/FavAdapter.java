@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -20,14 +21,14 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 
-public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyViewHolder> {
+public class FavAdapter extends RecyclerView.Adapter<FavAdapter.MyViewHolder> {
 
     private Context context ;
-    private ArrayList<Annonce> Annonces ;
+    private ArrayList<Annonce> AnnoncesFav ;
 
-    public FavoriteAdapter(Context context, ArrayList<Annonce> Annonces){
+    public FavAdapter(Context context, ArrayList<Annonce> AnnoncesFav){
         this.context = context ;
-        this.Annonces = Annonces ;
+        this.AnnoncesFav = AnnoncesFav ;
     }
 
 
@@ -37,7 +38,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
     @Override
     // retournele nb total de cellule que contiendra la liste
     public int getItemCount() {
-        return Annonces.size();
+        return AnnoncesFav.size();
     }
 
     @Override
@@ -54,7 +55,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
     //// binds the data to the TextView... in each row
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        Annonce annonce= (Annonce) Annonces.get(position);
+        Annonce annonce= (Annonce) AnnoncesFav.get(position);
         holder.titre_annonce.setText(annonce.getTitre());
         holder.owner_annonce.setText(annonce.getLogin_utilisateur());
         Picasso.get()
@@ -84,7 +85,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
 
         public MyViewHolder(final View itemView) {
             super(itemView);
-            titre_annonce = itemView.findViewById(R.id.titre_annonce);
+            titre_annonce = itemView.findViewById(R.id.offer_title);
             photo_annonce = itemView.findViewById(R.id.img);
             completed_text = itemView.findViewById(R.id.completed_text);
             principal_cardview = itemView.findViewById(R.id.principal_cardview);
@@ -100,7 +101,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
                 @Override
                 public void onClick(View view) {
 
-                    currentAnnonce = (Annonce) Annonces.get(getLayoutPosition());
+                    currentAnnonce = (Annonce) AnnoncesFav.get(getLayoutPosition());
                     Intent intent = new Intent(context, DetailedOfferActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("login", currentAnnonce.getLogin_utilisateur());

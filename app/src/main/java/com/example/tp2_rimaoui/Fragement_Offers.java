@@ -1,22 +1,40 @@
 package com.example.tp2_rimaoui;
 
+import android.media.MediaCodec;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.example.RecyclerView.AnnonceAdapter;
 import com.example.RecyclerView.OfferAdapter;
+import com.example.database_animals.Annonce;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import myrequestt.Myrequest;
 
 
 public class Fragement_Offers extends Fragment {
 
     View view;
     private OfferAdapter myAdapter ;
+    private Myrequest request ;
+    private RequestQueue queue ;
+    private SessionManager sessionManager ;
+    private List Favoris ;
+    private ArrayList<Annonce> Annonces ;
+    private RecyclerView rv ;
+    private OfferAdapter offerAdapter ;
 
 
 
@@ -67,6 +85,51 @@ public class Fragement_Offers extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
          view = inflater.inflate(R.layout.fragment_fragement__offers, container, false);
-        return view ;
+         ServeurIP app = (ServeurIP) getActivity().getApplicationContext();
+         String IPV4_serv = app.getIPV4_serveur();
+         sessionManager = new SessionManager(getContext());
+         queue = VolleySingleton.getInstance(getContext()).getRequestQueue();
+         request = new Myrequest(getContext(), queue, IPV4_serv);
+         rv = view.findViewById(R.id.my_profile_Offers);
+
+         Favoris = request.getFavoris(sessionManager.getPseudo(), new Myrequest.GetFavorisCallback() {
+             @Override
+             public void onSucces(String message) {
+                 Annonces = request.getUserPosts(sessionManager.getPseudo(), Favoris, new Myrequest.GetUserPostsCallback() {
+                     @Override
+                     public void onSucces(String message) {
+                         offerAdapter = new OfferAdapter(getContext(), Annonces);
+                         rv.setLayoutManager(new LinearLayoutManager(getContext()));
+                         rv.setAdapter(offerAdapter);
+
+                     }
+
+                     @Override
+                     public void inputErrors(Map<String, String> errors) {
+
+                     }
+
+                     @Override
+                     public void onError(String message) {
+                         Toast.makeText(getContext(), "fragment offer : "+message, Toast.LENGTH_SHORT).show();
+
+                     }
+                 });
+             }
+
+             @Override
+             public void inputErrors(Map<String, String> errors) {
+
+             }
+
+             @Override
+             public void onError(String message) {
+
+             }
+         }) ;
+
+
+
+         return view ;
     }
 }

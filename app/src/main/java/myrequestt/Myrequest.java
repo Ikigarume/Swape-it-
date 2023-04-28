@@ -14,8 +14,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.database_animals.Annonce;
 import com.example.tp2_rimaoui.Categorie;
+import com.example.tp2_rimaoui.Home_page;
 import com.example.tp2_rimaoui.NewPost_Activity;
+import com.example.tp2_rimaoui.OtherProfileActivity;
 import com.example.tp2_rimaoui.ServeurIP;
 
 import org.json.JSONArray;
@@ -24,6 +27,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Myrequest {
@@ -319,6 +323,334 @@ public class Myrequest {
         void inputErrors(Map<String,String> errors);
         void onError(String message);
     }
+
+    public List<Integer> getFavoris (String pseudo, GetFavorisCallback callback){
+        String BASE_URL = "http://"+IPV4_serv+"/swapeit/user_favoris.php";
+        List<Integer> Favoris = new ArrayList<>();
+        StringRequest request = new StringRequest(Request.Method.POST, BASE_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONArray array = new JSONArray(response);
+                            for (int i =0 ; i<array.length(); i++){
+
+                                JSONObject object = array.getJSONObject(i);
+                                int id_annonce = object.getInt("id_annonce");
+                                Favoris.add(id_annonce);
+
+
+                            }
+                            callback.onSucces("Informations downloaded successfully.");
+
+                            //Toast.makeText(Home_page.this, "piste1 :"+cheminImage, Toast.LENGTH_SHORT).show();
+
+
+
+
+                        }catch (Exception e){
+                            callback.onError("Volley Error.");
+                            //Toast.makeText(Home_page.this, "Volley Error", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(Home_page.this, error.toString(),Toast.LENGTH_LONG).show();
+                Log.d("APP","ERROR :"+error);
+
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("Une erreur s'est produite");
+                }
+
+            }
+        }){
+            //C'est dans cette mÃ©thode qu'on envoie les paramÃ¨tres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("pseudo",pseudo);
+                return map;
+            }
+        };
+
+        queue.add(request) ;
+        return Favoris ;
+
+
+    }
+
+    public interface GetFavorisCallback{
+        void onSucces(String message);
+        void inputErrors(Map<String,String> errors);
+        void onError(String message);
+    }
+
+    public ArrayList<Annonce> getPostsInfo (List Favoris, GetPostsInfoCallback callback){
+        String BASE_URL = "http://"+IPV4_serv+"/swapeit/posts_info.php";
+        ArrayList<Annonce> Annonces = new ArrayList<>();
+        StringRequest request = new StringRequest(Request.Method.POST, BASE_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONArray array = new JSONArray(response);
+                            for (int i =0 ; i<array.length(); i++){
+
+                                JSONObject object = array.getJSONObject(i);
+                                String login = object.getString("login");
+                                String photo_de_profil = object.getString("photo_de_profil");
+                                String chemin_image = object.getString("chemin_image");
+                                String titre = object.getString("titre");
+                                String description = object.getString("description");
+                                Double note = object.getDouble("note");
+                                String rate = String.valueOf(note);
+                                float rating = Float.valueOf(rate);
+                                int nbr_vote = object.getInt("nbr_vote");
+                                String id_categories = object.getString("id_categories");
+                                int id_annonce = object.getInt("id_annonce");
+                                String number = object.getString("telephone");
+
+                                int favorite = 0 ;
+                                if (Favoris.contains(id_annonce)) {
+                                    favorite = 1 ;
+                                } else {
+                                    favorite = 0 ;
+                                }
+
+                                Annonce annonce = new Annonce(id_annonce,login, photo_de_profil, chemin_image,titre, description, rating, nbr_vote,id_categories,number,0, favorite);
+                                Annonces.add(annonce);
+
+                                callback.onSucces("Informations downloaded successfully.");
+                            }
+
+                            //Toast.makeText(Home_page.this, "piste1 :"+cheminImage, Toast.LENGTH_SHORT).show();
+
+
+
+
+                        }catch (Exception e){
+                            callback.onError("Volley Error.");
+                            //Toast.makeText(Home_page.this, "Volley Error", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(Home_page.this, error.toString(),Toast.LENGTH_LONG).show();
+                Log.d("APP","ERROR :"+error);
+
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("Une erreur s'est produite");
+                }
+
+            }
+        }){
+            //C'est dans cette mÃ©thode qu'on envoie les paramÃ¨tres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("serveurIP", IPV4_serv);
+                return map;
+            }
+        };
+
+        queue.add(request);
+        return Annonces ;
+
+
+    }
+
+    public interface GetPostsInfoCallback{
+        void onSucces(String message);
+        void inputErrors(Map<String,String> errors);
+        void onError(String message);
+    }
+
+
+    public ArrayList<Annonce> getUserPosts(String pseudo, List Favoris, GetUserPostsCallback callback){
+        String BASE_URL = "http://"+IPV4_serv+"/swapeit/users_posts.php";
+        ArrayList<Annonce> Annonces = new ArrayList<>();
+        StringRequest request = new StringRequest(Request.Method.POST, BASE_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONArray array = new JSONArray(response);
+                            for (int i =0 ; i<array.length(); i++){
+
+                                JSONObject object = array.getJSONObject(i);
+                                String login = object.getString("login");
+                                String photo_de_profil = object.getString("photo_de_profil");
+                                String chemin_image = object.getString("chemin_image");
+                                String titre = object.getString("titre");
+                                String description = object.getString("description");
+                                Double note = object.getDouble("note");
+                                String rate = String.valueOf(note);
+                                float rating = Float.valueOf(rate);
+                                int nbr_vote = object.getInt("nbr_vote");
+                                String id_categories = object.getString("id_categories");
+                                int id_annonce = object.getInt("id_annonce");
+                                String number = object.getString("telephone");
+                                int etat = object.getInt("etat");
+
+                                int favorite = 0 ;
+                                if (Favoris.contains(id_annonce)) {
+                                    favorite = 1 ;
+                                } else {
+                                    favorite = 0 ;
+                                }
+
+                                Annonce annonce = new Annonce(id_annonce,login, photo_de_profil, chemin_image,titre, description, rating, nbr_vote,id_categories,number,etat,favorite);
+                                Annonces.add(annonce);
+
+                                callback.onSucces("Informations downloaded successfully.");
+                            }
+
+                            //Toast.makeText(Home_page.this, "piste1 :"+cheminImage, Toast.LENGTH_SHORT).show();
+
+
+
+
+                        }catch (Exception e){
+                            callback.onError("Volley Error.");
+                            //Toast.makeText(Home_page.this, "Volley Error", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(Home_page.this, error.toString(),Toast.LENGTH_LONG).show();
+                Log.d("APP","ERROR :"+error);
+
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("Une erreur s'est produite");
+                }
+
+            }
+        }){
+            //C'est dans cette mÃ©thode qu'on envoie les paramÃ¨tres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("serveurIP", IPV4_serv);
+                map.put("user_login", pseudo);
+                return map;
+            }
+        };
+
+        queue.add(request);
+        return Annonces ;
+
+
+    }
+
+    public interface GetUserPostsCallback {
+        void onSucces(String message);
+        void inputErrors(Map<String,String> errors);
+        void onError(String message);
+    }
+
+    public ArrayList<Annonce> getFavPosts(String pseudo, GetFavPostsCallback callback){
+        String BASE_URL = "http://"+IPV4_serv+"/swapeit/fav_posts.php";
+        ArrayList<Annonce> Annonces = new ArrayList<>();
+        StringRequest request = new StringRequest(Request.Method.POST, BASE_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONArray array = new JSONArray(response);
+                            for (int i =0 ; i<array.length(); i++){
+
+                                JSONObject object = array.getJSONObject(i);
+                                String login = object.getString("login");
+                                String photo_de_profil = object.getString("photo_de_profil");
+                                String chemin_image = object.getString("chemin_image");
+                                String titre = object.getString("titre");
+                                String description = object.getString("description");
+                                Double note = object.getDouble("note");
+                                String rate = String.valueOf(note);
+                                float rating = Float.valueOf(rate);
+                                int nbr_vote = object.getInt("nbr_vote");
+                                String id_categories = object.getString("id_categories");
+                                int id_annonce = object.getInt("id_annonce");
+                                String number = object.getString("telephone");
+                                int etat = object.getInt("etat");
+
+                                Annonce annonce = new Annonce(id_annonce,login, photo_de_profil, chemin_image,titre, description, rating, nbr_vote,id_categories,number,etat,1);
+                                Annonces.add(annonce);
+                            }
+                            callback.onSucces("Informations downloaded successfully.");
+
+                            //Toast.makeText(Home_page.this, "piste1 :"+cheminImage, Toast.LENGTH_SHORT).show();
+
+
+
+
+                        }catch (Exception e){
+                            callback.onError("Volley Error.");
+                            //Toast.makeText(Home_page.this, "Volley Error", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(Home_page.this, error.toString(),Toast.LENGTH_LONG).show();
+                Log.d("APP","ERROR :"+error);
+
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("Une erreur s'est produite");
+                }
+
+            }
+        }){
+            //C'est dans cette mÃ©thode qu'on envoie les paramÃ¨tres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("serveurIP", IPV4_serv);
+                map.put("user_login", pseudo);
+                return map;
+            }
+        };
+
+        queue.add(request);
+        return Annonces ;
+
+
+    }
+
+    public interface GetFavPostsCallback {
+        void onSucces(String message);
+        void inputErrors(Map<String,String> errors);
+        void onError(String message);
+    }
+
+
 
 
 
