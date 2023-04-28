@@ -15,14 +15,14 @@ public class Message {
     String message;
     @ColumnInfo(name = "id_sender")
     int idSender;
-    @ColumnInfo(name = "id_reciever")
-    int idReciever;
+    @ColumnInfo(name = "id_receiver")
+    int idReceiver;
     @ColumnInfo(name = "messages_date ")
     String dateMessage; //createdAt
 
     public Message (String message , int idsender , int idreciever , String dateMessage){
         this.message = message ;
-        this.idReciever = idreciever ;
+        this.idReceiver = idreciever ;
         this.idSender = idsender ;
         this.dateMessage = dateMessage ;
     }
@@ -31,8 +31,8 @@ public class Message {
         return this.message;
     }
 
-    public int getIdReciever() {
-        return this.idReciever;
+    public int getIdReceiver() {
+        return this.idReceiver;
     }
 
     public int getIdSender() {
@@ -43,7 +43,7 @@ public class Message {
 
 
     public void setMessage(String message){this.message = message ;}
-    public void setIdReciever(int id){this.idReciever = id ;}
+    public void setIdReceiver(int id){this.idReceiver = id ;}
     public void setIdSender(int id){this.idSender = id ;}
     public void setDateMessage(String date){this.dateMessage = date ;}
 

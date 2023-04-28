@@ -12,5 +12,11 @@
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="offers" />
 
+    <item
+        android:id="@+id/navigation_favorites"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="favorites" />
+
+
 
 </menu>
