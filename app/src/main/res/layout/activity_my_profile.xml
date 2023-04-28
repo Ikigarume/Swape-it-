@@ -5,13 +5,21 @@
     android:id="@+id/my_profile_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <androidx.appcompat.widget.AppCompatImageView
+            android:layout_height="match_parent"
+            >
+
+            <ImageView
                 android:id="@+id/imageBack"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
@@ -23,7 +31,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <ImageView
                 android:id="@+id/imagemore"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
@@ -148,75 +156,18 @@
 
                     </LinearLayout>
                 </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView
-            android:id="@+id/container_discussion_offers"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:elevation="4dp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/container_info">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp">
-        <GridLayout
-            android:id="@+id/ButtongridLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="15dp"
-            android:rowCount="1"
-            android:columnCount="3"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            >
-            <Button
-                android:id="@+id/discussions_button"
-                android:layout_width="110dp"
-                android:layout_height="50dp"
-                android:backgroundTint="@color/peche"
-                android:textSize="13dp"
-                android:text="discussions"
-                android:layout_marginHorizontal="5dp"/>
-            <Button
-                android:id="@+id/offers_button"
-                android:layout_width="110dp"
-                android:layout_height="50dp"
-                android:textSize="13dp"
-                android:backgroundTint="@color/peche"
-                android:text="Offers"
-                android:layout_marginHorizontal="5dp"/>
-
-            <Button
-                android:id="@+id/favorites_button"
-                android:layout_width="110dp"
-                android:layout_height="50dp"
-                android:textSize="13dp"
-                android:backgroundTint="@color/peche"
-                android:text="Favorites"
-                android:layout_marginHorizontal="6dp"/>
-
-        </GridLayout>
-
-        <FrameLayout
-            android:id="@+id/frameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/ButtongridLayout"
-            android:layout_marginVertical="10dp"
-           />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+            <FrameLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/container_info"
+                android:layout_marginVertical="10dp"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -226,7 +177,7 @@
 
 
 
-    <!--
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
@@ -234,33 +185,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:background="@color/green"
+        android:background="@color/light_peche"
         app:menu="@menu/bottom_nav_menu"/>
 
 
 
-   <FrameLayout
-       android:id="@+id/fragment_container"
-       android:layout_height="0dp"
-       android:layout_width="0dp"
-       app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintTop_toBottomOf="@+id/container_info"
-       app:layout_constraintBottom_toTopOf="@id/nav_view"
-       >
-       <fragment
-           android:id="@+id/nav_host_fragment_activity_my_profile"
-           android:layout_width="0dp"
-           android:layout_height="0dp"
-           android:name="androidx.navigation.fragment.NavHostFragment"
-           app:defaultNavHost="true"
-           app:layout_constraintStart_toStartOf="parent"
-           app:layout_constraintEnd_toEndOf="parent"
-           app:layout_constraintTop_toBottomOf="parent"
-           app:layout_constraintBottom_toTopOf="parent"
-           app:navGraph="@navigation/my_profile_navigation" />
-   </FrameLayout>
 
-          -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
