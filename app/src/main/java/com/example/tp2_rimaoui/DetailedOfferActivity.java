@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -58,6 +59,9 @@ public class DetailedOfferActivity extends AppCompatActivity {
     private TextView TextpostType ;
     private CardView Cardprincipal ;
     private ImageView Imageback ;
+    private Myrequest request ;
+    private RequestQueue queue ;
+
 
 
     @Override
@@ -67,8 +71,9 @@ public class DetailedOfferActivity extends AppCompatActivity {
 
         ServeurIP app = (ServeurIP) getApplicationContext();
         String IPV4_serv = app.getIPV4_serveur();
-
         sessionManager = new SessionManager(this);
+        queue = VolleySingleton.getInstance(this).getRequestQueue();
+        request = new Myrequest(this, queue, IPV4_serv);
 
         Intent intent = getIntent();
         String login = intent.getStringExtra("login");
@@ -160,7 +165,7 @@ public class DetailedOfferActivity extends AppCompatActivity {
         }
 
 
-        Categories = getPostsCategories(IPV4_serv, id_annonce, new GetPostsCategoriesCallback() {
+        Categories = request.getPostsCategories(id_annonce, new Myrequest.GetPostsCategoriesCallback() {
             @Override
             public void onSucces(String message) {
                 CategorieAdapter Cadapter = new CategorieAdapter(getApplicationContext(), Categories);
@@ -211,75 +216,7 @@ public class DetailedOfferActivity extends AppCompatActivity {
     }
 
 
-    private ArrayList<Categorie> getPostsCategories(String IPV4_serv, int id_annonce, DetailedOfferActivity.GetPostsCategoriesCallback callback) {
-        String BASE_URL = "http://" + IPV4_serv + "/swapeit/annonce_categories.php";
-        ArrayList<Categorie> Categories = new ArrayList<>();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
 
-                        try {
-
-                            JSONArray array = new JSONArray(response);
-                            for (int i = 0; i < array.length(); i++) {
-
-                                JSONObject object = array.getJSONObject(i);
-                                String nom = object.getString("nom");
-                                int id_categorie = object.getInt("id");
-
-                                Categorie categorie = new Categorie(id_categorie, nom);
-                                Categories.add(categorie);
-
-                                callback.onSucces("Informations downloaded successfully.");
-                            }
-
-                            //Toast.makeText(Home_page.this, "piste1 :"+cheminImage, Toast.LENGTH_SHORT).show();
-
-
-                        } catch (Exception e) {
-                            callback.onError("Volley Error.");
-                            //Toast.makeText(Home_page.this, "Volley Error", Toast.LENGTH_SHORT).show();
-
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //Toast.makeText(Home_page.this, error.toString(),Toast.LENGTH_LONG).show();
-                Log.d("APP", "ERROR :" + error);
-
-                if (error instanceof NetworkError) {
-                    callback.onError("Impossible de se connecter");
-                } else if (error instanceof VolleyError) {
-                    callback.onError("Une erreur s'est produite");
-                }
-
-            }
-        }) {
-            //C'est dans cette mÃ©thode qu'on envoie les paramÃ¨tres que l'on veut tester dans le script PHP
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("id_annonce", String.valueOf(id_annonce));
-                return map;
-            }
-        };
-
-        Volley.newRequestQueue(DetailedOfferActivity.this).add(stringRequest);
-        return Categories;
-
-
-    }
-
-    public interface GetPostsCategoriesCallback {
-        void onSucces(String message);
-
-        void inputErrors(Map<String, String> errors);
-
-        void onError(String message);
-    }
 
     private void addFavorite(String IPV4_serv,  int id_annonce) {
         String BASE_URL = "http://" + IPV4_serv + "/swapeit/add_favorite2.php";

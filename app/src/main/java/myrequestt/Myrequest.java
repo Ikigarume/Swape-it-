@@ -16,6 +16,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.database_animals.Annonce;
 import com.example.tp2_rimaoui.Categorie;
+import com.example.tp2_rimaoui.DetailedOfferActivity;
 import com.example.tp2_rimaoui.Home_page;
 import com.example.tp2_rimaoui.NewPost_Activity;
 import com.example.tp2_rimaoui.OtherProfileActivity;
@@ -323,6 +324,82 @@ public class Myrequest {
         void inputErrors(Map<String,String> errors);
         void onError(String message);
     }
+
+    public void updatePost(int id_annonce, int etat, String pseudo_utilisateur,  String titre, String image, String description, ArrayList<Integer> categories, updatePostCallback callback ) {
+        //URL pour aller chercher le script PHP
+        String url = "http://"+IPV4_serv+"/swapeit/updatePost.php" ;
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Map<String, String> errors = new HashMap<>();
+
+                try {
+                    JSONObject json = new JSONObject(response);
+                    Boolean error = json.getBoolean("error");
+
+                    if(!error){
+                        callback.onSucces("Your offer has been successfully added !");
+                    }
+                    else{
+                        callback.onError(json.getString("message"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("APP","ERROR :"+error);
+
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("Une erreur s'est produite");
+                }
+
+
+
+
+            }
+        }) {
+            //C'est dans cette méthode qu'on envoie les paramètres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<java.lang.String, java.lang.String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("id_annonce", String.valueOf(id_annonce));
+                map.put("etat", String.valueOf(etat));
+                map.put("pseudo_utilisateur", pseudo_utilisateur);
+                map.put("titre",titre);
+                map.put("description", description);
+                map.put("image", image);
+
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < categories.size(); i++) {
+                    sb.append(categories.get(i));
+                    sb.append(" ");
+                }
+                String categoriesStr = sb.toString();
+                map.put("categories", categoriesStr);
+
+
+
+                return map;
+            }
+        } ;
+
+        queue.add(request) ;
+    }
+
+
+    public interface updatePostCallback{
+        void onSucces(String message);
+        void inputErrors(Map<String,String> errors);
+        void onError(String message);
+    }
+
 
     public List<Integer> getFavoris (String pseudo, GetFavorisCallback callback){
         String BASE_URL = "http://"+IPV4_serv+"/swapeit/user_favoris.php";
@@ -647,6 +724,77 @@ public class Myrequest {
     public interface GetFavPostsCallback {
         void onSucces(String message);
         void inputErrors(Map<String,String> errors);
+        void onError(String message);
+    }
+
+
+    public ArrayList<Categorie> getPostsCategories(int id_annonce, GetPostsCategoriesCallback callback) {
+        String BASE_URL = "http://" + IPV4_serv + "/swapeit/annonce_categories.php";
+        ArrayList<Categorie> Categories = new ArrayList<>();
+        StringRequest request = new StringRequest(Request.Method.POST, BASE_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONArray array = new JSONArray(response);
+                            for (int i = 0; i < array.length(); i++) {
+
+                                JSONObject object = array.getJSONObject(i);
+                                String nom = object.getString("nom");
+                                int id = object.getInt("id");
+                                if(id!=12 && id!=13) {
+                                    Categorie categorie = new Categorie(id, nom);
+                                    Categories.add(categorie);
+                                }
+                            }
+                            callback.onSucces("Informations downloaded successfully.");
+
+                            //Toast.makeText(Home_page.this, "piste1 :"+cheminImage, Toast.LENGTH_SHORT).show();
+
+
+                        } catch (Exception e) {
+                            callback.onError("Volley Error.");
+                            //Toast.makeText(Home_page.this, "Volley Error", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(Home_page.this, error.toString(),Toast.LENGTH_LONG).show();
+                Log.d("APP", "ERROR :" + error);
+
+                if (error instanceof NetworkError) {
+                    callback.onError("Impossible de se connecter");
+                } else if (error instanceof VolleyError) {
+                    callback.onError("Une erreur s'est produite");
+                }
+
+            }
+        }) {
+            //C'est dans cette mÃ©thode qu'on envoie les paramÃ¨tres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("id_annonce", String.valueOf(id_annonce));
+                return map;
+            }
+        };
+
+        queue.add(request);
+        return Categories;
+
+
+    }
+
+    public interface GetPostsCategoriesCallback {
+        void onSucces(String message);
+
+        void inputErrors(Map<String, String> errors);
+
         void onError(String message);
     }
 
