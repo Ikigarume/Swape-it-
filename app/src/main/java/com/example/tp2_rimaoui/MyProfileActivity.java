@@ -1,7 +1,11 @@
 package com.example.tp2_rimaoui;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +25,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.tp2_rimaoui.ui.home.HomeFragment;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
@@ -36,6 +44,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,6 +64,44 @@ public class MyProfileActivity extends AppCompatActivity implements PopupMenu.On
     String userNumber ;
     Float userNote ;
     int nbr_vote ;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ServeurIP app = (ServeurIP) getApplicationContext();
+        String IPV4_serv = app.getIPV4_serveur();
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+        ImageView userImage = findViewById(R.id.profile_image);
+        TextView userLogin = findViewById(R.id.my_user_name);
+        TextView userNum = findViewById(R.id.phone_number);
+        RatingBar ratingBar = findViewById(R.id.ratingBar);
+        TextView userNbrVote = findViewById(R.id.nbr_vote);
+        Toast.makeText(this, "new login : "+sessionManager.getPseudo(), Toast.LENGTH_SHORT).show();
+
+        getUserInfo(IPV4_serv, new GetUserInfoCallback() {
+            @Override
+            public void onSucces(String message) {
+                Picasso.get().load(cheminImage).into(userImage);
+                userLogin.setText(sessionManager.getPseudo());
+                userNum.setText("+212 "+userNumber);
+                ratingBar.setRating(userNote);
+                userNbrVote.setText("("+nbr_vote+")");
+            }
+
+            @Override
+            public void inputErrors(Map<String, String> errors) {
+
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+        });
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +125,7 @@ public class MyProfileActivity extends AppCompatActivity implements PopupMenu.On
         sessionManager = new SessionManager(this);
 
         replaceFragment(new fragment_Favorites());
+
 
         getUserInfo(IPV4_serv, new GetUserInfoCallback() {
             @Override
@@ -108,15 +156,12 @@ public class MyProfileActivity extends AppCompatActivity implements PopupMenu.On
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_Discussions:
-                        Toast.makeText(MyProfileActivity.this, "You clicking on buttondiscc", Toast.LENGTH_SHORT).show();
                         replaceFragment(new Fragment_Discussions());
                         return true;
                     case R.id.navigation_Offers:
-                        Toast.makeText(MyProfileActivity.this, "You clicking on buttonoffers", Toast.LENGTH_SHORT).show();
                         replaceFragment(new Fragement_Offers());
                         return true;
                     case R.id.navigation_favorites:
-                        Toast.makeText(MyProfileActivity.this, "You clicking on buttonfav", Toast.LENGTH_SHORT).show();
                         replaceFragment(new fragment_Favorites());
                         return true;
                     default:
@@ -220,12 +265,14 @@ public class MyProfileActivity extends AppCompatActivity implements PopupMenu.On
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.option_edit_profile :
-                //Toast.makeText(this,"editing the profile option is clicked",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), EditProfile_Activity.class);
+                intent.putExtra("userImage",cheminImage);
+                intent.putExtra("userLogin",sessionManager.getPseudo());
+                intent.putExtra("userNumber",userNumber);
+                intent.putExtra("id_utilisateur",id_utilisateur);
                 this.startActivity(intent);
             case R.id.option_log_out :
                 Toast.makeText(this,"loging out option is clicked",Toast.LENGTH_SHORT).show() ;
-                //sessionManager.logout();
                 return true ;
             default:return false ;
         }

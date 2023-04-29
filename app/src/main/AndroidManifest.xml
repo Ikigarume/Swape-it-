@@ -38,6 +38,9 @@
             android:name=".OtherProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".EditProfile_Activity"
+            android:exported="false" />
+        <activity
             android:name=".LaunchingActivity"
             android:exported="true">
             <intent-filter>

@@ -401,6 +401,69 @@ public class Myrequest {
     }
 
 
+    public void updateUserInfo(int id_utilisateur, String newPseudo, String newNumber, String newImage,  updateUserInfoCallback callback ) {
+        //URL pour aller chercher le script PHP
+        String url = "http://"+IPV4_serv+"/swapeit/updateUserInfo.php" ;
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Map<String, String> errors = new HashMap<>();
+
+                try {
+                    JSONObject json = new JSONObject(response);
+                    Boolean error = json.getBoolean("error");
+
+                    if(!error){
+                        callback.onSucces("Your offer has been successfully added !");
+                    }
+                    else{
+                        callback.onError(json.getString("message"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("APP","ERROR :"+error);
+
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("Une erreur s'est produite");
+                }
+
+
+
+
+            }
+        }) {
+            //C'est dans cette méthode qu'on envoie les paramètres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<java.lang.String, java.lang.String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("id_utilisateur", String.valueOf(id_utilisateur));
+                map.put("pseudo", newPseudo);
+                map.put("number", newNumber);
+                map.put("image",newImage);
+                return map;
+            }
+        } ;
+
+        queue.add(request) ;
+    }
+
+
+    public interface updateUserInfoCallback{
+        void onSucces(String message);
+        void inputErrors(Map<String,String> errors);
+        void onError(String message);
+    }
+
+
     public List<Integer> getFavoris (String pseudo, GetFavorisCallback callback){
         String BASE_URL = "http://"+IPV4_serv+"/swapeit/user_favoris.php";
         List<Integer> Favoris = new ArrayList<>();

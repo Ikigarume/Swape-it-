@@ -99,6 +99,8 @@
 
 
 
+
+
                 <LinearLayout
                     android:id="@+id/linearlayout1"
                     android:layout_width="wrap_content"
@@ -142,19 +144,20 @@
                         android:orientation="horizontal"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/phone_number">
+
                         <RatingBar
                             android:id="@+id/ratingBar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="-18dp"
                             android:layout_marginStart="-50dp"
+                            android:layout_marginTop="-18dp"
                             android:isIndicator="true"
                             android:numStars="5"
+                            android:progressTint="#Ffd700"
                             android:rating="3"
                             android:scaleX="0.45"
-                            android:scaleY="0.4"
-                            android:progressTint="#Ffd700"
-                            />
+                            android:scaleY="0.4" />
+
                         <TextView
                             android:id="@+id/nbr_vote"
                             android:layout_width="wrap_content"

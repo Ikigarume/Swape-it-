@@ -292,7 +292,6 @@ public class NewPost_Activity extends AppCompatActivity {
                 Intent iGallery = new Intent(Intent.ACTION_PICK);
                 iGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 activityResultLauncher.launch(iGallery);
-                Toast.makeText(NewPost_Activity.this, "here", Toast.LENGTH_SHORT).show();
             }
         });
 

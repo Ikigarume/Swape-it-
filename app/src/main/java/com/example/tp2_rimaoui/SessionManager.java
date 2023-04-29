@@ -12,6 +12,7 @@ public class SessionManager {
     private final static String IS_LOGGED = "isLogged" ;
     private final static String PSEUDO = "pseudo" ;
     private final static String ID = "id";
+
     private Context context ;
 
     public SessionManager(Context context){
@@ -27,9 +28,17 @@ public class SessionManager {
     public String getPseudo() {
         return prefs.getString(PSEUDO, null);
     }
+    public void setPseudo(String pseudo){
+        editor.putString(PSEUDO, pseudo);
+        editor.commit();
+    }
 
     public String getId() {
         return prefs.getString(ID, null);
+    }
+    public void setId(String id){
+        editor.putString(ID,id);
+        editor.commit();
     }
 
     public void insertUser(String id, String pseudo) {

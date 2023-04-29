@@ -24,7 +24,8 @@
                 android:drawableTop="@drawable/ic_back"
                 android:background="@drawable/ic_back_background"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@id/button_upload"
+                app:layout_constraintBottom_toBottomOf="@id/button_upload"/>
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="195dp"
@@ -33,6 +34,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/button_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save changes"
+                android:textAllCaps="false"
+                android:background="@drawable/round_button_gray"
+                android:backgroundTint="#3C4166"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_margin="10dp"
+                android:padding="15dp"
+                />
             <androidx.cardview.widget.CardView
                 android:id="@+id/container_info"
                 android:layout_width="match_parent"
@@ -43,7 +58,7 @@
                 app:cardCornerRadius="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView">
+                app:layout_constraintTop_toBottomOf="@+id/button_upload">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -70,6 +85,25 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/Text1" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profile_image"
+                        android:layout_width="135dp"
+                        android:layout_height="135dp"
+                        android:src="@drawable/chien"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/devider1" />
+
+                    <ImageView
+                        android:id="@+id/btnCamera"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/new_picture"
+                        app:layout_constraintEnd_toEndOf="@id/profile_image"
+                        app:layout_constraintBottom_toBottomOf="@id/profile_image"
+                        />
                     <TextView
                         android:id="@+id/pseudo_textView"
                         android:layout_width="wrap_content"
@@ -82,10 +116,12 @@
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/devider1" />
+                        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
                     <EditText
                         android:id="@+id/pseudo_editText"
                         android:layout_width="match_parent"
+                        android:layout_marginTop="10dp"
+
                         android:layout_marginHorizontal="19dp"
                         android:layout_height="45dp"
                         android:padding="10dp"
@@ -102,7 +138,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="24dp"
                         android:fontFamily="@font/cambria"
-                        android:text="pseudo name : "
+                        android:text="phone number : "
                         android:textColor="#3C4166"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -112,14 +148,130 @@
                     <EditText
                         android:id="@+id/number_editText"
                         android:layout_width="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginHorizontal="19dp"
+                        android:layout_height="45dp"
+                        android:padding="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/curved_border"
+                        android:backgroundTint="@color/white"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/number_textView"
+                        android:hint="edit your number  here "/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+            <Button
+                android:id="@+id/password_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Confirm new password"
+                android:textAllCaps="false"
+                android:background="@drawable/round_button_gray"
+                android:backgroundTint="#3C4166"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/container_info"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="10dp"
+                android:padding="15dp"
+                />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/container_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:elevation="4dp"
+                app:cardBackgroundColor="@color/light_peche"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/password_upload">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/passText1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:fontFamily="@font/cambria"
+                        android:text="Change your password"
+                        android:textColor="@color/dark_blue"
+                        android:textSize="25dp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <View
+                        android:id="@+id/devider2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginVertical="10dp"
+                        android:background="@color/gray1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/passText1" />
+
+
+                    <TextView
+                        android:id="@+id/oldpassword_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        android:fontFamily="@font/cambria"
+                        android:text="Current password : "
+                        android:textColor="#3C4166"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/devider2" />
+                    <EditText
+                        android:id="@+id/oldpassword_editText"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="10dp"
+
                         android:layout_marginHorizontal="19dp"
                         android:layout_height="45dp"
                         android:padding="10dp"
                         android:background="@drawable/curved_border"
                         android:backgroundTint="@color/white"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/number_textView"
-                        android:hint="edit your number  here "/>
+                        app:layout_constraintTop_toBottomOf="@+id/oldpassword_textView"
+                        android:hint="Enter your current password "
+                        />
+                    <TextView
+                        android:id="@+id/newpassword_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        android:fontFamily="@font/cambria"
+                        android:text="New password : "
+                        android:textColor="#3C4166"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/oldpassword_editText" />
+
+                    <EditText
+                        android:id="@+id/newpassword_editText"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginHorizontal="19dp"
+                        android:layout_height="45dp"
+                        android:padding="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/curved_border"
+                        android:backgroundTint="@color/white"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/newpassword_textView"
+                        android:hint="enter your new password "/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>

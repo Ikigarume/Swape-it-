@@ -50,6 +50,7 @@ public class Home_page extends AppCompatActivity {
     private Myrequest request;
     String cheminImage ;
     String userFavorites ;
+    int userID;
     private ArrayList<Annonce> Annonces ;
     private EditText editSearch ;
     private RecyclerView rv;
@@ -72,6 +73,32 @@ public class Home_page extends AppCompatActivity {
         sessionManager = new SessionManager(this);
         queue = VolleySingleton.getInstance(this).getRequestQueue();
         request = new Myrequest(this, queue, IPV4_serv);
+
+        welcometext.setText("Welcome "+sessionManager.getPseudo());
+
+        getUserImg(IPV4_serv, new GetUserImgCallback() {
+            @Override
+            public void onSucces(String message) {
+                Picasso.get().load(cheminImage).into(profile_image, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                    }
+                });
+            }
+
+            @Override
+            public void inputErrors(Map<String, String> errors) {
+            }
+
+            @Override
+            public void onError(String message) {
+                Toast.makeText(getApplicationContext(), "User Image : "+message, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         Favoris = request.getFavoris(sessionManager.getPseudo(), new Myrequest.GetFavorisCallback() {
             @Override
@@ -123,6 +150,8 @@ public class Home_page extends AppCompatActivity {
         sessionManager = new SessionManager(this);
         queue = VolleySingleton.getInstance(this).getRequestQueue();
         request = new Myrequest(this, queue, IPV4_serv);
+
+
 
         Favoris = request.getFavoris(sessionManager.getPseudo(), new Myrequest.GetFavorisCallback() {
             @Override
@@ -266,10 +295,11 @@ public class Home_page extends AppCompatActivity {
                     public void onResponse(String response) {
 
                         try {
-
                             JSONArray array = new JSONArray(response);
                             JSONObject object = array.getJSONObject(0);
                             cheminImage = object.getString("chemin");
+                            userID = object.getInt("id_utilisateur");
+                            sessionManager.setId(String.valueOf(userID));
                             callback.onSucces("Informations downloaded successfully.");
 
                             //Toast.makeText(Home_page.this, "piste1 :"+cheminImage, Toast.LENGTH_SHORT).show();
