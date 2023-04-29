@@ -21,29 +21,35 @@
             android:layout_height="match_parent"
             >
 
-            <ImageView
+            <Button
                 android:id="@+id/imageBack"
-                android:layout_width="35dp"
+                android:layout_width="39dp"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="25dp"
-                android:padding="3dp"
-                android:src="@drawable/ic_back"
+                android:paddingVertical="3dp"
+                android:paddingEnd="1dp"
+                android:gravity="center"
+                android:onClick="goingBack"
+                android:drawableTop="@drawable/ic_back"
                 android:background="@drawable/ic_back_background"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
+            <Button
                 android:id="@+id/imagemore"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="25dp"
-                android:padding="3dp"
-                android:src="@drawable/ic_more"
+                android:paddingVertical="6dp"
+                android:drawableTop="@drawable/ic_more"
+                android:gravity="center"
+                android:onClick="showPopUpMenu"
                 android:background="@drawable/ic_back_background"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                />
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="195dp"

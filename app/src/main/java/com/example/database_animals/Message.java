@@ -20,7 +20,7 @@ public class Message {
     @ColumnInfo(name = "messages_date ")
     String dateMessage; //createdAt
 
-    public Message (String message , int idsender , int idreciever , String dateMessage){
+    public Message ( int idsender , int idreciever ,String message, String dateMessage){
         this.message = message ;
         this.idReceiver = idreciever ;
         this.idSender = idsender ;

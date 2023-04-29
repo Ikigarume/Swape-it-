@@ -1,10 +1,12 @@
 package com.example.tp2_rimaoui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ import com.example.tp2_rimaoui.ui.home.HomeFragment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -37,14 +40,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class MyProfileActivity extends AppCompatActivity {
+public class MyProfileActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
 
     public static final String USER_KEY = "user_id";
     Bundle bundle = new Bundle() ;
     //bundle.putInt("user_id", userId);
-    private Button buttonDiscussion , buttonOffers , buttonFavorites ;
-    private ImageView ImageGoBack, ImageMore ;
+
+
+    //private Button btnMore , btnBack ;
     private SessionManager sessionManager ;
     String cheminImage ;
     int id_utilisateur ;
@@ -60,9 +64,10 @@ public class MyProfileActivity extends AppCompatActivity {
         ServeurIP app = (ServeurIP) getApplicationContext();
         String IPV4_serv = app.getIPV4_serveur();
 
+       //btnBack.findViewById(R.id.imageBack);
 
-        ImageGoBack = findViewById(R.id.imageBack) ;
-        ImageMore = findViewById(R.id.imagemore) ; // to log out and to edit informations
+        //btnMore.findViewById(R.id.imagemore);
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         ImageView userImage = findViewById(R.id.profile_image);
         TextView userLogin = findViewById(R.id.my_user_name);
@@ -194,12 +199,38 @@ public class MyProfileActivity extends AppCompatActivity {
 
     }
 
+
+
     public interface GetUserInfoCallback{
         void onSucces(String message);
         void inputErrors(Map<String,String> errors);
         void onError(String message);
     }
 
+    public void goingBack(View v){
+        onBackPressed();
+    }
+    public void showPopUpMenu(View v){
+        PopupMenu popup = new PopupMenu(this,v);
+        popup.setOnMenuItemClickListener(this);
+        popup.inflate(R.menu.log_edit_menu);
+        popup.show();
+    }
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.option_edit_profile :
+                //Toast.makeText(this,"editing the profile option is clicked",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), EditProfile_Activity.class);
+                this.startActivity(intent);
+            case R.id.option_log_out :
+                Toast.makeText(this,"loging out option is clicked",Toast.LENGTH_SHORT).show() ;
+                //sessionManager.logout();
+                return true ;
+            default:return false ;
+        }
+
+    }
 
     
 }
