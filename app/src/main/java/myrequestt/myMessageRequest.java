@@ -85,10 +85,10 @@ public class myMessageRequest {
             @Override
             protected Map<java.lang.String, java.lang.String> getParams() throws AuthFailureError {
                 Map<String,String> map = new HashMap<>();
-                map.put("id_sender", id_sender);
-                map.put("id_receiver",id_receiver);
+                map.put("id_sender", id_sender); // this should be an int
+                map.put("id_receiver",id_receiver); // this also should be an int
                 map.put("message_body", messageBody);
-                //map.put("message_time", messageTime);
+                //map.put("message_time", messageTime); // this should be a time
 
 
 
