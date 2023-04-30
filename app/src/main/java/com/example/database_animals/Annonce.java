@@ -51,7 +51,7 @@ public class Annonce {
     public String getNumber() {return this.number;}
     public int getEtat(){return this.etat;}
     public int getFavorite(){return this.favorite;}
-    public void setFavorite(int etat){this.etat = etat;}
+    public void setFavorite(int fav){this.favorite = fav;}
 
 
 

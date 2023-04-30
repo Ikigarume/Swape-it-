@@ -28,6 +28,8 @@ public class SessionManager {
     public String getPseudo() {
         return prefs.getString(PSEUDO, null);
     }
+
+
     public void setPseudo(String pseudo){
         editor.putString(PSEUDO, pseudo);
         editor.commit();

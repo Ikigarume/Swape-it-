@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -30,6 +31,7 @@ import com.example.database_animals.Annonce;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import org.checkerframework.checker.units.qual.A;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -42,7 +44,7 @@ import myrequestt.Myrequest;
 
 public class Home_page extends AppCompatActivity {
 
-    private AnnonceAdapter annonceAdapter ;
+    private boolean isActivityInitialized = false;
     private Button new_post ;
     private SessionManager  sessionManager ;
     private ImageView profile_image ;
@@ -52,7 +54,8 @@ public class Home_page extends AppCompatActivity {
     String cheminImage ;
     String userFavorites ;
     int userID;
-    private ArrayList<Annonce> Annonces ;
+    private ArrayList<Annonce> AnnoncesHP = new ArrayList<>();
+    private AnnonceAdapter annonceAdapterHP ;
     private EditText editSearch ;
     private RecyclerView rv;
     private List<Integer> Favoris ;
@@ -66,85 +69,12 @@ public class Home_page extends AppCompatActivity {
      */
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        ServeurIP app = (ServeurIP) getApplicationContext();
-        String IPV4_serv = app.getIPV4_serveur();
-        sessionManager = new SessionManager(this);
-        queue = VolleySingleton.getInstance(this).getRequestQueue();
-        request = new Myrequest(this, queue, IPV4_serv);
-
-        welcometext.setText("Welcome "+sessionManager.getPseudo());
-
-        getUserImg(IPV4_serv, new GetUserImgCallback() {
-            @Override
-            public void onSucces(String message) {
-                Picasso.get().load(cheminImage).into(profile_image, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                    }
-                });
-            }
-
-            @Override
-            public void inputErrors(Map<String, String> errors) {
-            }
-
-            @Override
-            public void onError(String message) {
-                Toast.makeText(getApplicationContext(), "User Image : "+message, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        Favoris = request.getFavoris(sessionManager.getPseudo(), new Myrequest.GetFavorisCallback() {
-            @Override
-            public void onSucces(String message) {
-                Annonces = request.getPostsInfo(Favoris, new Myrequest.GetPostsInfoCallback() {
-                    @Override
-                    public void onSucces(String message) {
-                        annonceAdapter = new AnnonceAdapter(getApplicationContext(), Annonces);
-                        rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                        rv.setAdapter(annonceAdapter);
-                    }
-
-                    @Override
-                    public void inputErrors(Map<String, String> errors) {
-                        Toast.makeText(Home_page.this, "inputErrors", Toast.LENGTH_SHORT).show();
-
-                    }
-
-                    @Override
-                    public void onError(String message) {
-                        Toast.makeText(Home_page.this, "Annonces : "+message, Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-
-            }
-
-            @Override
-            public void inputErrors(Map<String, String> errors) {
-
-            }
-
-            @Override
-            public void onError(String message) {
-                Toast.makeText(Home_page.this, "Favoris : "+message, Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
 
         ServeurIP app = (ServeurIP) getApplicationContext();
         String IPV4_serv = app.getIPV4_serveur();
@@ -153,16 +83,19 @@ public class Home_page extends AppCompatActivity {
         request = new Myrequest(this, queue, IPV4_serv);
 
 
-
         Favoris = request.getFavoris(sessionManager.getPseudo(), new Myrequest.GetFavorisCallback() {
             @Override
             public void onSucces(String message) {
-                Annonces = request.getPostsInfo(Favoris, new Myrequest.GetPostsInfoCallback() {
+                for (Integer i : Favoris){
+                    Toast.makeText(Home_page.this, "fav : "+i, Toast.LENGTH_SHORT).show();
+                }
+                AnnoncesHP = request.getPostsInfo(Favoris, new Myrequest.GetPostsInfoCallback() {
                     @Override
                     public void onSucces(String message) {
-                        annonceAdapter = new AnnonceAdapter(getApplicationContext(), Annonces);
+                        app.setAnnoncesHP(AnnoncesHP);
+                        annonceAdapterHP = new AnnonceAdapter(getApplicationContext(), AnnoncesHP);
                         rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                        rv.setAdapter(annonceAdapter);
+                        rv.setAdapter(annonceAdapterHP);
                     }
 
                     @Override
@@ -230,12 +163,12 @@ public class Home_page extends AppCompatActivity {
                 Favoris = request.getFavoris(sessionManager.getPseudo(), new Myrequest.GetFavorisCallback() {
                     @Override
                     public void onSucces(String message) {
-                        Annonces = request.getPostsInfo(Favoris, new Myrequest.GetPostsInfoCallback() {
+                        AnnoncesHP = request.getPostsInfo(Favoris, new Myrequest.GetPostsInfoCallback() {
                             @Override
                             public void onSucces(String message) {
-                                annonceAdapter = new AnnonceAdapter(getApplicationContext(), Annonces);
+                                annonceAdapterHP = new AnnonceAdapter(getApplicationContext(), AnnoncesHP);
                                 rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                                rv.setAdapter(annonceAdapter);
+                                rv.setAdapter(annonceAdapterHP);
                             }
 
                             @Override
@@ -285,14 +218,14 @@ public class Home_page extends AppCompatActivity {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
                     String text = editSearch.getText().toString().trim();
                     ArrayList<Annonce> Result = new ArrayList<>();
-                    for(Annonce annonce : Annonces){
+                    for(Annonce annonce : AnnoncesHP){
                         if(annonce.getTitre().contains(text) || annonce.getDescription().contains(text)){
                             Result.add(annonce);
                         }
                     }
-                    annonceAdapter = new AnnonceAdapter(getApplicationContext(), Result);
+                    annonceAdapterHP = new AnnonceAdapter(getApplicationContext(), Result);
                     rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                    rv.setAdapter(annonceAdapter);
+                    rv.setAdapter(annonceAdapterHP);
                     return true;
                 }
                 return false;
@@ -327,6 +260,65 @@ public class Home_page extends AppCompatActivity {
 
 
 
+
+
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //L#objectif ici est de mettre a jour la liste d'offre a chaque modification effectué
+        ServeurIP app = (ServeurIP) getApplicationContext();
+        String IPV4_serv = app.getIPV4_serveur();
+        sessionManager = new SessionManager(this);
+        queue = VolleySingleton.getInstance(this).getRequestQueue();
+        request = new Myrequest(this, queue, IPV4_serv);
+        AnnoncesHP = app.getAnnoncesHP();
+        annonceAdapterHP = new AnnonceAdapter(getApplicationContext(), AnnoncesHP);
+
+        Toast.makeText(this, "call : "+isActivityInitialized, Toast.LENGTH_SHORT).show();
+        if (isActivityInitialized) {
+            // L'activité a déjà été créée
+            rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            rv.setAdapter(annonceAdapterHP);
+        } else {
+            // L'activité vient d'être créée pour la première fois, ne rien faire
+            isActivityInitialized = true;
+            SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("isActivityInitialized", true);
+            editor.apply();
+        }
+
+
+
+        welcometext.setText("Welcome "+sessionManager.getPseudo());
+
+        getUserImg(IPV4_serv, new GetUserImgCallback() {
+            @Override
+            public void onSucces(String message) {
+                Picasso.get().load(cheminImage).into(profile_image, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                    }
+                });
+            }
+
+            @Override
+            public void inputErrors(Map<String, String> errors) {
+            }
+
+            @Override
+            public void onError(String message) {
+                Toast.makeText(getApplicationContext(), "User Image : "+message, Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
 

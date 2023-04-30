@@ -7,6 +7,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexWrap;
+import com.google.android.flexbox.FlexboxLayoutManager;
+
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
@@ -28,6 +32,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.RecyclerView.AnnonceAdapter;
 import com.example.RecyclerView.CategorieAdapter;
 import com.example.database_animals.Annonce;
 import com.squareup.picasso.Callback;
@@ -46,6 +51,7 @@ import myrequestt.Myrequest;
 public class DetailedOfferActivity extends AppCompatActivity {
 
     private TextView TextOfferTitle;
+    private int annonceid ;
     private ImageView ImageOffer;
     private ImageView ImageUser;
     private TextView Textlogin;
@@ -61,6 +67,8 @@ public class DetailedOfferActivity extends AppCompatActivity {
     private ImageView Imageback ;
     private Myrequest request ;
     private RequestQueue queue ;
+    private ArrayList<Annonce> AnnoncesHP;
+
 
 
 
@@ -74,6 +82,10 @@ public class DetailedOfferActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
         queue = VolleySingleton.getInstance(this).getRequestQueue();
         request = new Myrequest(this, queue, IPV4_serv);
+
+
+
+
 
         Intent intent = getIntent();
         String login = intent.getStringExtra("login");
@@ -102,10 +114,13 @@ public class DetailedOfferActivity extends AppCompatActivity {
         Imagefavorie = findViewById(R.id.icone_favorie);
         Imageback = findViewById(R.id.imageBack);
 
+
+
         Imageback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+                app.setAnnoncesHP(AnnoncesHP);
             }
         });
 
@@ -125,25 +140,37 @@ public class DetailedOfferActivity extends AppCompatActivity {
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.categories);
 
-        int spanCount = 3;
-        GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount);
+        //int spanCount = 3;
+        //GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount);
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(getApplicationContext());
+        layoutManager.setFlexDirection(FlexDirection.ROW); // or FlexDirection.COLUMN
+        layoutManager.setFlexWrap(FlexWrap.WRAP); // or FlexWrap.NOWRAP or FlexWrap.WRAP_REVERSE
         rv.setLayoutManager(layoutManager);
 
-        MySpanSizeLookup spanSizeLookup = new MySpanSizeLookup();
-        layoutManager.setSpanSizeLookup(spanSizeLookup);
+
+
+        //MySpanSizeLookup spanSizeLookup = new MySpanSizeLookup();
+        //layoutManager.setSpanSizeLookup(spanSizeLookup);
+        AnnoncesHP = app.getAnnoncesHP();
 
         Imagefavorie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                for(Annonce annonce : AnnoncesHP){
+                    if(annonce.getId_annonce()== id_annonce){
+                        annonceid = AnnoncesHP.indexOf(annonce);
+                    }
+                }
                 Drawable currentDrawable = Imagefavorie.getDrawable();
                 if (currentDrawable.getConstantState().equals(getResources().getDrawable(R.drawable.favorite_gold).getConstantState())) {
                     Imagefavorie.setImageResource(R.drawable.favorite_gray);
                     removeFavorite(IPV4_serv, id_annonce);
-
+                    AnnoncesHP.get(annonceid).setFavorite(0);
                 } else {
                     Imagefavorie.setImageResource(R.drawable.favorite_gold);
                     // On ajoute le favorie à la base de donnée
                     addFavorite(IPV4_serv, id_annonce);
+                    AnnoncesHP.get(annonceid).setFavorite(1);
                 }
                 // On ajoute une petite animation
                 ObjectAnimator scaleX = ObjectAnimator.ofFloat(Imagefavorie, "scaleX", 1f, 1.2f, 1f);
