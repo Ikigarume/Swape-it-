@@ -12,9 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import myrequestt.myMessageRequest;
 
 
@@ -27,12 +24,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.RequestQueue;
-import com.example.RecyclerView.MessageAdapter;
 import com.example.database_animals.Message;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class Message_Activity extends AppCompatActivity {
@@ -41,11 +37,12 @@ public class Message_Activity extends AppCompatActivity {
 
         Bitmap bitmap ;
         EditText MessageEditText ;
-        private TextView Send ;
-        private ImageView uploadPictureButton ;
+        private TextView Send, TextOtherUserLogin, TextOtherUserLogin2 ;
+        private ImageView uploadPictureButton, ImageOtherUserImg, ImageOtherUserImg2;
         private ImageView takePictureButton , imageBack ;
 
         private int currentUserId  , otherUserId ;
+        private String otherUserImg, otherUserLogin;
 
         private RecyclerView rv ;
 
@@ -64,12 +61,36 @@ public class Message_Activity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_messagerie);
 
+
             ServeurIP app = (ServeurIP) this.getApplicationContext();
             String IPV4_serv = app.getIPV4_serveur();
-
             sessionManager = new SessionManager(this.getApplicationContext()) ;
             queue = VolleySingleton.getInstance(getApplicationContext()).getRequestQueue();
             request = new myMessageRequest(getApplicationContext(),queue,IPV4_serv) ;
+
+            Intent intent = getIntent();
+            otherUserId = intent.getIntExtra("otherUserId",0);
+            otherUserLogin = intent.getStringExtra("otherUserlogin");
+            otherUserImg = intent.getStringExtra("otherUserImg");
+            currentUserId = Integer.parseInt(sessionManager.getId());
+
+            // loading the elements
+            takePictureButton = (ImageView) findViewById(R.id.take_picture_button);
+            uploadPictureButton = (ImageView) findViewById(R.id.upload_picture_button) ;
+            TextOtherUserLogin = findViewById(R.id.discussions_username);
+            TextOtherUserLogin2 = findViewById(R.id.other_user_name) ;
+            ImageOtherUserImg = findViewById(R.id.profile_image);
+            ImageOtherUserImg2 = findViewById(R.id.other_user_profile_image);
+            imageBack = findViewById(R.id.imageBack);
+
+            TextOtherUserLogin.setText(otherUserLogin);
+            TextOtherUserLogin2.setText(otherUserLogin);
+            Picasso.get().load(otherUserImg).into(ImageOtherUserImg);
+            Picasso.get().load(otherUserImg).into(ImageOtherUserImg2);
+
+
+
+
 
             messages = request.getAllMessages(sessionManager.getId(),Integer.toString(otherUserId) , new myMessageRequest.GetAllMessagesCallBack() {
                 @Override
@@ -84,10 +105,8 @@ public class Message_Activity extends AppCompatActivity {
             }) ;
 
 
-            // loading the elements
-            takePictureButton = (ImageView) findViewById(R.id.take_picture_button);
-            uploadPictureButton = (ImageView) findViewById(R.id.upload_picture_button) ;
-            imageBack = findViewById(R.id.imageBack);
+
+
 
             imageBack.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -138,9 +157,7 @@ public class Message_Activity extends AppCompatActivity {
             MessageEditText = (EditText) findViewById(R.id.message_input_field) ;
 
             // get the data thta has being passed to the message activity :
-            Intent intent = getIntent();
-            currentUserId = intent.getIntExtra("currentUserId",0);
-            otherUserId = intent.getIntExtra("otherUserId",0);
+
             // just in case they were = 0 then roll back to the previous activity :
             if(currentUserId==0 || otherUserId==0){
                 onBackPressed();

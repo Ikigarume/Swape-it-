@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -88,7 +89,8 @@ public class DiscussionAdapter extends RecyclerView.Adapter<DiscussionAdapter.My
                     Intent intent = new Intent(context, Message_Activity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("otherUserId",currentDiscussion.getOtherChatterId()) ;
-                    intent.putExtra("currentUserId", 1); // this one is to get the id of the user
+                    intent.putExtra("otherUserlogin",currentDiscussion.getOtherChatter());
+                    intent.putExtra("otherUserImg",currentDiscussion.getImg_rep());
                     context.startActivity(intent);
                 }
             });

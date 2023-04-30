@@ -138,10 +138,10 @@
         <LinearLayout
             android:id="@+id/message_input_linearlayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="20dp"
-            android:layout_weight="1"
+            android:gravity="start"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -156,10 +156,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="0dp"
                 android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+               >
 
                 <!-- Message input field -->
 
@@ -169,6 +166,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:background="@drawable/round_edittext_messages"
+                    android:backgroundTint="@color/light_peche"
                     android:hint="Type your message"
                     android:inputType="text"
                     android:padding="14dp"
@@ -202,10 +200,7 @@
                 android:contentDescription="Upload images or videos button"
                 android:onClick="onUploadButtonClick"
                 android:src="@drawable/gallary_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/take_picture_button"
-                app:layout_constraintStart_toEndOf="@id/message_input_Relativelayout"
-                app:layout_constraintTop_toTopOf="parent" />
+                 />
 
             <ImageView
                 android:id="@+id/take_picture_button"
@@ -215,10 +210,7 @@
                 android:clickable="true"
                 android:onClick="onUploadButtonClick"
                 android:src="@drawable/camera_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/upload_picture_button"
-                app:layout_constraintTop_toTopOf="parent" />
+                />
 
         </LinearLayout>
     </LinearLayout>

@@ -59,7 +59,7 @@ public class myMessageRequest {
                                 Discussion d = new Discussion(otherUserId,otherUserPseudo,latestMsg,img_rep);
                                 Discussions.add(d);
                                 }
-                            callBack.onSucces("heheheheheh");
+                            callBack.onSucces("");
                         }catch(Exception e){
                             Toast.makeText(context,"Discussion exception"+e,Toast.LENGTH_SHORT).show();
                             callBack.onError("JSONException");
@@ -78,6 +78,7 @@ public class myMessageRequest {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> map = new HashMap<>();
+                map.put("serveurIP",IPV4_serv);
                 map.put("currentUserId",currentUserId) ;
                 return map;
             }

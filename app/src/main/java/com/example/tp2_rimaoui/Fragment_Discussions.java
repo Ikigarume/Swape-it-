@@ -49,7 +49,6 @@ public class Fragment_Discussions extends Fragment {
                 myAdapter = new DiscussionAdapter(getContext(),discussions) ;
                 rv.setLayoutManager(new LinearLayoutManager(getContext()));
                 rv.setAdapter(myAdapter);
-                Toast.makeText(getContext(),message,Toast.LENGTH_SHORT).show();
             }
             public void onError(String message){
                 Toast.makeText(getContext(),"discussions fragment : "+message,Toast.LENGTH_SHORT).show();
