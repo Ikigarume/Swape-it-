@@ -133,7 +133,6 @@
                     android:clickable="true"
                     android:gravity="center_vertical"
                     android:minHeight="52dp"
-                    android:onClick="onSendMessageButtonClick"
                     android:selectAllOnFocus="true"
                     android:text="send"
                     android:textAllCaps="false"
