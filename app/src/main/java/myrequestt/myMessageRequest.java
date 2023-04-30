@@ -58,11 +58,8 @@ public class myMessageRequest {
 
                                 Discussion d = new Discussion(otherUserId,otherUserPseudo,latestMsg,img_rep);
                                 Discussions.add(d);
-                                Toast.makeText(context,"No Discussion exception, the discussions have being parsed",Toast.LENGTH_SHORT).show();
-                                Toast.makeText(context,"the length of the arrayu is "+array.length(),Toast.LENGTH_SHORT).show();
-                            }
+                                }
                             callBack.onSucces("heheheheheh");
-                            Toast.makeText(context,"No Discussion exception, the discussions have being parsed",Toast.LENGTH_SHORT).show();
                         }catch(Exception e){
                             Toast.makeText(context,"Discussion exception"+e,Toast.LENGTH_SHORT).show();
                             callBack.onError("JSONException");

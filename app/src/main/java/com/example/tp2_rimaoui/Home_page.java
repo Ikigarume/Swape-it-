@@ -87,7 +87,6 @@ public class Home_page extends AppCompatActivity {
             @Override
             public void onSucces(String message) {
                 for (Integer i : Favoris){
-                    Toast.makeText(Home_page.this, "fav : "+i, Toast.LENGTH_SHORT).show();
                 }
                 AnnoncesHP = request.getPostsInfo(Favoris, new Myrequest.GetPostsInfoCallback() {
                     @Override
@@ -278,7 +277,6 @@ public class Home_page extends AppCompatActivity {
         AnnoncesHP = app.getAnnoncesHP();
         annonceAdapterHP = new AnnonceAdapter(getApplicationContext(), AnnoncesHP);
 
-        Toast.makeText(this, "call : "+isActivityInitialized, Toast.LENGTH_SHORT).show();
         if (isActivityInitialized) {
             // L'activité a déjà été créée
             rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
