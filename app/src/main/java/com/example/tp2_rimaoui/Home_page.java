@@ -3,6 +3,7 @@ package com.example.tp2_rimaoui;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -222,6 +223,51 @@ public class Home_page extends AppCompatActivity {
         new_post = findViewById(R.id.newPost);
         welcometext = findViewById(R.id.textView4);
         editSearch = findViewById(R.id.recherche);
+        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Favoris = request.getFavoris(sessionManager.getPseudo(), new Myrequest.GetFavorisCallback() {
+                    @Override
+                    public void onSucces(String message) {
+                        Annonces = request.getPostsInfo(Favoris, new Myrequest.GetPostsInfoCallback() {
+                            @Override
+                            public void onSucces(String message) {
+                                annonceAdapter = new AnnonceAdapter(getApplicationContext(), Annonces);
+                                rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                                rv.setAdapter(annonceAdapter);
+                            }
+
+                            @Override
+                            public void inputErrors(Map<String, String> errors) {
+                                Toast.makeText(Home_page.this, "inputErrors", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                            @Override
+                            public void onError(String message) {
+                                Toast.makeText(Home_page.this, "Annonces : "+message, Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+                        swipeRefreshLayout.setRefreshing(false);
+
+                    }
+
+                    @Override
+                    public void inputErrors(Map<String, String> errors) {
+
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        Toast.makeText(Home_page.this, "Favoris : "+message, Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+        });
 
         profile_image.setOnClickListener(new View.OnClickListener() {
             @Override

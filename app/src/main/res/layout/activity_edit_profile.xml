@@ -24,8 +24,8 @@
                 android:drawableTop="@drawable/ic_back"
                 android:background="@drawable/ic_back_background"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/button_upload"
-                app:layout_constraintBottom_toBottomOf="@id/button_upload"/>
+                app:layout_constraintTop_toTopOf="parent"
+                />
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="195dp"
@@ -34,20 +34,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-            <Button
-                android:id="@+id/button_upload"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Save changes"
-                android:textAllCaps="false"
-                android:background="@drawable/round_button_gray"
-                android:backgroundTint="#3C4166"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_margin="10dp"
-                android:padding="15dp"
-                />
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/container_info"
                 android:layout_width="match_parent"
@@ -58,10 +45,28 @@
                 app:cardCornerRadius="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button_upload">
+                app:layout_constraintTop_toBottomOf="@+id/imageView">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/button_upload"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Save changes"
+                        android:textAllCaps="false"
+                        android:layout_marginVertical="20dp"
+                        android:background="@drawable/round_button_gray"
+                        android:backgroundTint="#3C4166"
+                        android:textColor="@color/white"
+                        app:layout_constraintTop_toBottomOf="@id/number_editText"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:padding="15dp"
+                        />
+
                     <TextView
                         android:id="@+id/Text1"
                         android:layout_width="wrap_content"
@@ -156,26 +161,11 @@
                         android:background="@drawable/curved_border"
                         android:backgroundTint="@color/white"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/number_textView"
                         android:hint="edit your number  here "/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
-            <Button
-                android:id="@+id/password_upload"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Confirm new password"
-                android:textAllCaps="false"
-                android:background="@drawable/round_button_gray"
-                android:backgroundTint="#3C4166"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/container_info"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="10dp"
-                android:padding="15dp"
-                />
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/container_password"
                 android:layout_width="match_parent"
@@ -188,10 +178,28 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/password_upload">
+                app:layout_constraintTop_toBottomOf="@+id/container_info">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/password_upload"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Confirm new password"
+                        android:textAllCaps="false"
+                        android:background="@drawable/round_button_gray"
+                        android:backgroundTint="#3C4166"
+                        android:textColor="@color/white"
+                        android:layout_marginBottom="20dp"
+                        android:padding="15dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/passwordField"
+                        />
+
                     <TextView
                         android:id="@+id/passText1"
                         android:layout_width="wrap_content"
@@ -230,48 +238,77 @@
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/devider2" />
-                    <EditText
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/oldpasswordField"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/oldpassword_textView"
+                        app:endIconMode="password_toggle"
+                        app:hintAnimationEnabled="false"
+                        android:paddingLeft="10dp"
+                        android:textColorHint="@color/normal_gray"
+                        app:hintTextColor="#00000000"
+                        app:errorEnabled="true"
+                        android:layout_marginBottom="40dp"
+                        >
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/oldpassword_editText"
                         android:layout_width="match_parent"
                         android:layout_marginTop="10dp"
-
+                        app:endIconMode="password_toggle"
                         android:layout_marginHorizontal="19dp"
                         android:layout_height="45dp"
                         android:padding="10dp"
                         android:background="@drawable/curved_border"
                         android:backgroundTint="@color/white"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/oldpassword_textView"
                         android:hint="Enter your current password "
+                        android:textColorHint="@color/pink_button"
                         />
+                    </com.google.android.material.textfield.TextInputLayout>
                     <TextView
                         android:id="@+id/newpassword_textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="10dp"
                         android:fontFamily="@font/cambria"
                         android:text="New password : "
                         android:textColor="#3C4166"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/oldpassword_editText" />
+                        app:layout_constraintTop_toBottomOf="@+id/oldpasswordField" />
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/passwordField"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/newpassword_textView"
+                        app:endIconMode="password_toggle"
+                        app:hintAnimationEnabled="false"
+                        android:textColorHint="@color/normal_gray"
+                        app:hintTextColor="#00000000"
+                        android:paddingLeft="10dp"
+                        app:errorEnabled="true"
+                        android:layout_marginBottom="40dp"
+                        >
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/newpassword_editText"
                         android:layout_width="match_parent"
-                        android:layout_marginTop="10dp"
                         android:layout_marginHorizontal="19dp"
                         android:layout_height="45dp"
                         android:padding="10dp"
-                        android:layout_marginBottom="20dp"
+                        android:hint="Enter your new password "
                         android:background="@drawable/curved_border"
                         android:backgroundTint="@color/white"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/newpassword_textView"
-                        android:hint="enter your new password "/>
+                        />
+
+                    </com.google.android.material.textfield.TextInputLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,8 +2,10 @@ package com.example.tp2_rimaoui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -32,6 +34,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -78,7 +82,6 @@ public class MyProfileActivity extends AppCompatActivity implements PopupMenu.On
         TextView userNum = findViewById(R.id.phone_number);
         RatingBar ratingBar = findViewById(R.id.ratingBar);
         TextView userNbrVote = findViewById(R.id.nbr_vote);
-        Toast.makeText(this, "new login : "+sessionManager.getPseudo(), Toast.LENGTH_SHORT).show();
 
         getUserInfo(IPV4_serv, new GetUserInfoCallback() {
             @Override
@@ -116,6 +119,7 @@ public class MyProfileActivity extends AppCompatActivity implements PopupMenu.On
         //btnMore.findViewById(R.id.imagemore);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+        bottomNavigationView.setItemIconTintList(null);
         ImageView userImage = findViewById(R.id.profile_image);
         TextView userLogin = findViewById(R.id.my_user_name);
         TextView userNum = findViewById(R.id.phone_number);
@@ -149,24 +153,29 @@ public class MyProfileActivity extends AppCompatActivity implements PopupMenu.On
         });
 
 
-
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
                 switch (item.getItemId()) {
                     case R.id.navigation_Discussions:
                         replaceFragment(new Fragment_Discussions());
+
                         return true;
                     case R.id.navigation_Offers:
                         replaceFragment(new Fragement_Offers());
+
                         return true;
                     case R.id.navigation_favorites:
                         replaceFragment(new fragment_Favorites());
+
+
                         return true;
                     default:
                         return false;
                 }
+
+
             }
         });
 
@@ -272,7 +281,10 @@ public class MyProfileActivity extends AppCompatActivity implements PopupMenu.On
                 intent.putExtra("id_utilisateur",id_utilisateur);
                 this.startActivity(intent);
             case R.id.option_log_out :
-                Toast.makeText(this,"loging out option is clicked",Toast.LENGTH_SHORT).show() ;
+                sessionManager.logout();
+                Intent intent2 = new Intent(getApplicationContext(), BoardingActivity.class);
+                startActivity(intent2);
+                finish();
                 return true ;
             default:return false ;
         }

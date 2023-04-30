@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.RequestQueue;
+import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -33,7 +34,8 @@ import myrequestt.Myrequest;
 public class EditProfile_Activity extends AppCompatActivity {
 
     private SessionManager sessionManager ;
-    private EditText userPseudo, userNumber, oldPassword, newPassword;
+    private EditText userPseudo, userNumber;
+    private TextInputLayout passwordField,oldpasswordField ;
     private ImageView userImage, btnCamera ;
     private Button btnInfo, btnPassword;
     private Myrequest request;
@@ -56,8 +58,8 @@ public class EditProfile_Activity extends AppCompatActivity {
         userImage = findViewById(R.id.profile_image);
         btnInfo = findViewById(R.id.button_upload);
         btnPassword = findViewById(R.id.password_upload);
-        oldPassword = findViewById(R.id.oldpassword_editText);
-        newPassword = findViewById(R.id.newpassword_editText);
+        oldpasswordField = findViewById(R.id.oldpasswordField);
+        passwordField = findViewById(R.id.passwordField);
         btnCamera = findViewById(R.id.btnCamera);
 
         Intent intent = getIntent();
@@ -146,6 +148,42 @@ public class EditProfile_Activity extends AppCompatActivity {
 
                 }
 
+            }
+        });
+
+        btnPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String newPass = passwordField.getEditText().getText().toString().trim();
+                String oldPass = oldpasswordField.getEditText().getText().toString().trim();
+
+                if(newPass.length()>0 && oldPass.length()>0){
+
+                    if(newPass.length()>7){
+                        request.updateUserPass(sessionManager.getId(), newPass, oldPass, new Myrequest.updateUserPassCallback() {
+                            @Override
+                            public void onSucces(String message) {
+                                Toast.makeText(EditProfile_Activity.this, "Password changed successfully !", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                            @Override
+                            public void inputErrors(Map<String, String> errors) {
+
+                            }
+
+                            @Override
+                            public void onError(String message) {
+                                Toast.makeText(EditProfile_Activity.this, message, Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+
+                    } else {
+                        passwordField.setError("Password too short");
+                    }
+
+                }
             }
         });
 

@@ -3,18 +3,18 @@
 
     <item
         android:id="@+id/navigation_Discussions"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/chat_selector"
         android:title="Discussions"
         />
 
     <item
         android:id="@+id/navigation_Offers"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/dashboard_selector"
         android:title="offers" />
 
     <item
         android:id="@+id/navigation_favorites"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/fav_selector"
         android:title="favorites" />
 
 
