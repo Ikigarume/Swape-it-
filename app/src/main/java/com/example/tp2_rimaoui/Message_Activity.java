@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,12 +21,16 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.RequestQueue;
 import com.example.RecyclerView.MessageAdapter;
 import com.example.database_animals.Message;
+import com.google.android.material.appbar.AppBarLayout;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -79,20 +84,21 @@ public class Message_Activity extends AppCompatActivity {
             takePictureButton = (ImageView) findViewById(R.id.take_picture_button);
             uploadPictureButton = (ImageView) findViewById(R.id.upload_picture_button) ;
             TextOtherUserLogin = findViewById(R.id.discussions_username);
-            TextOtherUserLogin2 = findViewById(R.id.other_user_name) ;
-            ImageOtherUserImg = findViewById(R.id.profile_image);
+
             ImageOtherUserImg2 = findViewById(R.id.other_user_profile_image);
             imageBack = findViewById(R.id.imageBack);
-
-            TextOtherUserLogin.setText(otherUserLogin);
-            TextOtherUserLogin2.setText(otherUserLogin);
-            Picasso.get().load(otherUserImg).into(ImageOtherUserImg);
-            Picasso.get().load(otherUserImg).into(ImageOtherUserImg2);
+            NestedScrollView nestedScrollView = findViewById(R.id.NestedScrollingView);
 
 
 
             // adapting the images :
             rv = (RecyclerView) findViewById(R.id.recycler_gchat);
+
+            // Planifier une tâche différée pour faire défiler le NestedScrollView
+            //rv.setNestedScrollingEnabled(false);
+
+
+
             rv.setLayoutManager(new LinearLayoutManager(this));
 
             messages = request.getAllMessages(sessionManager.getId(),Integer.toString(otherUserId) , new myMessageRequest.GetAllMessagesCallBack() {
@@ -100,7 +106,13 @@ public class Message_Activity extends AppCompatActivity {
                 public void onSucces(String message){
                     myAdapter = new MessageAdapter(getApplicationContext(), messages, currentUserId, otherUserId, otherUserLogin);
                     rv.setAdapter(myAdapter);
-
+                    nestedScrollView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Faire défiler le NestedScrollView jusqu'à la fin
+                            nestedScrollView.fullScroll(View.FOCUS_DOWN);
+                        }
+                    });
 
 
                 }
@@ -187,6 +199,14 @@ public class Message_Activity extends AppCompatActivity {
 
                 }
             });
+
+
+
+
+
+
+
+
 
         }
     public void sendMessageToDB(String messageToSend){

@@ -230,8 +230,7 @@ public class myMessageRequest {
                                     String messageBody = msg.getString("messageBody");
                                     String messageTime = msg.getString("messageDate");
                                     Message m = new Message(idSender,idReceiver,messageBody,messageTime);
-                                    Toast.makeText(context, "body : "+messageBody, Toast.LENGTH_SHORT).show();
-                                    allMessages.add(0,m);
+                                    allMessages.add(m);
 
                                 }
                                 callBack.onSucces("no errors accured in fetching data");

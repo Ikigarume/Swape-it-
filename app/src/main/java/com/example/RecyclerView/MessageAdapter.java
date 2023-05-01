@@ -16,11 +16,15 @@ import com.example.tp2_rimaoui.R;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MessageAdapter extends RecyclerView.Adapter {
 
     private static final int VIEW_TYPE_MESSAGE_SENT = 1 ;
+    private static String lastDateMessage = null ;
     private static final int VIEW_TYPE_MESSAGE_RECIEVED = 2 ;
     private int currentUserId ;
     private int otherUserId ;
@@ -85,21 +89,41 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
 
     public class SendMessageHolder extends RecyclerView.ViewHolder{
-        private final TextView messageText, timeText ;
+        private final TextView messageText, timeText, dateText ;
 
         public SendMessageHolder(@NonNull View itemView) {
             super(itemView);
             messageText = (TextView) itemView.findViewById(R.id.text_gchat_message_me);
             timeText = (TextView) itemView.findViewById(R.id.text_gchat_timestamp_me);
+            dateText = itemView.findViewById(R.id.text_message_date_me);
         }
 
         public void bind(Message msg){
             messageText.setText(msg.getMessage());
-            timeText.setText(msg.getDateMessage());
+            String dateString = msg.getDateMessage();
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat timeoutputFormat = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat dateoutputFormat = new SimpleDateFormat("dd MMM yyyy");
+
+            try {
+                Date date = inputFormat.parse(dateString);
+                String timeonly = timeoutputFormat.format(date);
+                String dateOnly = dateoutputFormat.format(date);
+                timeText.setText(timeonly);
+                if(dateOnly.equals(lastDateMessage)){
+                    dateText.setVisibility(View.GONE);
+                } else {
+                    dateText.setText(dateOnly);
+                    lastDateMessage = dateOnly;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
         }
     }
     public class ReceivedMessageHolder extends RecyclerView.ViewHolder{
-        private final TextView messageText , timeText , userNameText ;
+        private final TextView messageText , timeText , userNameText, dateText ;
         private final ImageView profileImage ;
         public ReceivedMessageHolder(@NonNull View itemView) {
             super(itemView);
@@ -107,10 +131,29 @@ public class MessageAdapter extends RecyclerView.Adapter {
             timeText = (TextView) itemView.findViewById(R.id.text_message_time);
             userNameText = (TextView) itemView.findViewById(R.id.text_message_name);
             profileImage = (ImageView) itemView.findViewById(R.id.other_image);
+            dateText = itemView.findViewById(R.id.text_date);
         }
         public void bind(Message msg){
             messageText.setText(msg.getMessage());
-            timeText.setText(msg.getDateMessage());
+            String dateString = msg.getDateMessage();
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat timeoutputFormat = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat dateoutputFormat = new SimpleDateFormat("dd MMM yyyy");
+
+            try {
+                Date date = inputFormat.parse(dateString);
+                String timeonly = timeoutputFormat.format(date);
+                String dateOnly = dateoutputFormat.format(date);
+                timeText.setText(timeonly);
+                if(dateOnly.equals(lastDateMessage)){
+                    dateText.setVisibility(View.GONE);
+                } else {
+                    dateText.setText(dateOnly);
+                    lastDateMessage = dateOnly;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             userNameText.setText(otherUserLogin);
         }
     }
