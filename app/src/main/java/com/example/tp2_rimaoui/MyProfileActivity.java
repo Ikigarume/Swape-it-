@@ -128,7 +128,7 @@ public class MyProfileActivity extends AppCompatActivity implements PopupMenu.On
 
         sessionManager = new SessionManager(this);
 
-        replaceFragment(new fragment_Favorites());
+        replaceFragment(new Fragment_Discussions());
 
 
         getUserInfo(IPV4_serv, new GetUserInfoCallback() {
@@ -159,7 +159,11 @@ public class MyProfileActivity extends AppCompatActivity implements PopupMenu.On
 
                 switch (item.getItemId()) {
                     case R.id.navigation_Discussions:
-                        replaceFragment(new Fragment_Discussions());
+                        Fragment_Discussions fragmentDiscussion = new Fragment_Discussions() ;
+                        //Bundle b = new Bundle() ;
+                        //b.putInt("user_id", id_utilisateur);
+                        //fragmentDiscussion.setArguments(b);
+                        replaceFragment(fragmentDiscussion);
 
                         return true;
                     case R.id.navigation_Offers:

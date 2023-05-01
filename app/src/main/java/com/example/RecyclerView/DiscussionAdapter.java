@@ -2,6 +2,7 @@ package com.example.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.database_animals.Discussion;
+import com.example.tp2_rimaoui.DetailedOfferActivity;
+import com.example.tp2_rimaoui.Message_Activity;
 import com.example.tp2_rimaoui.R;
+import com.example.tp2_rimaoui.SessionManager;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -21,11 +26,20 @@ public class DiscussionAdapter extends RecyclerView.Adapter<DiscussionAdapter.My
     private Context context;
     private ArrayList<Discussion> discussions ;
 
+
     public DiscussionAdapter(Context context , ArrayList<Discussion> discussions){
         this.context = context ;
         this.discussions = discussions ;
     }
 
+
+
+
+
+    @Override
+    public int getItemCount() {
+        return discussions.size();
+    }
 
     @NonNull
     @Override
@@ -38,24 +52,30 @@ public class DiscussionAdapter extends RecyclerView.Adapter<DiscussionAdapter.My
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
        Discussion discussion = (Discussion) discussions.get(position);
-       //holder.username.setText();
-       //holder.msg.setText();
-       //holder.profileImage.setImageBitmap();
+       holder.username.setText(discussion.getOtherChatter());
+       holder.msg.setText(discussion.getLatestMsg());
+
+        Picasso.get()
+                .load(discussion.getImg_rep())
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.errorimage)
+                .into(holder.profileImage) ;
+
+
     }
 
-    @Override
-    public int getItemCount() {
-        return 0;
-    }
+
+
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView username ;
-        TextView msg ;
-        ImageView profileImage ;
-        Discussion currentDiscussion ;
+        private TextView username ;
+        private TextView msg ;
+        private ImageView profileImage ;
+        private Discussion currentDiscussion ;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull final View itemView) {
             super(itemView);
             username= itemView.findViewById(R.id.discussions_username);
             msg= itemView.findViewById(R.id.latest_msg_discussion);
@@ -65,7 +85,11 @@ public class DiscussionAdapter extends RecyclerView.Adapter<DiscussionAdapter.My
                 @Override
                 public void onClick(View view){
                     currentDiscussion = (Discussion) discussions.get(getLayoutPosition())   ;
-                    new AlertDialog.Builder(itemView.getContext()).setTitle(currentDiscussion.getOtherChatter()).show() ;
+                    Intent intent = new Intent(context, Message_Activity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("otherUserId",currentDiscussion.getOtherChatterId()) ;
+                    intent.putExtra("currentUserId", 1); // this one is to get the id of the user
+                    context.startActivity(intent);
                 }
             });
         }

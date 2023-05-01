@@ -19,6 +19,9 @@
             android:name=".DetailedOfferActivity"
             android:exported="false" />
         <activity
+            android:name=".Message_Activity"
+            android:exported="false"/>
+        <activity
             android:name=".NewPost_Activity"
             android:exported="false" />
         <activity
