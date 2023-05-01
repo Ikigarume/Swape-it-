@@ -284,13 +284,15 @@ public class MyProfileActivity extends AppCompatActivity implements PopupMenu.On
                 intent.putExtra("userNumber",userNumber);
                 intent.putExtra("id_utilisateur",id_utilisateur);
                 this.startActivity(intent);
+                return true ;
             case R.id.option_log_out :
                 sessionManager.logout();
                 Intent intent2 = new Intent(getApplicationContext(), BoardingActivity.class);
                 startActivity(intent2);
                 finish();
                 return true ;
-            default:return false ;
+            default:
+                return false ;
         }
 
     }

@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.RequestQueue;
+import com.example.RecyclerView.MessageAdapter;
 import com.example.database_animals.Message;
 import com.squareup.picasso.Picasso;
 
@@ -50,7 +51,7 @@ public class Message_Activity extends AppCompatActivity {
         private RequestQueue queue ;
         private myMessageRequest request ;
 
-        private com.example.RecyclerView.MessageAdapter myAdapter;
+        private MessageAdapter myAdapter;
 
         private ArrayList messages = new ArrayList<>();
         @Override
@@ -90,17 +91,23 @@ public class Message_Activity extends AppCompatActivity {
 
 
 
-
+            // adapting the images :
+            rv = (RecyclerView) findViewById(R.id.recycler_gchat);
+            rv.setLayoutManager(new LinearLayoutManager(this));
 
             messages = request.getAllMessages(sessionManager.getId(),Integer.toString(otherUserId) , new myMessageRequest.GetAllMessagesCallBack() {
                 @Override
                 public void onSucces(String message){
+                    myAdapter = new MessageAdapter(getApplicationContext(), messages, currentUserId, otherUserId, otherUserLogin);
+                    rv.setAdapter(myAdapter);
+
+
 
                 }
 
                 @Override
                 public void onError(String message) {
-                    Toast.makeText(getApplicationContext(),"getting all past messages has failed due to "+message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"message error "+message, Toast.LENGTH_SHORT).show();
                 }
             }) ;
 
@@ -115,14 +122,8 @@ public class Message_Activity extends AppCompatActivity {
                 }
             });
 
-            // adapting the images :
-            rv = (RecyclerView) findViewById(R.id.recycler_gchat);
 
 
-
-
-            rv.setLayoutManager(new LinearLayoutManager(this));
-            rv.setAdapter(myAdapter);
 
 
             ActivityResultLauncher<Intent> activityResultLauncher =registerForActivityResult(

@@ -217,11 +217,12 @@ public class myMessageRequest {
                     @Override
                     public void onResponse(String response) {
                         try{
-                            JSONArray res = new JSONArray(response);
-                            JSONObject error = res.getJSONObject(0);
-                            Boolean err = error.getBoolean("err");
+                            JSONObject json = new JSONObject(response);
+                            Boolean err = json.getBoolean("err");
+
                             if (!err){
-                                JSONArray messages = res.getJSONArray(1) ;
+                                JSONArray messages = json.getJSONArray("messageDetails") ;
+                                Toast.makeText(context, "length : "+messages.length(), Toast.LENGTH_SHORT).show();
                                 for(int i = 0 ; i<messages.length() ;i++ ){
                                     JSONObject msg = messages.getJSONObject(i) ;
                                     int idSender = msg.getInt("userSender_ID");
@@ -229,9 +230,11 @@ public class myMessageRequest {
                                     String messageBody = msg.getString("messageBody");
                                     String messageTime = msg.getString("messageDate");
                                     Message m = new Message(idSender,idReceiver,messageBody,messageTime);
+                                    Toast.makeText(context, "body : "+messageBody, Toast.LENGTH_SHORT).show();
                                     allMessages.add(0,m);
-                                    callBack.onSucces("no errors accured in fetching data");
+
                                 }
+                                callBack.onSucces("no errors accured in fetching data");
                             }
 
                         }catch(Exception e){

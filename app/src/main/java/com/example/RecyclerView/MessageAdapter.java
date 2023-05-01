@@ -24,14 +24,16 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_RECIEVED = 2 ;
     private int currentUserId ;
     private int otherUserId ;
+    private String otherUserLogin ;
 
     private Context context ;
     private ArrayList<Message> Messages ;
-    public MessageAdapter(Context context, ArrayList<Message> messages, int currentUser , int otherUser ){
+    public MessageAdapter(Context context, ArrayList<Message> messages, int currentUser , int otherUser, String otherUserLogin ){
         this.context = context ;
         this.Messages = messages ;
         this.currentUserId = currentUser ;
         this.otherUserId = otherUser ;
+        this.otherUserLogin = otherUserLogin ;
     }
     @Override
     public int getItemCount() {
@@ -83,7 +85,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
 
     public class SendMessageHolder extends RecyclerView.ViewHolder{
-        TextView messageText, timeText ;
+        private final TextView messageText, timeText ;
 
         public SendMessageHolder(@NonNull View itemView) {
             super(itemView);
@@ -97,8 +99,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
         }
     }
     public class ReceivedMessageHolder extends RecyclerView.ViewHolder{
-        TextView messageText , timeText , userNameText ;
-        ImageView profileImage ;
+        private final TextView messageText , timeText , userNameText ;
+        private final ImageView profileImage ;
         public ReceivedMessageHolder(@NonNull View itemView) {
             super(itemView);
             messageText = (TextView) itemView.findViewById(R.id.text_message_body);
@@ -109,7 +111,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
         public void bind(Message msg){
             messageText.setText(msg.getMessage());
             timeText.setText(msg.getDateMessage());
-            userNameText.setText(msg.getIdSender());
+            userNameText.setText(otherUserLogin);
         }
     }
 }
