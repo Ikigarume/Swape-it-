@@ -18,6 +18,7 @@ import com.example.RecyclerView.MessageAdapter;
 import com.example.database_animals.Discussion;
 import com.example.database_animals.Message;
 
+import org.checkerframework.checker.units.qual.A;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,11 +28,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
 
 public class myMessageRequest {
 
     private Context context ;
     private RequestQueue queue ;
+    private Timer timer;
     private final String IPV4_serv ;
 
     public myMessageRequest(Context context, RequestQueue requestQueue, String IPV4_serv){
@@ -42,7 +45,7 @@ public class myMessageRequest {
 
     public ArrayList<Discussion> getDiscussions(String currentUserId, getDiscussionsCallBack callBack){
         //String BASE_URL = "http://"+IPV4_serv+"/swapeit/Discussions.php";
-        String BASE_URL = "http://"+IPV4_serv+"/swapeit/Discussions.php";
+        String BASE_URL = "http://"+IPV4_serv+"/swapeit/discussionsTEST.php";
         ArrayList<Discussion> Discussions = new ArrayList<>() ;
         StringRequest request = new StringRequest(Request.Method.POST, BASE_URL,
                 new Response.Listener<String>() {
@@ -146,27 +149,28 @@ public class myMessageRequest {
         public void onError(String message) ;
     }
 
-    public void sendTextMessage(String id_sender, String id_receiver, String messageBody, String messageType ,  SendTextMessageCallBack callBack ) {
+    public void sendTextMessage(String id_sender, String id_receiver, String messageBody, int messageType ,  SendTextMessageCallBack callBack ) {
 
-        String url = "http://"+IPV4_serv+"/swapeit/sendTextMessage.php" ;
+        String url = "http://"+IPV4_serv+"/swapeit/sendMessageTEST.php" ;
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Map<String, String> errors = new HashMap<>();
+
                         try {
                             JSONObject json = new JSONObject(response);
                             Boolean error = json.getBoolean("error");
-                            int id_sent_message = json.getInt("id_sent_message");
+                            //int id_sent_message = json.getInt("id_sent_message");
                             String serverMessageSentResponse = json.getString("message");
 
+
+
                             if(!error){
-                                callBack.onSucces(serverMessageSentResponse,id_sent_message);
+                                callBack.onSucces(serverMessageSentResponse);
                             }
                             else{
                                 callBack.onError(serverMessageSentResponse);
                             }
-                            Toast.makeText(context, "sending onResponse :"+serverMessageSentResponse, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -192,7 +196,7 @@ public class myMessageRequest {
                 map.put("id_sender", id_sender); // this should be an int
                 map.put("id_receiver",id_receiver); // this also should be an int
                 map.put("message_body", messageBody);
-                map.put("message_type",messageType) ;
+                map.put("message_type", String.valueOf(messageType)) ;
                 return map;
             }
         } ;
@@ -200,7 +204,7 @@ public class myMessageRequest {
         queue.add(request) ;
     }
     public interface SendTextMessageCallBack{
-        public void onSucces(String message, int id_message_sent);
+        public void onSucces(String message);
         public void onError(String message) ;
     }
 
@@ -219,15 +223,15 @@ public class myMessageRequest {
 
                             if (!err){
                                 JSONArray messages = json.getJSONArray("messageDetails") ;
-                                Toast.makeText(context, "length : "+messages.length(), Toast.LENGTH_SHORT).show();
                                 for(int i = 0 ; i<messages.length() ;i++ ){
                                     JSONObject msg = messages.getJSONObject(i) ;
+                                    int idMessage = msg.getInt("message_lastID");
                                     int idSender = msg.getInt("userSender_ID");
                                     int idReceiver = msg.getInt("userReceiver_ID");
                                     String messageBody = msg.getString("messageBody");
                                     String messageTime = msg.getString("messageDate");
                                     int messageType = msg.getInt("messageType");
-                                    Message m = new Message(idSender,idReceiver,messageBody,messageTime,messageType);
+                                    Message m = new Message(idMessage, idSender,idReceiver,messageBody,messageTime,messageType);
                                     allMessages.add(m);
 
                                 }
@@ -235,7 +239,7 @@ public class myMessageRequest {
                             }
 
                         }catch(Exception e){
-                            callBack.onError("the error parameter faces a problem ");
+                            e.printStackTrace();
                         }
                     }
                 },
@@ -264,14 +268,37 @@ public class myMessageRequest {
     }
 
 
-    public void getMessage(String MessageSentId,ArrayList<Message>Messageslist, GetMessageCallBack callBack){
-        String BASE_url = "http://"+IPV4_serv+"/swapeit/getALLMessages.php" ;
+    public ArrayList<Message> getNewMessages(int currentUser, int otherUser, int lastIDMessage, GetNewMessagesCallBack callBack){
+        String BASE_url = "http://"+IPV4_serv+"/swapeit/getNewMessages.php" ;
+        ArrayList<Message> NewMessages = new ArrayList<>();
         StringRequest request = new StringRequest(Request.Method.POST, BASE_url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                String feedback ;
+
                 try{
-                    JSONObject first  = new JSONObject(response);
+                    JSONObject json = new JSONObject(response);
+                    Boolean err = json.getBoolean("err");
+
+                    if (!err){
+                        JSONArray messages = json.getJSONArray("messageDetails") ;
+                        if(messages.length()>0){
+                            for(int i = 0 ; i<messages.length() ;i++ ) {
+                                JSONObject msg = messages.getJSONObject(i);
+                                int idMessage = msg.getInt("message_lastID");
+                                int idSender = msg.getInt("userSender_ID");
+                                int idReceiver = msg.getInt("userReceiver_ID");
+                                String messageBody = msg.getString("messageBody");
+                                String messageTime = msg.getString("messageDate");
+                                int messageType = msg.getInt("messageType");
+                                Message m = new Message(idMessage, idSender, idReceiver, messageBody, messageTime, messageType);
+                                NewMessages.add(m);
+                            }
+                        }
+                        callBack.onSucces("no errors occurred in fetching data");
+                    }
+                    /*
+                    JSONObject json  = new JSONObject(response);
+
                     feedback = first.getString("message");
                     if(first.getBoolean("error")){
                         JSONObject m = first.getJSONObject("messageDetails") ;
@@ -289,6 +316,8 @@ public class myMessageRequest {
                         callBack.onError(feedback);
                     }
                     Toast.makeText(context, "serverMessageSentResponse" + feedback , Toast.LENGTH_SHORT).show();
+
+                     */
                 }catch(Exception e){
                     callBack.onError(" bla blo bli Failed to retrieve message");
                 }
@@ -304,12 +333,24 @@ public class myMessageRequest {
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> map = new HashMap<>() ;
-                map.put("messageSentId",MessageSentId) ;
+                map.put("currentUserId", String.valueOf(currentUser)) ;
+                map.put("otherUserId", String.valueOf(otherUser));
+                map.put("lastMessageId", String.valueOf(lastIDMessage)) ;
                 return map ;
             }
         };
         queue.add(request);
+        return NewMessages;
     }
+
+    public interface GetNewMessagesCallBack{
+        public void onSucces(String message) ;
+        public void onError(String message) ;
+    }
+
+
+
+    /*
     public void getMessage(String currentUserId , String otherUserId, ArrayList<Message> Messageslist , GetMessageCallBack callBack ){
         String BASE_url = "http://"+IPV4_serv+"/swapeit/getALLMessages.php" ;
 
@@ -359,6 +400,8 @@ public class myMessageRequest {
         queue.add(request);
         //return message[0];
     }
+
+     */
     }
 
 

@@ -12,6 +12,7 @@ import java.time.LocalTime;
 public class Message {
 
     @ColumnInfo(name = "message")
+            private int id;
     String message;
     @ColumnInfo(name = "id_sender")
     int idSender;
@@ -23,9 +24,8 @@ public class Message {
     @ColumnInfo(name="message_type")
     int messageType ; // 0 for text, 1 for Imgs
 
-
-
-    public Message (int idsender , int idreciever , String message, String dateMessage, int type){
+    public Message ( int idsender , int idreciever , String message, String dateMessage, int type){
+        this.id = id ;
         this.message = message ;
         this.idReceiver = idreciever ;
         this.idSender = idsender ;
@@ -33,6 +33,16 @@ public class Message {
         this.messageType = type ;
     }
 
+    public Message (int id , int idsender , int idreciever , String message, String dateMessage, int type){
+        this.id = id ;
+        this.message = message ;
+        this.idReceiver = idreciever ;
+        this.idSender = idsender ;
+        this.dateMessage = dateMessage ;
+        this.messageType = type ;
+    }
+
+    public int getId(){return this.id;}
     public String getMessage() {
         return this.message;
     }

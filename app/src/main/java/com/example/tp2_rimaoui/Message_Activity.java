@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -34,12 +36,19 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class Message_Activity extends AppCompatActivity {
 
         private ImageView otherUserProfileImage ;
+        private int Sender_LastIdMessage = 0 ;
+        private ArrayList<Message> newmessages = new ArrayList<>();
+        private Timer timer;
         Bitmap bitmap ;
         EditText MessageEditText ;
         private TextView Send, TextOtherUserLogin, TextOtherUserLogin2 ;
@@ -57,7 +66,7 @@ public class Message_Activity extends AppCompatActivity {
 
         private MessageAdapter myAdapter;
 
-        private ArrayList messages = new ArrayList<>();
+        private ArrayList<Message> messages = new ArrayList<>();
         @Override
 
         protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +109,7 @@ public class Message_Activity extends AppCompatActivity {
                 public void onSucces(String message){
                     myAdapter = new MessageAdapter(getApplicationContext(), messages, currentUserId, otherUserId, otherUserLogin);
                     rv.setAdapter(myAdapter);
+                    Sender_LastIdMessage = messages.get(messages.size()-1).getId() ;
                     nestedScrollView.post(new Runnable() {
                         @Override
                         public void run() {
@@ -133,12 +143,34 @@ public class Message_Activity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    String message = MessageEditText.getText().toString().trim();
+                    String messageText = MessageEditText.getText().toString().trim();
                     int messageType = 0;
-                    request.sendTextMessage(sessionManager.getId(), Integer.toString(otherUserId),message , Integer.toString(messageType),
+                    request.sendTextMessage(sessionManager.getId(), Integer.toString(otherUserId),messageText , 0,
                             new myMessageRequest.SendTextMessageCallBack(){
                                 @Override
-                                public void onSucces(String message, int id_message_sent) {
+                                public void onSucces(String message) {
+                                    // Créer un objet de la classe SimpleDateFormat
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    // Obtenir la date et l'heure actuelles
+                                    Date date = new Date();
+                                    // Formater la date et l'heure selon le modèle souhaité
+                                    String heureActuelle = dateFormat.format(date);
+                                    Message msg = new Message(currentUserId,otherUserId,messageText,heureActuelle,0);
+                                    messages.add(msg);
+                                    myAdapter.notifyDataSetChanged();
+                                    MessageEditText.setText("");
+                                    nestedScrollView.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            // Faire défiler le NestedScrollView jusqu'à la fin
+                                            nestedScrollView.fullScroll(View.FOCUS_DOWN);
+                                        }
+                                    });
+
+
+
+
+                                    /*
                                     request.getMessage(Integer.toString(id_message_sent), messages, new myMessageRequest.GetMessageCallBack() {
                                         @Override
                                         public void onSucces(String message) {
@@ -150,10 +182,12 @@ public class Message_Activity extends AppCompatActivity {
 
                                         }
                                     });
+
+                                     */
                                 }
                                 @Override
                                 public void onError(String message) {
-                                    Toast.makeText(getApplicationContext(), "sending message in teh activity :"+message, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "send error:"+message, Toast.LENGTH_SHORT).show();
                                 }
                             }
                     );
@@ -203,6 +237,56 @@ public class Message_Activity extends AppCompatActivity {
                 }
             });
 
+            // ici nous allons executer la commande getNewMessages toutes les 5 secondes pour recuperer les nouveaux messages du destinataire
+            // Création d'un objet Timer
+            timer = new Timer();
+
+            // Définition de la tâche à exécuter toutes les 5 secondes
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    // Affichage du Toast sur le thread principal de l'application
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        public void run() {
+                            newmessages = request.getNewMessages(currentUserId, otherUserId, Sender_LastIdMessage, new myMessageRequest.GetNewMessagesCallBack() {
+                                @Override
+                                public void onSucces(String message) {
+                                    if(newmessages.size()>0){
+                                        Sender_LastIdMessage = newmessages.get(newmessages.size()-1).getId();
+                                        messages.addAll(newmessages);
+                                        myAdapter.notifyDataSetChanged();
+                                        nestedScrollView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                // Faire défiler le NestedScrollView jusqu'à la fin
+                                                nestedScrollView.fullScroll(View.FOCUS_DOWN);
+                                            }
+                                        });
+                                    }
+                                }
+                                @Override
+                                public void onError(String message) {
+
+                                }
+                            });
+
+                        }
+                    });
+                }
+            }, 0, 5000); // Démarrage de la tâche après 0ms et exécution toutes les 5000ms
+
+
+
         }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Arrêt de la tâche
+        timer.cancel();
+    }
+
     }
 
