@@ -40,7 +40,6 @@ import java.util.ArrayList;
 public class Message_Activity extends AppCompatActivity {
 
         private ImageView otherUserProfileImage ;
-
         Bitmap bitmap ;
         EditText MessageEditText ;
         private TextView Send, TextOtherUserLogin, TextOtherUserLogin2 ;
@@ -89,16 +88,11 @@ public class Message_Activity extends AppCompatActivity {
             imageBack = findViewById(R.id.imageBack);
             NestedScrollView nestedScrollView = findViewById(R.id.NestedScrollingView);
 
-
-
             // adapting the images :
             rv = (RecyclerView) findViewById(R.id.recycler_gchat);
 
             // Planifier une tâche différée pour faire défiler le NestedScrollView
             //rv.setNestedScrollingEnabled(false);
-
-
-
             rv.setLayoutManager(new LinearLayoutManager(this));
 
             messages = request.getAllMessages(sessionManager.getId(),Integer.toString(otherUserId) , new myMessageRequest.GetAllMessagesCallBack() {
@@ -113,59 +107,18 @@ public class Message_Activity extends AppCompatActivity {
                             nestedScrollView.fullScroll(View.FOCUS_DOWN);
                         }
                     });
-
-
                 }
-
                 @Override
                 public void onError(String message) {
                     Toast.makeText(getApplicationContext(),"message error "+message, Toast.LENGTH_SHORT).show();
                 }
             }) ;
-
-
-
-
-
             imageBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     onBackPressed();
                 }
             });
-
-
-
-
-
-            ActivityResultLauncher<Intent> activityResultLauncher =registerForActivityResult(
-                    new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                        @Override
-                        public void onActivityResult(ActivityResult result) {
-                            if(result.getResultCode() == Activity.RESULT_OK){
-                                Intent data = result.getData();
-                                Uri uri = data.getData();
-                                try {
-                                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
-                                    // replace this with the part of sending the image
-                                    //ImgGallery.setImageBitmap(bitmap);
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            }
-                        }
-                    }
-            ) ;
-            uploadPictureButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent selectFromGallery = new Intent(Intent.ACTION_PICK);
-                    selectFromGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    activityResultLauncher.launch(selectFromGallery) ;
-                }
-            });
-
-
             Send = (TextView) findViewById(R.id.send_button) ;
             MessageEditText = (EditText) findViewById(R.id.message_input_field) ;
 
@@ -181,47 +134,75 @@ public class Message_Activity extends AppCompatActivity {
                 public void onClick(View v) {
 
                     String message = MessageEditText.getText().toString().trim();
-                    sendMessageToDB(message);
+                    int messageType = 0;
+                    request.sendTextMessage(sessionManager.getId(), Integer.toString(otherUserId),message , Integer.toString(messageType),
+                            new myMessageRequest.SendTextMessageCallBack(){
+                                @Override
+                                public void onSucces(String message, int id_message_sent) {
+                                    request.getMessage(Integer.toString(id_message_sent), messages, new myMessageRequest.GetMessageCallBack() {
+                                        @Override
+                                        public void onSucces(String message) {
+                                            myAdapter.notifyDataSetChanged();
+                                            Toast.makeText(getApplicationContext(), "getting message :"+message, Toast.LENGTH_SHORT).show();
+                                        }
+                                        @Override
+                                        public void onError(String message) {
 
+                                        }
+                                    });
+                                }
+                                @Override
+                                public void onError(String message) {
+                                    Toast.makeText(getApplicationContext(), "sending message in teh activity :"+message, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                    );
                 }
             });
+            ActivityResultLauncher<Intent> cameratakenPicture =registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult result) {
+                            if(result.getResultCode() == Activity.RESULT_OK){
+                               Intent data = result.getData();
+                               Uri uri = data.getData() ;
+                                Toast.makeText(getApplicationContext(), "image have being uploaded", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+            ) ;
             takePictureButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivity(cameraIntent);
+                    //startActivity(cameraIntent);
+                    cameratakenPicture.launch(cameraIntent);
                 }
             });
 
+            ActivityResultLauncher<Intent> activityResultLauncher =registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult result) {
+                            if(result.getResultCode() == Activity.RESULT_OK){
+                                Intent data = result.getData();
+                                Uri uri = data.getData();
+                                Intent intent = new Intent(Message_Activity.this, DisplayImg_Activity.class);
+                                intent.putExtra("imageUri", uri.toString());
+                                startActivity(intent);
+                            }
+                        }
+                    }
+            ) ;
             uploadPictureButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent selectFromGallery = new Intent(Intent.ACTION_PICK);
+                    selectFromGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    activityResultLauncher.launch(selectFromGallery) ;
                 }
             });
 
-
-
-
-
-
-
-
-
         }
-    public void sendMessageToDB(String messageToSend){
-            loadMessageFromDB();
-        return;
-    }
-
-    public void loadMessageFromDB(){
-            // code to retreive the message ;
-            Message loadedMessage ;
-            //messages.add(loadedMessage);
-            myAdapter.notifyDataSetChanged();
-            return ;
-    }
-
-
     }
 

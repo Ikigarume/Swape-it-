@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.database_animals.Message;
 import com.example.tp2_rimaoui.R;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -23,9 +24,14 @@ import java.util.Date;
 
 public class MessageAdapter extends RecyclerView.Adapter {
 
-    private static final int VIEW_TYPE_MESSAGE_SENT = 1 ;
+
+
+    private static final int VIEW_TYPE_TEXT_MESSAGE_SENT = 1 ;
+    private static final int VIEW_TYPE_IMAGE_MESSAGE_SENT = 2 ;
+    private static final int VIEW_TYPE_TEXT_MESSAGE_RECEIVED = 3 ;
+    private static final int VIEW_TYPE_IMAGE_MESSAGE_RECEIVED = 4 ;
     private static String lastDateMessage = null ;
-    private static final int VIEW_TYPE_MESSAGE_RECIEVED = 2 ;
+
     private int currentUserId ;
     private int otherUserId ;
     private String otherUserLogin ;
@@ -47,13 +53,21 @@ public class MessageAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         Message message = (Message) Messages.get(position);
-        if(message.getIdSender()==currentUserId){
-            // if the message is sent by the current user :
-            return VIEW_TYPE_MESSAGE_SENT ;
+        if(message.getIdSender()==currentUserId){// if the message is sent by the current user :
+            if (message.getMessageType()==0){// the message is a sent text
+                return VIEW_TYPE_TEXT_MESSAGE_SENT;
+            }
+            else { // the message is an image sent :
+                return VIEW_TYPE_IMAGE_MESSAGE_SENT ;
+            }
         }
-        else {
-            // if current user didn't send the message then it was recieved by him :
-            return VIEW_TYPE_MESSAGE_RECIEVED ;
+        else {//the current user is a receiver of this message
+            if (message.getMessageType()==0){// the message is a received text
+                return VIEW_TYPE_TEXT_MESSAGE_RECEIVED;
+            }
+            else { // the message is an image received :
+                return VIEW_TYPE_IMAGE_MESSAGE_RECEIVED ;
+            }
         }
     }
     @NonNull
@@ -61,33 +75,39 @@ public class MessageAdapter extends RecyclerView.Adapter {
     // Inflates the appropriate layout according to the ViewType.
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view ;
-
-        if(viewType == VIEW_TYPE_MESSAGE_SENT){
+        if(viewType == VIEW_TYPE_TEXT_MESSAGE_SENT){
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sent_message,parent,false) ;
             return new SendMessageHolder(view);
-        }
-        else if (viewType == VIEW_TYPE_MESSAGE_RECIEVED){
+        } else if (viewType == VIEW_TYPE_IMAGE_MESSAGE_SENT ) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sent_message_img,parent,false) ;
+            return new SendImageMessageHolder(view);
+        } else if (viewType == VIEW_TYPE_TEXT_MESSAGE_RECEIVED){
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_received_message,parent,false);
             return new ReceivedMessageHolder(view);
+        } else if (viewType== VIEW_TYPE_IMAGE_MESSAGE_RECEIVED) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_received_message_img,parent,false) ;
+            return new ReceivedImageMessageHolder(view);
         }
         return null ;
     }
-
     // binding the content to the UI :
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Message msg = (Message) Messages.get(position);
         switch (holder.getItemViewType()){
-            case VIEW_TYPE_MESSAGE_SENT:
+            case VIEW_TYPE_TEXT_MESSAGE_SENT:
                 ((SendMessageHolder)holder).bind(msg) ;
                 break ;
-            case VIEW_TYPE_MESSAGE_RECIEVED:
+            case VIEW_TYPE_IMAGE_MESSAGE_SENT :
+                ((SendImageMessageHolder)holder).bind(msg) ;
+                break ;
+            case VIEW_TYPE_TEXT_MESSAGE_RECEIVED:
                 ((ReceivedMessageHolder)holder).bind(msg);
+                break;
+            case VIEW_TYPE_IMAGE_MESSAGE_RECEIVED:
+                ((ReceivedImageMessageHolder)holder).bind(msg);
         }
     }
-
-
-
     public class SendMessageHolder extends RecyclerView.ViewHolder{
         private final TextView messageText, timeText, dateText ;
 
@@ -110,6 +130,38 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 String timeonly = timeoutputFormat.format(date);
                 String dateOnly = dateoutputFormat.format(date);
                 timeText.setText(timeonly);
+                if(dateOnly.equals(lastDateMessage)){
+                    dateText.setVisibility(View.GONE);
+                } else {
+                    dateText.setText(dateOnly);
+                    lastDateMessage = dateOnly;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public class SendImageMessageHolder extends  RecyclerView.ViewHolder {
+        private final TextView  timeImg, dateText ;
+        private final ImageView messageImg ;
+        public SendImageMessageHolder(@NonNull View itemView) {
+            super(itemView);
+            messageImg = (ImageView) itemView.findViewById(R.id.img_message_body_sent);
+            timeImg= (TextView) itemView.findViewById(R.id.text_gchat_timestamp_me);
+            dateText = itemView.findViewById(R.id.text_message_date_me);
+        }
+        public void bind(Message msg){
+            Picasso.get().load(msg.getMessage()).placeholder(R.drawable.placeholder).error(R.drawable.errorimage).into(messageImg);
+            String dateString = msg.getDateMessage();
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat timeoutputFormat = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat dateoutputFormat = new SimpleDateFormat("dd MMM yyyy");
+
+            try {
+                Date date = inputFormat.parse(dateString);
+                String timeonly = timeoutputFormat.format(date);
+                String dateOnly = dateoutputFormat.format(date);
+                timeImg.setText(timeonly);
                 if(dateOnly.equals(lastDateMessage)){
                     dateText.setVisibility(View.GONE);
                 } else {
@@ -157,4 +209,45 @@ public class MessageAdapter extends RecyclerView.Adapter {
             userNameText.setText(otherUserLogin);
         }
     }
-}
+
+    public class ReceivedImageMessageHolder extends RecyclerView.ViewHolder{
+        private final TextView   timeImg , userNameText, dateText ;
+        private final ImageView profileImage, messageImg ;
+        public ReceivedImageMessageHolder(@NonNull View itemView) {
+            super(itemView);
+            messageImg = (ImageView) itemView.findViewById(R.id.img_message_body_received);
+            timeImg = (TextView) itemView.findViewById(R.id.text_message_time);
+            userNameText = (TextView) itemView.findViewById(R.id.text_message_name);
+            profileImage = (ImageView) itemView.findViewById(R.id.other_image);
+            dateText = itemView.findViewById(R.id.text_date);
+        }
+        public void bind(Message msg){
+            Picasso.get().load(msg.getMessage()).placeholder(R.drawable.placeholder).error(R.drawable.errorimage).into(messageImg);
+            String dateString = msg.getDateMessage();
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat timeoutputFormat = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat dateoutputFormat = new SimpleDateFormat("dd MMM yyyy");
+
+            try {
+                Date date = inputFormat.parse(dateString);
+                String timeonly = timeoutputFormat.format(date);
+                String dateOnly = dateoutputFormat.format(date);
+                timeImg.setText(timeonly);
+                if(dateOnly.equals(lastDateMessage)){
+                    dateText.setVisibility(View.GONE);
+                } else {
+                    dateText.setText(dateOnly);
+                    lastDateMessage = dateOnly;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            userNameText.setText(otherUserLogin);
+        }
+
+        }
+    }
+
+
+
+

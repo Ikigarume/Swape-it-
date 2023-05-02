@@ -20,11 +20,17 @@ public class Message {
     @ColumnInfo(name = "messages_date ")
     String dateMessage; //createdAt
 
-    public Message ( int idsender , int idreciever ,String message, String dateMessage){
+    @ColumnInfo(name="message_type")
+    int messageType ; // 0 for text, 1 for Imgs
+
+
+
+    public Message (int idsender , int idreciever , String message, String dateMessage, int type){
         this.message = message ;
         this.idReceiver = idreciever ;
         this.idSender = idsender ;
         this.dateMessage = dateMessage ;
+        this.messageType = type ;
     }
 
     public String getMessage() {
@@ -46,6 +52,8 @@ public class Message {
     public void setIdReceiver(int id){this.idReceiver = id ;}
     public void setIdSender(int id){this.idSender = id ;}
     public void setDateMessage(String date){this.dateMessage = date ;}
+    public int getMessageType() {return messageType;}
+    public void setMessageType(int messageType) {this.messageType = messageType;}
 
 }
 
