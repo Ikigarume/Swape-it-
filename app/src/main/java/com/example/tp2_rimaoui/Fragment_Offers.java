@@ -1,6 +1,5 @@
 package com.example.tp2_rimaoui;
 
-import android.media.MediaCodec;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,9 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
-import com.example.RecyclerView.AnnonceAdapter;
 import com.example.RecyclerView.MyPostsAdapter;
-import com.example.RecyclerView.OfferAdapter;
 import com.example.database_animals.Annonce;
 
 import java.util.ArrayList;
@@ -25,7 +22,7 @@ import java.util.Map;
 import myrequestt.Myrequest;
 
 
-public class Fragement_Offers extends Fragment {
+public class Fragment_Offers extends Fragment {
 
     View view;
     private MyPostsAdapter myAdapter ;

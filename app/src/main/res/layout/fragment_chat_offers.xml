@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment_Offers">
-
+    android:layout_marginTop="10dp"
+>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp">
+        android:layout_height="match_parent">
     <TextView
         android:id="@+id/my_Offers_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Offers"
-        android:layout_marginTop="10dp"
+        android:text="Choose an offer"
+        android:textColor="#E2986E"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/comfortaa_regular"
-        android:textSize="25sp"
+        android:textSize="30sp"
         android:textStyle="bold"
-        android:textColor="@color/dark_blue"
         android:layout_marginHorizontal="20dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,13 +30,11 @@
         android:id="@+id/my_profile_Offers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="20dp"
         app:layout_constraintTop_toBottomOf="@+id/my_Offers_text"
-        android:layout_marginBottom="10dp"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-</FrameLayout>
+</androidx.core.widget.NestedScrollView>

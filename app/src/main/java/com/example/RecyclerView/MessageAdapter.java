@@ -1,16 +1,22 @@
 package com.example.RecyclerView;
 
+import static android.view.View.GONE;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuView;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.database_animals.Annonce;
 import com.example.database_animals.Message;
 import com.example.tp2_rimaoui.R;
 import com.squareup.picasso.Picasso;
@@ -30,6 +36,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_IMAGE_MESSAGE_SENT = 2 ;
     private static final int VIEW_TYPE_TEXT_MESSAGE_RECEIVED = 3 ;
     private static final int VIEW_TYPE_IMAGE_MESSAGE_RECEIVED = 4 ;
+    private static final int VIEW_TYPE_ANNONCE = 5 ;
+    private static final int VIEW_TYPE_RATING_BAR = 6 ;
     private static String lastDateMessage = null ;
 
     private int currentUserId ;
@@ -50,25 +58,30 @@ public class MessageAdapter extends RecyclerView.Adapter {
         return Messages.size();
     }
 
+
+
     @Override
     public int getItemViewType(int position) {
         Message message = (Message) Messages.get(position);
-        if(message.getIdSender()==currentUserId){// if the message is sent by the current user :
-            if (message.getMessageType()==0){// the message is a sent text
+        if(message.getMessageType()==0){
+            if(message.getIdSender()==currentUserId){
                 return VIEW_TYPE_TEXT_MESSAGE_SENT;
-            }
-            else { // the message is an image sent :
-                return VIEW_TYPE_IMAGE_MESSAGE_SENT ;
-            }
-        }
-        else {//the current user is a receiver of this message
-            if (message.getMessageType()==0){// the message is a received text
+            } else {
                 return VIEW_TYPE_TEXT_MESSAGE_RECEIVED;
             }
-            else { // the message is an image received :
-                return VIEW_TYPE_IMAGE_MESSAGE_RECEIVED ;
+        } else if(message.getMessageType()==1){
+            if(message.getIdSender()==currentUserId){
+                return VIEW_TYPE_IMAGE_MESSAGE_SENT;
+            } else {
+                return VIEW_TYPE_IMAGE_MESSAGE_RECEIVED;
             }
+        } else if (message.getMessageType()==2){
+            return VIEW_TYPE_TEXT_MESSAGE_SENT;
+        } else {
+            return VIEW_TYPE_TEXT_MESSAGE_SENT;
         }
+
+
     }
     @NonNull
     @Override
@@ -87,8 +100,13 @@ public class MessageAdapter extends RecyclerView.Adapter {
         } else if (viewType== VIEW_TYPE_IMAGE_MESSAGE_RECEIVED) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_received_message_img,parent,false) ;
             return new ReceivedImageMessageHolder(view);
+        } else if (viewType == VIEW_TYPE_ANNONCE){
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_programm_exchange,parent,false) ;
+            return new ProgramExchangeHolder(view);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rating_bar,parent,false) ;
+            return new RatingBarHolder(view);
         }
-        return null ;
     }
     // binding the content to the UI :
     @Override
@@ -106,39 +124,74 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 break;
             case VIEW_TYPE_IMAGE_MESSAGE_RECEIVED:
                 ((ReceivedImageMessageHolder)holder).bind(msg);
+                break;
+            case VIEW_TYPE_ANNONCE:
+                ((ProgramExchangeHolder)holder).bind(msg);
+                break;
+            case VIEW_TYPE_RATING_BAR:
+                ((RatingBarHolder)holder).bind(msg);
+                break;
         }
     }
     public class SendMessageHolder extends RecyclerView.ViewHolder{
-        private final TextView messageText, timeText, dateText ;
+        private final TextView messageText, timeText, dateText, AnnonceText ;
+        private final ConstraintLayout Container_SendMessage ;
+        private final CardView Container_PostMessage, Container_RatingBar ;
+        private final ImageView clearRatingBar ;
 
         public SendMessageHolder(@NonNull View itemView) {
             super(itemView);
             messageText = (TextView) itemView.findViewById(R.id.text_gchat_message_me);
             timeText = (TextView) itemView.findViewById(R.id.text_gchat_timestamp_me);
             dateText = itemView.findViewById(R.id.text_message_date_me);
+            Container_SendMessage = itemView.findViewById(R.id.Container_SentMessage);
+            Container_PostMessage = itemView.findViewById(R.id.Container_PostMessage);
+            Container_RatingBar = itemView.findViewById(R.id.Container_ratingbar);
+            AnnonceText = itemView.findViewById(R.id.textView1);
+            clearRatingBar = itemView.findViewById(R.id.clear_ratingbar);
+
         }
 
         public void bind(Message msg){
-            messageText.setText(msg.getMessage());
-            String dateString = msg.getDateMessage();
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            SimpleDateFormat timeoutputFormat = new SimpleDateFormat("HH:mm");
-            SimpleDateFormat dateoutputFormat = new SimpleDateFormat("dd MMM yyyy");
-
-            try {
-                Date date = inputFormat.parse(dateString);
-                String timeonly = timeoutputFormat.format(date);
-                String dateOnly = dateoutputFormat.format(date);
-                timeText.setText(timeonly);
-                if(dateOnly.equals(lastDateMessage)){
-                    dateText.setVisibility(View.GONE);
-                } else {
-                    dateText.setText(dateOnly);
-                    lastDateMessage = dateOnly;
+            if(msg.getMessageType()==0){
+                Container_PostMessage.setVisibility(GONE);
+                Container_RatingBar.setVisibility(GONE);
+                messageText.setText(msg.getMessage());
+                String dateString = msg.getDateMessage();
+                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat timeoutputFormat = new SimpleDateFormat("HH:mm");
+                SimpleDateFormat dateoutputFormat = new SimpleDateFormat("dd MMM yyyy");
+                try {
+                    Date date = inputFormat.parse(dateString);
+                    String timeonly = timeoutputFormat.format(date);
+                    String dateOnly = dateoutputFormat.format(date);
+                    timeText.setText(timeonly);
+                    if(dateOnly.equals(lastDateMessage)){
+                        dateText.setVisibility(GONE);
+                    } else {
+                        dateText.setText(dateOnly);
+                        lastDateMessage = dateOnly;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
             }
+            else if (msg.getMessageType()==2) {
+                Container_SendMessage.setVisibility(GONE);
+                Container_RatingBar.setVisibility(GONE);
+                AnnonceText.setText(msg.getMessage());
+            } else {
+                Container_SendMessage.setVisibility(GONE);
+                Container_PostMessage.setVisibility(GONE);
+                clearRatingBar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Container_RatingBar.setVisibility(GONE);
+                    }
+                });
+            }
+
+
         }
     }
     public class SendImageMessageHolder extends  RecyclerView.ViewHolder {
@@ -163,7 +216,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 String dateOnly = dateoutputFormat.format(date);
                 timeImg.setText(timeonly);
                 if(dateOnly.equals(lastDateMessage)){
-                    dateText.setVisibility(View.GONE);
+                    dateText.setVisibility(GONE);
                 } else {
                     dateText.setText(dateOnly);
                     lastDateMessage = dateOnly;
@@ -198,7 +251,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 String dateOnly = dateoutputFormat.format(date);
                 timeText.setText(timeonly);
                 if(dateOnly.equals(lastDateMessage)){
-                    dateText.setVisibility(View.GONE);
+                    dateText.setVisibility(GONE);
                 } else {
                     dateText.setText(dateOnly);
                     lastDateMessage = dateOnly;
@@ -234,7 +287,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 String dateOnly = dateoutputFormat.format(date);
                 timeImg.setText(timeonly);
                 if(dateOnly.equals(lastDateMessage)){
-                    dateText.setVisibility(View.GONE);
+                    dateText.setVisibility(GONE);
                 } else {
                     dateText.setText(dateOnly);
                     lastDateMessage = dateOnly;
@@ -246,6 +299,34 @@ public class MessageAdapter extends RecyclerView.Adapter {
         }
 
         }
+
+    public class ProgramExchangeHolder extends RecyclerView.ViewHolder{
+        private final TextView Text ;
+
+        public ProgramExchangeHolder(@NonNull View itemView) {
+            super(itemView);
+            Text = (TextView) itemView.findViewById(R.id.textView1);
+
+        }
+
+        public void bind(Message msg){
+            Text.setText(msg.getMessage());
+        }
+    }
+
+    public class RatingBarHolder extends RecyclerView.ViewHolder{
+        private final RatingBar ratingBar;
+
+        public RatingBarHolder(@NonNull View itemView) {
+            super(itemView);
+            ratingBar =  itemView.findViewById(R.id.ratingBar);
+
+        }
+
+        public void bind(Message msg){
+        }
+    }
+
     }
 
 

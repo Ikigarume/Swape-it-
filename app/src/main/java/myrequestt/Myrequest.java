@@ -771,6 +771,89 @@ public class Myrequest {
         void onError(String message);
     }
 
+    public ArrayList<Annonce> getUserChatPosts(String pseudo, GetUserChatPostsCallback callback){
+        String BASE_URL = "http://"+IPV4_serv+"/swapeit/users_chatposts.php";
+        ArrayList<Annonce> Annonces = new ArrayList<>();
+        StringRequest request = new StringRequest(Request.Method.POST, BASE_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONArray array = new JSONArray(response);
+                            for (int i =0 ; i<array.length(); i++){
+
+                                JSONObject object = array.getJSONObject(i);
+                                String login = object.getString("login");
+                                String photo_de_profil = object.getString("photo_de_profil");
+                                String chemin_image = object.getString("chemin_image");
+                                String titre = object.getString("titre");
+                                String description = object.getString("description");
+                                Double note = object.getDouble("note");
+                                String rate = String.valueOf(note);
+                                float rating = Float.valueOf(rate);
+                                int nbr_vote = object.getInt("nbr_vote");
+                                String id_categories = object.getString("id_categories");
+                                int id_annonce = object.getInt("id_annonce");
+                                String number = object.getString("telephone");
+                                Annonce annonce = new Annonce(id_annonce,login, photo_de_profil, chemin_image,titre, description, rating, nbr_vote,id_categories,number,0,0);
+                                Annonces.add(annonce);
+
+
+                            }
+                            callback.onSucces("Informations downloaded successfully.");
+
+                            //Toast.makeText(Home_page.this, "piste1 :"+cheminImage, Toast.LENGTH_SHORT).show();
+
+
+
+
+                        }catch (Exception e){
+                            callback.onError("Volley Error.");
+                            //Toast.makeText(Home_page.this, "Volley Error", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(Home_page.this, error.toString(),Toast.LENGTH_LONG).show();
+                Log.d("APP","ERROR :"+error);
+
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("Une erreur s'est produite");
+                }
+
+            }
+        }){
+            //C'est dans cette mÃ©thode qu'on envoie les paramÃ¨tres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("serveurIP", IPV4_serv);
+                map.put("user_login", pseudo);
+                return map;
+            }
+        };
+
+        queue.add(request);
+        return Annonces ;
+
+
+    }
+
+    public interface GetUserChatPostsCallback {
+        void onSucces(String message);
+        void inputErrors(Map<String,String> errors);
+        void onError(String message);
+    }
+
+
+
     public ArrayList<Annonce> getFavPosts(String pseudo, GetFavPostsCallback callback){
         String BASE_URL = "http://"+IPV4_serv+"/swapeit/fav_posts.php";
         ArrayList<Annonce> Annonces = new ArrayList<>();
@@ -922,6 +1005,7 @@ public class Myrequest {
 
         void onError(String message);
     }
+
 
 
 

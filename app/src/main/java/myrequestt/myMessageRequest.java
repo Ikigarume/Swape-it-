@@ -149,7 +149,7 @@ public class myMessageRequest {
         public void onError(String message) ;
     }
 
-    public void sendTextMessage(String id_sender, String id_receiver, String messageBody, int messageType ,  SendTextMessageCallBack callBack ) {
+    public void sendTextMessage(int id_sender, int id_receiver, String messageBody, int messageType ,  SendTextMessageCallBack callBack ) {
 
         String url = "http://"+IPV4_serv+"/swapeit/sendMessageTEST.php" ;
         StringRequest request = new StringRequest(Request.Method.POST, url,
@@ -193,8 +193,8 @@ public class myMessageRequest {
             @Override
             protected Map<java.lang.String, java.lang.String> getParams() throws AuthFailureError {
                 Map<String,String> map = new HashMap<>();
-                map.put("id_sender", id_sender); // this should be an int
-                map.put("id_receiver",id_receiver); // this also should be an int
+                map.put("id_sender", String.valueOf(id_sender)); // this should be an int
+                map.put("id_receiver", String.valueOf(id_receiver)); // this also should be an int
                 map.put("message_body", messageBody);
                 map.put("message_type", String.valueOf(messageType)) ;
                 return map;
@@ -348,7 +348,72 @@ public class myMessageRequest {
         public void onError(String message) ;
     }
 
+
+    public void programExchange(int currentUserId, int otherUserId, int id_annonce, programExchangeCallback callback){
+
+        String url = "http://"+IPV4_serv+"/swapeit/addExchange.php" ;
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject json = new JSONObject(response);
+                    Boolean error = json.getBoolean("error");
+
+                    if(!error){
+                        callback.onSuccess("Exchange added successfully");
+
+                    } else {
+                        callback.onError(json.getString("message"));
+
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context,"error"+e,Toast.LENGTH_SHORT);
+                    callback.onError("JSONException");
+                    e.printStackTrace();
+
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("VolleyError");
+                }
+
+
+            }
+        }) {
+            //C'est dans cette méthode qu'on envoie les paramètres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<java.lang.String, java.lang.String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("current_user_id", String.valueOf(currentUserId)); // correspond à $_POST('pseudo')
+                map.put("other_user_id", String.valueOf(otherUserId));
+                map.put("id_annonce", String.valueOf(id_annonce));
+                return map;
+            }
+        } ;
+
+        queue.add(request) ;
+
     }
+
+    public interface programExchangeCallback{
+        //Si on avait une classe user on aurat fait void onSuccess(User user)
+        void onSuccess(String message);
+        void onError(String message);
+    }
+
+
+
+
+
+
+}
 
 
 
