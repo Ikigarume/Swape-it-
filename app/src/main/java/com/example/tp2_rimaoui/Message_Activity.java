@@ -8,10 +8,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,30 +27,46 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.RecyclerView.MessageAdapter;
 import com.example.database_animals.Message;
 import com.google.android.material.appbar.AppBarLayout;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class Message_Activity extends AppCompatActivity {
+public class Message_Activity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
         private ImageView otherUserProfileImage ;
         private int Sender_LastIdMessage = 0 ;
+        private int ExchangeState = 0 ;
         private ArrayList<Message> newmessages = new ArrayList<>();
         private Timer timer;
         Bitmap bitmap ;
@@ -82,6 +102,26 @@ public class Message_Activity extends AppCompatActivity {
             queue = VolleySingleton.getInstance(getApplicationContext()).getRequestQueue();
             request = new myMessageRequest(getApplicationContext(),queue,IPV4_serv) ;
 
+            getExchangeState(IPV4_serv, new GetExchangeStateCallback() {
+                @Override
+                public void onSucces(String message) {
+
+                }
+
+                @Override
+                public void inputErrors(Map<String, String> errors) {
+
+                }
+
+                @Override
+                public void onError(String message) {
+                    Toast.makeText(Message_Activity.this, message, Toast.LENGTH_SHORT).show();
+
+
+
+                }
+            });
+
             Intent intent = getIntent();
             otherUserId = intent.getIntExtra("otherUserId",0);
             otherUserLogin = intent.getStringExtra("otherUserlogin");
@@ -96,6 +136,9 @@ public class Message_Activity extends AppCompatActivity {
             ImageOtherUserImg2 = findViewById(R.id.other_user_profile_image);
             imageBack = findViewById(R.id.imageBack);
             NestedScrollView nestedScrollView = findViewById(R.id.NestedScrollingView);
+
+            TextOtherUserLogin.setText(otherUserLogin);
+            Picasso.get().load(otherUserImg).into(ImageOtherUserImg2);
 
             // adapting the images :
             rv = (RecyclerView) findViewById(R.id.recycler_gchat);
@@ -117,6 +160,43 @@ public class Message_Activity extends AppCompatActivity {
                             nestedScrollView.fullScroll(View.FOCUS_DOWN);
                         }
                     });
+
+                    timer = new Timer();
+
+                    // Définition de la tâche à exécuter toutes les 5 secondes
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            // Affichage du Toast sur le thread principal de l'application
+                            Handler handler = new Handler(Looper.getMainLooper());
+                            handler.post(new Runnable() {
+                                public void run() {
+                                    newmessages = request.getNewMessages(currentUserId, otherUserId, Sender_LastIdMessage, new myMessageRequest.GetNewMessagesCallBack() {
+                                        @Override
+                                        public void onSucces(String message) {
+                                            if(newmessages.size()>0){
+                                                Sender_LastIdMessage = newmessages.get(newmessages.size()-1).getId();
+                                                messages.addAll(newmessages);
+                                                myAdapter.notifyDataSetChanged();
+                                                nestedScrollView.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        // Faire défiler le NestedScrollView jusqu'à la fin
+                                                        nestedScrollView.fullScroll(View.FOCUS_DOWN);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                        @Override
+                                        public void onError(String message) {
+
+                                        }
+                                    });
+
+                                }
+                            });
+                        }
+                    }, 0, 5000); // Démarrage de la tâche après 0ms et exécution toutes les 5000ms
                 }
                 @Override
                 public void onError(String message) {
@@ -239,42 +319,7 @@ public class Message_Activity extends AppCompatActivity {
 
             // ici nous allons executer la commande getNewMessages toutes les 5 secondes pour recuperer les nouveaux messages du destinataire
             // Création d'un objet Timer
-            timer = new Timer();
 
-            // Définition de la tâche à exécuter toutes les 5 secondes
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    // Affichage du Toast sur le thread principal de l'application
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.post(new Runnable() {
-                        public void run() {
-                            newmessages = request.getNewMessages(currentUserId, otherUserId, Sender_LastIdMessage, new myMessageRequest.GetNewMessagesCallBack() {
-                                @Override
-                                public void onSucces(String message) {
-                                    if(newmessages.size()>0){
-                                        Sender_LastIdMessage = newmessages.get(newmessages.size()-1).getId();
-                                        messages.addAll(newmessages);
-                                        myAdapter.notifyDataSetChanged();
-                                        nestedScrollView.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                // Faire défiler le NestedScrollView jusqu'à la fin
-                                                nestedScrollView.fullScroll(View.FOCUS_DOWN);
-                                            }
-                                        });
-                                    }
-                                }
-                                @Override
-                                public void onError(String message) {
-
-                                }
-                            });
-
-                        }
-                    });
-                }
-            }, 0, 5000); // Démarrage de la tâche après 0ms et exécution toutes les 5000ms
 
 
 
@@ -288,5 +333,103 @@ public class Message_Activity extends AppCompatActivity {
         timer.cancel();
     }
 
+    private void getExchangeState(String IPV4_serv, GetExchangeStateCallback callback){
+        String BASE_URL = "http://"+IPV4_serv+"/swapeit/getExchange.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONObject json = new JSONObject(response);
+                            Boolean error = json.getBoolean("error");
+                            if(!error){
+                                ExchangeState = json.getInt("etat");
+                            }
+                            callback.onSucces("Informations downloaded successfully.");
+
+                            //Toast.makeText(Home_page.this, "piste1 :"+cheminImage, Toast.LENGTH_SHORT).show();
+                        }catch (Exception e){
+                            callback.onError("Volley Error.");
+                            //Toast.makeText(Home_page.this, "Volley Error", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(Home_page.this, error.toString(),Toast.LENGTH_LONG).show();
+                Log.d("APP","ERROR :"+error);
+
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("Une erreur s'est produite");
+                }
+
+            }
+        }){
+            //C'est dans cette mÃ©thode qu'on envoie les paramÃ¨tres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("current_user_id", String.valueOf(currentUserId)); // Ajoutez ce paramètre
+                map.put("other_user_id", String.valueOf(otherUserId)) ;
+                return map;
+            }
+        };
+
+        Volley.newRequestQueue(this).add(stringRequest);
+
+
     }
+
+    public interface GetExchangeStateCallback{
+        void onSucces(String message);
+        void inputErrors(Map<String,String> errors);
+        void onError(String message);
+    }
+
+    public void showPopUpMenu(View v){
+        PopupMenu popup = new PopupMenu(this,v);
+        popup.setOnMenuItemClickListener(this);
+        if(ExchangeState== 0){
+            popup.inflate(R.menu.exchange0_menu);
+        } else {
+            popup.inflate(R.menu.exchange1_menu);
+
+        }
+
+        popup.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.option_program:
+                FrameLayout fl = findViewById(R.id.linearLayoutOffers);
+                View view = findViewById(R.id.darkBackground);
+                view.setVisibility(View.VISIBLE);
+                fl.setVisibility(View.VISIBLE);
+                FragmentManager fragmentManager = getSupportFragmentManager() ;
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragement_Offers fragment = new Fragement_Offers();
+                fragmentTransaction.replace(R.id.linearLayoutOffers,fragment);
+                fragmentTransaction.commit();
+                return true ;
+            case R.id.option_cancel:
+                Toast.makeText(this, "you wanna cancel ", Toast.LENGTH_SHORT).show();
+                return true ;
+            case R.id.option_complete:
+                Toast.makeText(this, "you wanna complete", Toast.LENGTH_SHORT).show();
+                return true ;
+            default:
+                return false ;
+        }
+        }
+
+    }
+
+
 

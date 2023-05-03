@@ -8,6 +8,7 @@
 
 
     <LinearLayout
+        android:id="@+id/linearlayoutMessages"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,10 +30,26 @@
                 android:layout_marginHorizontal="5dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
+
+                <Button
+                    android:id="@+id/imagemore"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="25dp"
+                    android:paddingVertical="6dp"
+                    android:drawableTop="@drawable/ic_more"
+                    android:gravity="center"
+                    android:onClick="showPopUpMenu"
+                    android:background="@drawable/ic_back_background"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
                 <ImageView
                     android:id="@+id/imageBack"
-                    android:layout_width="39dp"
-                    android:layout_height="39dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginStart="5dp"
                     android:background="@color/white"
@@ -40,6 +57,8 @@
                     android:onClick="goingBack"
                     android:src="@drawable/ic_back"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+
                     app:layout_constraintTop_toTopOf="parent" />
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/other_user_profile_image"
@@ -95,6 +114,9 @@
 
 
         </androidx.core.widget.NestedScrollView>
+
+
+
 
         <LinearLayout
             android:id="@+id/message_input_linearlayout"
@@ -175,5 +197,32 @@
 
         </LinearLayout>
     </LinearLayout>
+
+    <View
+        android:id="@+id/darkBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#90000000"
+        android:visibility="gone"
+        />
+
+
+
+
+            <FrameLayout
+                android:id="@+id/linearLayoutOffers"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="140dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/rounded_top_corners"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
