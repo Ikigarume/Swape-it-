@@ -147,13 +147,14 @@
                     android:id="@+id/message_input_field"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
+                    android:paddingEnd="30dp"
                     android:layout_alignParentEnd="true"
                     android:background="@drawable/round_edittext_messages"
                     android:backgroundTint="@color/light_peche"
                     android:hint="Type your message"
-                    android:inputType="text"
                     android:padding="14dp"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:inputType="textMultiLine"/>
                 <!-- Send message button -->
                 <TextView
 

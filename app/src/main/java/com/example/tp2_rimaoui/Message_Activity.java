@@ -1,13 +1,17 @@
 package com.example.tp2_rimaoui;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.icu.util.LocaleData;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,19 +56,24 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 public class Message_Activity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+    private Bitmap imageBitmap ;
 
-        private ImageView otherUserProfileImage ;
+    private ImageView otherUserProfileImage ;
         private int Sender_LastIdMessage = 0 ;
         private int ExchangeState = 0 ;
         private ArrayList<Message> newmessages = new ArrayList<>();
@@ -211,18 +220,10 @@ public class Message_Activity extends AppCompatActivity implements PopupMenu.OnM
             });
             Send = (TextView) findViewById(R.id.send_button) ;
             MessageEditText = (EditText) findViewById(R.id.message_input_field) ;
-
-            // get the data thta has being passed to the message activity :
-
-            // just in case they were = 0 then roll back to the previous activity :
-            if(currentUserId==0 || otherUserId==0){
-                onBackPressed();
-            }
             // where the functions for the buttons are :
             Send.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     String messageText = MessageEditText.getText().toString().trim();
                     int messageType = 0;
                     request.sendTextMessage(sessionManager.getId(), Integer.toString(otherUserId),messageText , 0,
@@ -247,23 +248,6 @@ public class Message_Activity extends AppCompatActivity implements PopupMenu.OnM
                                         }
                                     });
 
-
-
-
-                                    /*
-                                    request.getMessage(Integer.toString(id_message_sent), messages, new myMessageRequest.GetMessageCallBack() {
-                                        @Override
-                                        public void onSucces(String message) {
-                                            myAdapter.notifyDataSetChanged();
-                                            Toast.makeText(getApplicationContext(), "getting message :"+message, Toast.LENGTH_SHORT).show();
-                                        }
-                                        @Override
-                                        public void onError(String message) {
-
-                                        }
-                                    });
-
-                                     */
                                 }
                                 @Override
                                 public void onError(String message) {
@@ -278,9 +262,87 @@ public class Message_Activity extends AppCompatActivity implements PopupMenu.OnM
                         @Override
                         public void onActivityResult(ActivityResult result) {
                             if(result.getResultCode() == Activity.RESULT_OK){
-                               Intent data = result.getData();
-                               Uri uri = data.getData() ;
-                                Toast.makeText(getApplicationContext(), "image have being uploaded", Toast.LENGTH_SHORT).show();
+                               //Intent data = result.getData();
+                               //Uri uri = data.getData() ;
+                                // Toast.makeText(getApplicationContext(), "image have being uploaded", Toast.LENGTH_SHORT).show();
+                                Intent data = result.getData() ;
+                                Bundle extras = data.getExtras() ;
+                                Bitmap imageBitmap= (Bitmap) extras.get("data");
+
+                                //converting the image to Base64 so we can send it to the database :
+                                ByteArrayOutputStream b = new ByteArrayOutputStream();
+                                imageBitmap.compress(Bitmap.CompressFormat.JPEG,100,b);
+                                byte[] imageBytes = b.toByteArray() ;
+                                String base64String = android.util.Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+                                // saving the file in insternal storage :
+                                ContextWrapper cw = new ContextWrapper(getApplicationContext());
+                                // path to data/data/swape-it/app_data/imageDir
+
+                                File directory = new File(getApplicationContext().getFilesDir(), "Swape-it");
+                                if (!directory.exists()) {
+
+                                    Toast.makeText(getApplicationContext(), "the directory doesnt exist", Toast.LENGTH_SHORT).show();
+                                    directory.mkdirs();
+                                }
+                                File d = getApplicationContext().getFilesDir();
+                                Toast.makeText(getApplicationContext(), "the directory does exist and the name is "+d.getName(), Toast.LENGTH_SHORT).show();
+                                //File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+                                // creating imageDir :
+                                Random rand = new Random();
+                                int randomNum = rand.nextInt(100);
+                                String imageName = "image_"+randomNum+System.currentTimeMillis()+".png";
+                                File mypath = new File(directory,imageName);
+                                FileOutputStream fos = null;
+                                try{
+                                    fos = new FileOutputStream(mypath);
+                                    // Cusing the compress method to write the image to the outputstream :
+                                    imageBitmap.compress(Bitmap.CompressFormat.PNG,100,fos);
+                                    Toast.makeText(getApplicationContext(),"the file is compressed",Toast.LENGTH_SHORT).show();
+
+                                }catch(Exception e){
+                                    e.printStackTrace();
+                                }
+                                finally{
+                                    try{
+                                        fos.close();
+                                    }
+                                    catch(Exception e){
+                                        e.printStackTrace();
+                                    }
+
+                                    //Message newMsg = new Message(currentUserId,otherUserId,finalPath, ,1); // this message is to be added in the adapter,
+                                }
+                                String finalPath = directory.getAbsolutePath() ;
+                                request.sendTextMessage(sessionManager.getId(), Integer.toString(otherUserId), base64String, 1, new myMessageRequest.SendTextMessageCallBack() {
+                                    @Override
+                                    public void onSucces(String message) {
+                                        Toast.makeText(getApplicationContext(),"message is sent : "+ message,Toast.LENGTH_SHORT).show();
+                                        // Créer un objet de la classe SimpleDateFormat
+                                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                        // Obtenir la date et l'heure actuelles
+                                        Date date = new Date();
+                                        // Formater la date et l'heure selon le modèle souhaité
+                                        String heureActuelle = dateFormat.format(date);
+                                        Message msg = new Message(currentUserId,otherUserId,finalPath,heureActuelle,1);
+                                        messages.add(msg);
+                                        myAdapter.notifyDataSetChanged();
+                                        MessageEditText.setText("");
+                                        nestedScrollView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                // Faire défiler le NestedScrollView jusqu'à la fin
+                                                nestedScrollView.fullScroll(View.FOCUS_DOWN);
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onError(String message) {
+                                        Toast.makeText(getApplicationContext(),"an error happened : "+message,Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
                             }
                         }
                     }
@@ -301,9 +363,17 @@ public class Message_Activity extends AppCompatActivity implements PopupMenu.OnM
                             if(result.getResultCode() == Activity.RESULT_OK){
                                 Intent data = result.getData();
                                 Uri uri = data.getData();
-                                Intent intent = new Intent(Message_Activity.this, DisplayImg_Activity.class);
-                                intent.putExtra("imageUri", uri.toString());
-                                startActivity(intent);
+                                try {
+                                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
+                                    ByteArrayOutputStream B = new ByteArrayOutputStream();
+                                    bitmap.compress(Bitmap.CompressFormat.JPEG,100,B);
+                                    byte[]bytes=B.toByteArray();
+                                    String base64Img = Base64.encodeToString(bytes,Base64.DEFAULT);
+
+                                } catch (IOException e) {
+                                    Toast.makeText(getApplicationContext(), "something went wrong with getting the bitmap of the image ", Toast.LENGTH_SHORT).show();
+
+                                }
                             }
                         }
                     }
@@ -316,19 +386,13 @@ public class Message_Activity extends AppCompatActivity implements PopupMenu.OnM
                     activityResultLauncher.launch(selectFromGallery) ;
                 }
             });
-
             // ici nous allons executer la commande getNewMessages toutes les 5 secondes pour recuperer les nouveaux messages du destinataire
             // Création d'un objet Timer
-
-
-
-
         }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         // Arrêt de la tâche
         timer.cancel();
     }

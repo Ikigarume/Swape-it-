@@ -348,60 +348,6 @@ public class myMessageRequest {
         public void onError(String message) ;
     }
 
-
-
-    /*
-    public void getMessage(String currentUserId , String otherUserId, ArrayList<Message> Messageslist , GetMessageCallBack callBack ){
-        String BASE_url = "http://"+IPV4_serv+"/swapeit/getALLMessages.php" ;
-
-        StringRequest request = new StringRequest(Request.Method.POST, BASE_url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                String feedback ;
-                try{
-                    JSONArray res = new JSONArray(response) ;
-                    JSONObject first  = res.getJSONObject(0);
-                    feedback = first.getString("message");
-                    if(first.getBoolean("error")){
-                        JSONObject m = first.getJSONObject("messageDetails") ;
-
-                        int id_sender = m.getInt("id_sender") ;
-                        int id_Receiver = m.getInt("id_receiver") ;
-                        String messageBody = m.getString("messageBody");
-                        String messagetime = m.getString("messageDate") ;
-                        int messageType = m.getInt("messageType") ;
-                        Message msg = new Message(id_sender , id_Receiver, messageBody,messagetime, messageType) ;
-                        Messageslist.add(0,msg);
-                        callBack.onSucces(feedback) ;
-                    }
-                    else {
-                        callBack.onError(feedback);
-                    }
-
-                }catch(Exception e){
-                    callBack.onError(" bla blo bli Failed to retrieve message");
-                }
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        callBack.onError("a connection problem has occured please wait");
-                    }
-                }){
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> map = new HashMap<>() ;
-                map.put("currentUserId",currentUserId) ;
-                map.put("otherUserId", otherUserId );
-                return map ;
-            }
-        };
-        queue.add(request);
-        //return message[0];
-    }
-
-     */
     }
 
 
