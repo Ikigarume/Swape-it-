@@ -120,7 +120,7 @@ public class Message_Activity extends AppCompatActivity implements PopupMenu.OnM
         });
 
         Intent intent = getIntent();
-        otherUserId = intent.getIntExtra("otherUserId",0);
+        otherUserId = intent.getIntExtra("otherUserId",1);
         otherUserLogin = intent.getStringExtra("otherUserlogin");
         otherUserImg = intent.getStringExtra("otherUserImg");
         currentUserId = Integer.parseInt(sessionManager.getId());
@@ -225,6 +225,7 @@ public class Message_Activity extends AppCompatActivity implements PopupMenu.OnM
 
                 String messageText = MessageEditText.getText().toString().trim();
                 int messageType = 0;
+
                 request.sendTextMessage(currentUserId,otherUserId,messageText , 0,
                         new myMessageRequest.SendTextMessageCallBack(){
                             @Override
@@ -464,6 +465,9 @@ public class Message_Activity extends AppCompatActivity implements PopupMenu.OnM
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        String heureActuelle = dateFormat.format(date);
         switch (item.getItemId()) {
             case R.id.option_program:
                 view.setVisibility(View.VISIBLE);
@@ -475,34 +479,91 @@ public class Message_Activity extends AppCompatActivity implements PopupMenu.OnM
                 fragmentTransaction.commit();
                 return true ;
             case R.id.option_cancel:
-                Message msg = new Message(currentUserId, otherUserId,"The exchange programmed has been canceled by the owner",null, 2);
-                messages.add(msg);
-                myAdapter.notifyDataSetChanged();
-                nestedScrollView.post(new Runnable() {
+                ExchangeState = 0 ;
+                String bodymess = "The exchange programmed has been canceled by the owner";
+                request.sendTextMessage(currentUserId, otherUserId, bodymess, 2, new myMessageRequest.SendTextMessageCallBack() {
                     @Override
-                    public void run() {
-                        // Faire défiler le NestedScrollView jusqu'à la fin
-                        nestedScrollView.fullScroll(View.FOCUS_DOWN);
+                    public void onSucces(String message) {
+                        Message msg = new Message(currentUserId, otherUserId,bodymess,heureActuelle, 2);
+                        messages.add(msg);
+                        myAdapter.notifyDataSetChanged();
+                        nestedScrollView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Faire défiler le NestedScrollView jusqu'à la fin
+                                nestedScrollView.fullScroll(View.FOCUS_DOWN);
+                            }
+                        });
+                        request.cancelExchange(currentUserId, otherUserId, new myMessageRequest.cancelExchangeCallback() {
+                            @Override
+                            public void onSuccess(String message) {
+
+                            }
+
+                            @Override
+                            public void onError(String message) {
+                                Toast.makeText(Message_Activity.this, "There has been an error while canceling your exchange : "+message, Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        Toast.makeText(Message_Activity.this, "There has been an error while sending your message : "+message, Toast.LENGTH_SHORT).show();
+
                     }
                 });
+
                 return true ;
             case R.id.option_complete:
-                // Créer un objet de la classe SimpleDateFormat
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                // Obtenir la date et l'heure actuelles
-                Date date = new Date();
-                // Formater la date et l'heure selon le modèle souhaité
-                String heureActuelle = dateFormat.format(date);
-                Message msg2 = new Message(currentUserId, otherUserId,"",heureActuelle, 3);
-                messages.add(msg2);
-                myAdapter.notifyDataSetChanged();
-                nestedScrollView.post(new Runnable() {
+                ExchangeState = 0 ;
+                // Créer un objet de la classe SimpleDateFormat et formater la date et l'heure selon le modèle souhaité
+                request.sendTextMessage(currentUserId, otherUserId, "", 3, new myMessageRequest.SendTextMessageCallBack() {
                     @Override
-                    public void run() {
-                        // Faire défiler le NestedScrollView jusqu'à la fin
-                        nestedScrollView.fullScroll(View.FOCUS_DOWN);
+                    public void onSucces(String message) {
+                        request.sendTextMessage(otherUserId, currentUserId, "", 3, new myMessageRequest.SendTextMessageCallBack() {
+                            @Override
+                            public void onSucces(String message) {
+                            }
+                            @Override
+                            public void onError(String message) {
+                                Toast.makeText(Message_Activity.this, "Error in send rating message : "+message, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        Message msg2 = new Message(currentUserId, otherUserId,"Rate the user",heureActuelle, 3);
+                        messages.add(msg2);
+                        myAdapter.notifyDataSetChanged();
+                        nestedScrollView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Faire défiler le NestedScrollView jusqu'à la fin
+                                nestedScrollView.fullScroll(View.FOCUS_DOWN);
+                            }
+                        });
+                        request.markExchange(currentUserId, otherUserId, new myMessageRequest.markExchangeCallback() {
+                            @Override
+                            public void onSuccess(String message) {
+                            }
+
+                            @Override
+                            public void onError(String message) {
+                                Toast.makeText(Message_Activity.this, "There has been an error while completing your exchange : "+message, Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        Toast.makeText(Message_Activity.this, "There has been an error while sending your message : "+message, Toast.LENGTH_SHORT).show();
+
+
                     }
                 });
+
                 return true ;
             default:
                 return false ;

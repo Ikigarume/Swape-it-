@@ -15,8 +15,10 @@ public class Annonce {
     private String number ;
     private int etat ;
     private int favorite ;
+    private int id_user ;
 
     public Annonce(int id_annonce, String login, String photo_de_profil, String chemin_image, String titre, String description,float note, int nbr_vote, String id_categories,String number, int etat, int favorite){
+        this.id_user = 0 ;
         this.id_annonce = id_annonce;
         this.description = description;
         this.photo_de_profil = photo_de_profil;
@@ -31,6 +33,23 @@ public class Annonce {
         this.favorite = favorite;
     }
 
+    public Annonce(int id_annonce, int id_user, String login, String photo_de_profil, String chemin_image, String titre, String description,float note, int nbr_vote, String id_categories,String number, int etat, int favorite){
+        this.id_user = id_user ;
+        this.id_annonce = id_annonce;
+        this.description = description;
+        this.photo_de_profil = photo_de_profil;
+        this.chemin_image = chemin_image;
+        this.login = login;
+        this.note = note;
+        this.titre = titre ;
+        this.nbr_vote = nbr_vote;
+        this.id_categories = id_categories;
+        this.number = number ;
+        this.etat = etat ;
+        this.favorite = favorite;
+    }
+
+    public int getId_user(){return this.id_user;}
     public int getId_annonce(){ return this.id_annonce ; }
     public String getLogin_utilisateur(){
         return this.login;

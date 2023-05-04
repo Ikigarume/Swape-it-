@@ -609,6 +609,7 @@ public class Myrequest {
 
                                 JSONObject object = array.getJSONObject(i);
                                 String login = object.getString("login");
+                                int id_utilisateur = object.getInt("id_utilisateur");
                                 String photo_de_profil = object.getString("photo_de_profil");
                                 String chemin_image = object.getString("chemin_image");
                                 String titre = object.getString("titre");
@@ -628,7 +629,7 @@ public class Myrequest {
                                     favorite = 0 ;
                                 }
 
-                                Annonce annonce = new Annonce(id_annonce,login, photo_de_profil, chemin_image,titre, description, rating, nbr_vote,id_categories,number,0, favorite);
+                                Annonce annonce = new Annonce(id_annonce,id_utilisateur,login, photo_de_profil, chemin_image,titre, description, rating, nbr_vote,id_categories,number,0, favorite);
                                 Annonces.add(annonce);
 
                                 callback.onSucces("Informations downloaded successfully.");

@@ -125,6 +125,7 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.MyViewHo
                     currentAnnonce = (Annonce) Annonces.get(getLayoutPosition());
                     Intent intent = new Intent(context, DetailedOfferActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("id_utilisateur",currentAnnonce.getId_user());
                     intent.putExtra("login", currentAnnonce.getLogin_utilisateur());
                     intent.putExtra("photo_de_profil",currentAnnonce.getPhoto_de_profil());
                     intent.putExtra("photo_annonce",currentAnnonce.getChemin_image());

@@ -88,6 +88,7 @@ public class DetailedOfferActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
+        int id_utilisateur = intent.getIntExtra("id_utilisateur",0);
         String login = intent.getStringExtra("login");
         String photo_de_profil = intent.getStringExtra("photo_de_profil");
         String photo_annonce = intent.getStringExtra("photo_annonce");
@@ -231,6 +232,7 @@ public class DetailedOfferActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),OtherProfileActivity.class);
+                intent.putExtra("id_utilisateur", id_utilisateur);
                 intent.putExtra("user_login",login);
                 intent.putExtra("user_image",photo_de_profil);
                 intent.putExtra("user_note", note);

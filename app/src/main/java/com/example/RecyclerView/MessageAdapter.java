@@ -9,29 +9,34 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.view.menu.MenuView;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.database_animals.Annonce;
+import com.android.volley.RequestQueue;
 import com.example.database_animals.Message;
 import com.example.tp2_rimaoui.R;
+import com.example.tp2_rimaoui.ServeurIP;
+import com.example.tp2_rimaoui.SessionManager;
+import com.example.tp2_rimaoui.VolleySingleton;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import myrequestt.myMessageRequest;
+
 public class MessageAdapter extends RecyclerView.Adapter {
 
 
-
+    private SessionManager sessionManager ;
+    private RequestQueue queue ;
+    private myMessageRequest request ;
     private static final int VIEW_TYPE_TEXT_MESSAGE_SENT = 1 ;
     private static final int VIEW_TYPE_IMAGE_MESSAGE_SENT = 2 ;
     private static final int VIEW_TYPE_TEXT_MESSAGE_RECEIVED = 3 ;
@@ -114,7 +119,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
         Message msg = (Message) Messages.get(position);
         switch (holder.getItemViewType()){
             case VIEW_TYPE_TEXT_MESSAGE_SENT:
-                ((SendMessageHolder)holder).bind(msg) ;
+                ((SendMessageHolder)holder).bind(msg,position) ;
                 break ;
             case VIEW_TYPE_IMAGE_MESSAGE_SENT :
                 ((SendImageMessageHolder)holder).bind(msg) ;
@@ -138,6 +143,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
         private final ConstraintLayout Container_SendMessage ;
         private final CardView Container_PostMessage, Container_RatingBar ;
         private final ImageView clearRatingBar ;
+        private final RatingBar ratingBar ;
 
         public SendMessageHolder(@NonNull View itemView) {
             super(itemView);
@@ -149,10 +155,18 @@ public class MessageAdapter extends RecyclerView.Adapter {
             Container_RatingBar = itemView.findViewById(R.id.Container_ratingbar);
             AnnonceText = itemView.findViewById(R.id.textView1);
             clearRatingBar = itemView.findViewById(R.id.clear_ratingbar);
+            ratingBar = itemView.findViewById(R.id.ratingBar);
 
         }
 
-        public void bind(Message msg){
+        public void bind(Message msg, int position){
+            ServeurIP app = (ServeurIP) context;
+            String IPV4_serv = app.getIPV4_serveur();
+            sessionManager = new SessionManager(context) ;
+            queue = VolleySingleton.getInstance(context).getRequestQueue();
+            request = new myMessageRequest(context,queue,IPV4_serv) ;
+
+
             if(msg.getMessageType()==0){
                 Container_PostMessage.setVisibility(GONE);
                 Container_RatingBar.setVisibility(GONE);
@@ -183,10 +197,35 @@ public class MessageAdapter extends RecyclerView.Adapter {
             } else {
                 Container_SendMessage.setVisibility(GONE);
                 Container_PostMessage.setVisibility(GONE);
+                Toast.makeText(context, "position : "+position, Toast.LENGTH_SHORT).show();
                 clearRatingBar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Container_RatingBar.setVisibility(GONE);
+                        Float note = ratingBar.getRating();
+                        request.addRating(otherUserId, note, new myMessageRequest.addRatingCallback() {
+                            @Override
+                            public void onSuccess(String message) {
+                                Toast.makeText(context, "Thanking for rating this user !", Toast.LENGTH_SHORT).show();
+                                request.doneRating(currentUserId, otherUserId, position, new myMessageRequest.doneRatingCallback() {
+                                    @Override
+                                    public void onSuccess(String message) {
+                                        Toast.makeText(context, "deleted from database successfully", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onError(String message) {
+
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onError(String message) {
+                                Toast.makeText(context, "Adding rating error : "+message, Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
                     }
                 });
             }
@@ -320,6 +359,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
         public RatingBarHolder(@NonNull View itemView) {
             super(itemView);
             ratingBar =  itemView.findViewById(R.id.ratingBar);
+
 
         }
 

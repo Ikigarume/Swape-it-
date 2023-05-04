@@ -63,9 +63,10 @@ public class OtherProfileActivity extends AppCompatActivity {
         queue = VolleySingleton.getInstance(this).getRequestQueue();
         request = new Myrequest(this, queue, IPV4_serv);
 
-
         Intent intent = getIntent();
         String login = intent.getStringExtra("user_login");
+
+
         Favoris = request.getFavoris(sessionManager.getPseudo(), new Myrequest.GetFavorisCallback() {
             @Override
             public void onSucces(String message) {
@@ -119,29 +120,11 @@ public class OtherProfileActivity extends AppCompatActivity {
         user_image = findViewById(R.id.profile_image);
         user_ratingBar = findViewById(R.id.ratingBar);
         user_nbr_vote = findViewById(R.id.nbr_vote);
-        messageButton = findViewById(R.id.MessageButton);
-
-        messageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Message_Activity.class);
-                startActivity(intent);
-            }
-        });
-
-        messageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),Message_Activity.class);
-                startActivity(intent);
-            }
-        });
-
-
 
         rv =findViewById(R.id.offers_list);
 
         Intent intent = getIntent();
+        int id_utilisateur = intent.getIntExtra("id_utilisateur",0);
         String login = intent.getStringExtra("user_login");
         String image = intent.getStringExtra("user_image");
         Float note = intent.getFloatExtra("user_note",0.0f);
@@ -153,6 +136,20 @@ public class OtherProfileActivity extends AppCompatActivity {
         user_ratingBar.setRating(note);
         user_nbr_vote.setText("("+nbr_vote+")");
         user_number.setText("+212"+number);
+
+
+
+        messageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),Message_Activity.class);
+                intent.putExtra("otherUserId",id_utilisateur);
+                intent.putExtra("otherUserlogin",login);
+                intent.putExtra("otherUserImg",image);
+                startActivity(intent);
+            }
+        });
+
 
         Favoris = request.getFavoris(sessionManager.getPseudo(), new Myrequest.GetFavorisCallback() {
                     @Override

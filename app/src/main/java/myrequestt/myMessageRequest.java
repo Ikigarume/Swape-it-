@@ -408,6 +408,241 @@ public class myMessageRequest {
         void onError(String message);
     }
 
+    public void markExchange(int currentUserId, int otherUserId, markExchangeCallback callback){
+
+        String url = "http://"+IPV4_serv+"/swapeit/MarkExchange.php" ;
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject json = new JSONObject(response);
+                    Boolean error = json.getBoolean("error");
+
+                    if(!error){
+                        callback.onSuccess("Exchange added successfully");
+
+                    } else {
+                        callback.onError(json.getString("message"));
+
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context,"error"+e,Toast.LENGTH_SHORT);
+                    callback.onError("JSONException");
+                    e.printStackTrace();
+
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("VolleyError");
+                }
+
+
+            }
+        }) {
+            //C'est dans cette méthode qu'on envoie les paramètres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<java.lang.String, java.lang.String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("current_user_id", String.valueOf(currentUserId));
+                map.put("other_user_id", String.valueOf(otherUserId));
+                return map;
+            }
+        } ;
+
+        queue.add(request) ;
+
+    }
+
+    public interface markExchangeCallback{
+        //Si on avait une classe user on aurat fait void onSuccess(User user)
+        void onSuccess(String message);
+        void onError(String message);
+    }
+
+
+    public void cancelExchange(int currentUserId, int otherUserId, cancelExchangeCallback callback){
+
+        String url = "http://"+IPV4_serv+"/swapeit/cancelExchange.php" ;
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject json = new JSONObject(response);
+                    Boolean error = json.getBoolean("error");
+
+                    if(!error){
+                        callback.onSuccess("Exchange added successfully");
+
+                    } else {
+                        callback.onError(json.getString("message"));
+
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context,"error"+e,Toast.LENGTH_SHORT);
+                    callback.onError("JSONException");
+                    e.printStackTrace();
+
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("VolleyError");
+                }
+
+
+            }
+        }) {
+            //C'est dans cette méthode qu'on envoie les paramètres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<java.lang.String, java.lang.String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("current_user_id", String.valueOf(currentUserId));
+                map.put("other_user_id", String.valueOf(otherUserId));
+                return map;
+            }
+        } ;
+
+        queue.add(request) ;
+
+    }
+
+    public interface cancelExchangeCallback{
+        //Si on avait une classe user on aurat fait void onSuccess(User user)
+        void onSuccess(String message);
+        void onError(String message);
+    }
+
+    public void addRating(int currentUserId, float note, addRatingCallback callback){
+
+        String url = "http://"+IPV4_serv+"/swapeit/addRating.php" ;
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject json = new JSONObject(response);
+                    Boolean error = json.getBoolean("error");
+
+                    if(!error){
+                        callback.onSuccess("Exchange added successfully");
+
+                    } else {
+                        callback.onError(json.getString("message"));
+
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context,"error"+e,Toast.LENGTH_SHORT);
+                    callback.onError("JSONException");
+                    e.printStackTrace();
+
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("VolleyError");
+                }
+
+
+            }
+        }) {
+            //C'est dans cette méthode qu'on envoie les paramètres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<java.lang.String, java.lang.String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("user_id", String.valueOf(currentUserId));
+                map.put("star_number", String.valueOf(note));
+                return map;
+            }
+        } ;
+
+        queue.add(request) ;
+
+    }
+
+    public interface addRatingCallback{
+        //Si on avait une classe user on aurat fait void onSuccess(User user)
+        void onSuccess(String message);
+        void onError(String message);
+    }
+
+
+    public void doneRating(int currentUserId, int otherUserId, int position, doneRatingCallback callback){
+
+        String url = "http://"+IPV4_serv+"/swapeit/doneRating.php" ;
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject json = new JSONObject(response);
+                    Boolean error = json.getBoolean("error");
+
+                    if(!error){
+                        callback.onSuccess("Exchange added successfully");
+
+                    } else {
+                        callback.onError(json.getString("message"));
+
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context,"error"+e,Toast.LENGTH_SHORT);
+                    callback.onError("JSONException");
+                    e.printStackTrace();
+
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("VolleyError");
+                }
+
+
+            }
+        }) {
+            //C'est dans cette méthode qu'on envoie les paramètres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<java.lang.String, java.lang.String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("current_user_id", String.valueOf(currentUserId));
+                map.put("other_user_id", String.valueOf(otherUserId));
+                map.put("position", String.valueOf(position));
+                return map;
+            }
+        } ;
+
+        queue.add(request) ;
+
+    }
+
+    public interface doneRatingCallback{
+        //Si on avait une classe user on aurat fait void onSuccess(User user)
+        void onSuccess(String message);
+        void onError(String message);
+    }
+
 
 
 
