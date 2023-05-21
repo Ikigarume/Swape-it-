@@ -145,6 +145,7 @@
                       android:textAllCaps="false"
                       android:textColor="#255355"
                       android:textStyle="bold"
+                      android:clickable="true"
                       />
 
                   <Button

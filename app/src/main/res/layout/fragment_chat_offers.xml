@@ -20,6 +20,7 @@
         android:fontFamily="@font/comfortaa_regular"
         android:textSize="30sp"
         android:textStyle="bold"
+        android:labelFor="@+id/my_profile_Offers"
         android:layout_marginHorizontal="20dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

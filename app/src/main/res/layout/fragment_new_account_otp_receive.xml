@@ -54,7 +54,7 @@
                     android:layout_width="90dp"
                     android:layout_height="90dp"
                     android:layout_marginTop="20dp"
-                    android:contentDescription="@string/app_name"
+                    android:contentDescription="null"
                     android:src="@drawable/icone_receive" />
 
                 <TextView
@@ -219,6 +219,7 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="15dp"
                             android:minHeight="52dp"
+                            android:clickable="true"
                             android:text="Resend code"
                             android:textAllCaps="false"
                             android:textColor="#255355"

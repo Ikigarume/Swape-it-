@@ -21,6 +21,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+            android:focusable="true"
             android:layout_height="match_parent">
 
 
@@ -44,6 +45,7 @@
 
                     <ImageView
                         android:id="@+id/img"
+
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
@@ -51,6 +53,8 @@
 
                     <ImageView
                         android:id="@+id/favorite"
+                        android:clickable="true"
+                        android:contentDescription="add to favorits"
                         android:layout_width="55dp"
                         android:layout_height="55dp"
                         android:layout_marginEnd="25dp"
@@ -97,7 +101,9 @@
 
                     <TextView
                         android:id="@+id/login_user"
+                        android:contentDescription="pseudo"
                         android:layout_width="wrap_content"
+                        android:nextFocusLeft="@+id/ratingBar"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dp"
                         android:fontFamily="@font/comfortaa_regular"
@@ -126,6 +132,8 @@
                     android:layout_height="50dp"
                     android:isIndicator="true"
                     android:numStars="5"
+                    android:contentDescription="3 out of 5 stars"
+                    android:nextFocusDown="@+id/nbr_vote"
                     android:progressBackgroundTint="@color/gray1"
                     android:progressTint="#Ffd700"
                     android:rating="3"
@@ -140,6 +148,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/cambria"
                     android:text="X votes"
+                    android:nextFocusDown="@+id/titre_annonce"
                     android:textSize="17dp"
                     />
             </LinearLayout>
@@ -162,6 +171,7 @@
                     android:textStyle="bold"
                     android:textSize="20dp"
                     android:textColor="@color/black"
+                    android:nextFocusDown="@+id/description_annonce"
                     android:fontFamily="@font/cambria"
                     android:text="Titre de l'annonce"/>
                 <TextView
