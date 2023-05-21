@@ -38,6 +38,7 @@
 
             <Button
                 android:id="@+id/imagemore"
+                android:contentDescription="more"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"
@@ -76,6 +77,8 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="15dp"
                 android:orientation="vertical"
+                android:focusable="true"
+                android:focusableInTouchMode="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +91,7 @@
                     android:layout_width="135dp"
                     android:layout_height="135dp"
                     android:layout_gravity="center_horizontal"
-
+                    android:contentDescription="profile image"
                     android:src="@drawable/chien"
                     app:civ_border_color="#00000000"
                     app:civ_border_width="0dp"
@@ -96,9 +99,6 @@
                     app:layout_constraintHorizontal_bias="0.044"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-
-
 
 
                 <LinearLayout
@@ -131,7 +131,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
-                        android:text="060606060606 "
+                        android:text="+21206060606 "
                         android:textColor="@color/black"
                         android:textSize="14dp"
                         android:layout_marginBottom="4dp"
@@ -160,6 +160,7 @@
 
                         <TextView
                             android:id="@+id/nbr_vote"
+                            android:contentDescription="number of raters"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="(10)"
@@ -176,6 +177,7 @@
                 android:id="@+id/frameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusableInTouchMode="false"
                 app:layout_constraintTop_toBottomOf="@id/container_info"
                 android:layout_marginVertical="10dp"
                 />

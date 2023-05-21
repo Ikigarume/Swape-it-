@@ -19,8 +19,10 @@
         android:id="@+id/imageBack"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:clickable="true"
         android:layout_marginTop="16dp"
         android:layout_marginStart="40dp"
+        android:contentDescription="previous"
         android:background="@drawable/ic_back_background"
         android:src="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,6 +45,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
             android:layout_marginBottom="20dp">
 
 
@@ -60,6 +63,7 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profile_image"
                     android:layout_width="140dp"
+                    android:contentDescription="profile image"
                     android:layout_height="140dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="14dp"
@@ -142,6 +146,7 @@
                     android:id="@+id/MessageButton"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
+                    android:contentDescription="send a message"
                     android:layout_marginHorizontal="10dp"
                     android:background="@drawable/round_button"
                     android:backgroundTint="@color/light_peche"
@@ -192,6 +197,7 @@
                 android:textSize="30sp"
                 android:textStyle="bold"
                 android:textColor="#CC7237"
+                android:labelFor="@+id/offers_list"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -201,6 +207,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="15dp"
+                android:contentDescription="your offers"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_offers" />

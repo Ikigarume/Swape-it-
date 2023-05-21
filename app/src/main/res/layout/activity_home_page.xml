@@ -47,6 +47,7 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
                 android:layout_width="60dp"
+                android:contentDescription="your profile "
                 android:layout_height="60dp"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/chien"
@@ -99,6 +100,7 @@
 
                 <TextView
                     android:id="@+id/Annonces"
+                    android:labelFor="@+id/list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/linearseach"
@@ -117,6 +119,7 @@
                     android:layout_width="120dp"
                     android:layout_height="50dp"
                     android:text="New Post"
+                    android:contentDescription="new post"
                     android:fontFamily="@font/comfortaa_regular"
                     android:textStyle="bold"
                     android:textColor="@color/dark_blue"
@@ -132,7 +135,6 @@
 
 
                 <androidx.recyclerview.widget.RecyclerView
-
                     android:id="@+id/list"
                     android:layout_marginTop="20dp"
                     app:layout_constraintStart_toStartOf="parent"

@@ -66,6 +66,7 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@drawable/round_button"
+        android:contentDescription="Create Account"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -77,6 +78,7 @@
         android:textStyle="bold"
         android:textSize="16dp"
         android:layout_margin="20dp"
+        android:contentDescription="log in"
         android:textColor="@color/dark_brown"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"

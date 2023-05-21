@@ -33,6 +33,8 @@
 
                 <Button
                     android:id="@+id/imagemore"
+                    android:contentDescription="menu"
+                    android:nextFocusRight="@+id/imageBack"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_marginTop="10dp"
@@ -54,7 +56,9 @@
                     android:layout_marginStart="5dp"
                     android:background="@color/white"
                     android:gravity="center"
+                    android:nextFocusRight="@+id/other_user_profile_image"
                     android:onClick="goingBack"
+                    android:contentDescription="previous"
                     android:src="@drawable/ic_back"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -63,6 +67,8 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/other_user_profile_image"
                     android:layout_width="45dp"
+                    android:nextFocusRight="@+id/discussions_username"
+                    android:contentDescription="profile image"
                     android:layout_height="45dp"
                     android:layout_marginTop="7dp"
                     android:layout_gravity="center_horizontal"
@@ -77,12 +83,12 @@
                     android:id="@+id/discussions_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginStart="20dp"
                     android:fontFamily="@font/comfortaa_regular"
                     android:text="pseudo name"
                     android:textSize="22dp"
+                    android:nextFocusRight="@+id/recycler_gchat"
                     android:paddingBottom="5dp"
                     app:layout_constraintStart_toEndOf="@+id/other_user_profile_image"
                     app:layout_constraintTop_toTopOf="@+id/other_user_profile_image"
@@ -106,6 +112,9 @@
 
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:focusable="true"
+                    android:contentDescription="messages"
+                    android:nextFocusRight="@+id/message_input_field"
                     android:id="@+id/recycler_gchat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -147,7 +156,9 @@
                     android:id="@+id/message_input_field"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
+                    android:contentDescription="Type your message"
                     android:paddingEnd="30dp"
+                    android:nextFocusRight="@+id/send_button"
                     android:layout_alignParentEnd="true"
                     android:background="@drawable/round_edittext_messages"
                     android:backgroundTint="@color/light_peche"
@@ -161,6 +172,7 @@
                     android:id="@+id/send_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:nextFocusRight="@+id/upload_picture_button"
                     android:layout_alignEnd="@id/message_input_field"
                     android:layout_alignBottom="@id/message_input_field"
                     android:layout_marginEnd="18dp"
@@ -179,20 +191,23 @@
                 android:id="@+id/upload_picture_button"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:nextFocusRight="@+id/take_picture_button"
                 android:layout_gravity="center_vertical"
                 android:clickable="true"
-                android:contentDescription="Upload images or videos button"
+                android:contentDescription="Upload images from gallery"
                 android:onClick="onUploadButtonClick"
                 android:src="@drawable/gallary_icon"
                  />
 
             <ImageView
                 android:id="@+id/take_picture_button"
+                android:nextFocusRight="@+id/imagemore"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:clickable="true"
                 android:onClick="onUploadButtonClick"
+                android:contentDescription="take a picture"
                 android:src="@drawable/camera_icon"
                 />
 

@@ -25,6 +25,7 @@
         android:text="Categorie"
         android:textSize="15dp"
         android:textColor="@color/dark_blue"
+        android:nextFocusRight="@+id/categorie_name"
         android:fontFamily="@font/comfortaa_regular"/>
 
     </androidx.cardview.widget.CardView>

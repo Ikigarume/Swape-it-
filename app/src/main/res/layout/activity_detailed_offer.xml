@@ -12,20 +12,18 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-
-
-
+            android:layout_height="match_parent"
+            >
         <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imageBack"
+                android:contentDescription="back button"
                 android:layout_width="41dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginStart="20dp"
                 android:background="@drawable/ic_back_background"
                 android:padding="5dp"
+            android:nextFocusRight="@+id/details"
                 android:src="@drawable/ic_back"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -33,11 +31,13 @@
 
         <TextView
                 android:id="@+id/details"
+            android:nextFocusRight="@+id/icone_favorie"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:fontFamily="@font/cambria"
                 android:text="Details"
+                android:contentDescription="offer's details"
                 android:textColor="@color/dark_blue"
                 android:textSize="25dp"
                 android:textStyle="bold"
@@ -47,6 +47,9 @@
 
         <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/icone_favorie"
+                android:contentDescription="favorite"
+                android:clickable="true"
+                android:nextFocusRight="@+id/completed_text"
                 android:layout_marginTop="-22dp"
                 android:layout_width="100dp"
                 android:layout_height="90dp"
@@ -83,6 +86,7 @@
                 android:fontFamily="@font/cambria"
                 android:text="COMPLETED"
                 android:textSize="18dp"
+                android:nextFocusRight="@+id/offer_title"
                 android:textStyle="bold"
                 android:textColor="#DC143C"
                 app:layout_constraintTop_toTopOf="parent"
@@ -93,6 +97,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cambria"
+                android:nextFocusRight="@+id/imgGallery"
+                android:contentDescription="exchange or charity"
                 android:text="Exchange"
                 android:textSize="16dp"
                 android:textColor="@color/dark_gray"
@@ -106,6 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cambria"
+                android:nextFocusRight="@+id/type_post"
                 android:text="Titre de l'annonce"
                 android:textColor="@color/dark_blue"
                 android:textSize="35dp"
@@ -118,6 +125,9 @@
                 android:id="@+id/icone_map"
                 android:layout_width="70dp"
                 android:layout_height="80dp"
+                android:clickable="true"
+                android:nextFocusRight="@+id/imageBack"
+                android:contentDescription="location"
                 android:src="@drawable/icon_map"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/offer_title"
@@ -128,6 +138,7 @@
                 android:id="@+id/devider1"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:focusable="false"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="10dp"
                 android:background="@color/gray1"
@@ -157,6 +168,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:scaleType="fitXY"
+                        android:nextFocusRight="@+id/owner_profile_image"
+                        android:contentDescription="your selected image"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -179,6 +192,9 @@
                     android:id="@+id/owner_profile_image"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
+                    android:clickable="true"
+                    android:nextFocusRight="@+id/owner_username"
+                    android:contentDescription="offer owner's profile"
                     android:layout_marginLeft="05dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/chien" />
@@ -188,6 +204,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
+                    android:nextFocusRight="@+id/ratingBar"
                     android:fontFamily="@font/comfortaa_regular"
                     android:gravity="bottom"
                     android:text="Login"
@@ -201,7 +218,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="47dp"
                 android:layout_marginLeft="20dp"
+                android:contentDescription="3 out of 5 stars"
                 android:isIndicator="true"
+                android:nextFocusRight="@+id/nbr_vote"
                 android:numStars="5"
                 android:rating="3"
                 android:scaleX="0.6"
@@ -213,8 +232,10 @@
                 android:id="@+id/nbr_vote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="number of rates"
                 android:text="(10)"
                 android:textSize="16dp"
+                android:nextFocusRight="@+id/offer_description_detailed"
                 android:layout_marginLeft="-30dp"
                 app:layout_constraintStart_toEndOf="@id/ratingBar"
                 app:layout_constraintTop_toTopOf="@id/ratingBar"
@@ -230,12 +251,14 @@
                 android:text="Description details, this is where you put the detailes of your offer"
                 android:textColor="@color/dark_blue"
                 android:textSize="17dp"
+                android:nextFocusRight="@+id/categories"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
 
             <View
                 android:id="@+id/divider2"
+                android:focusable="false"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="20dp"
@@ -248,15 +271,17 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/categories"
+                android:focusable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
                 android:orientation="vertical"
-
+                android:contentDescription="categories"
                 android:padding="05dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divider2" />
+                app:layout_constraintTop_toBottomOf="@id/divider2"
+                android:nextFocusRight="@+id/icone_map"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
