@@ -231,6 +231,10 @@ public class myMessageRequest {
                                     String messageBody = msg.getString("messageBody");
                                     String messageTime = msg.getString("messageDate");
                                     int messageType = msg.getInt("messageType");
+                                    if(messageType==1){
+                                        messageBody = "http://"+IPV4_serv+"/SwapeIt/"+messageBody;
+                                    }
+
                                     Message m = new Message(idMessage, idSender,idReceiver,messageBody,messageTime,messageType);
                                     allMessages.add(m);
 
@@ -290,6 +294,9 @@ public class myMessageRequest {
                                 String messageBody = msg.getString("messageBody");
                                 String messageTime = msg.getString("messageDate");
                                 int messageType = msg.getInt("messageType");
+                                if(messageType==1){
+                                    messageBody = "http://"+IPV4_serv+"/SwapeIt/"+messageBody;
+                                }
                                 Message m = new Message(idMessage, idSender, idReceiver, messageBody, messageTime, messageType);
                                 NewMessages.add(m);
                             }

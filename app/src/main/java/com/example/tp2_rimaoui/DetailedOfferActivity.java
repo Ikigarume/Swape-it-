@@ -84,9 +84,6 @@ public class DetailedOfferActivity extends AppCompatActivity {
         request = new Myrequest(this, queue, IPV4_serv);
 
 
-
-
-
         Intent intent = getIntent();
         int id_utilisateur = intent.getIntExtra("id_utilisateur",0);
         String login = intent.getStringExtra("login");
@@ -114,7 +111,6 @@ public class DetailedOfferActivity extends AppCompatActivity {
         Cardprincipal = findViewById(R.id.offer_details_container);
         Imagefavorie = findViewById(R.id.icone_favorie);
         Imageback = findViewById(R.id.imageBack);
-
 
 
         Imageback.setOnClickListener(new View.OnClickListener() {
@@ -190,27 +186,35 @@ public class DetailedOfferActivity extends AppCompatActivity {
         if(etat==0){
             Textcompleted.setVisibility(View.INVISIBLE);
             Cardprincipal.setCardBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+        } else if (etat == 1){
+            Textcompleted.setText("CLOSED");
+        } else {
+            Textcompleted.setText("COMPLETED");
         }
+
+
 
 
         Categories = request.getPostsCategories(id_annonce, new Myrequest.GetPostsCategoriesCallback() {
             @Override
             public void onSucces(String message) {
-                CategorieAdapter Cadapter = new CategorieAdapter(getApplicationContext(), Categories);
-                rv.setAdapter(Cadapter);
-                
                 //traitement du type de poste
                 String type = null;
                 for(Categorie categorie : Categories){
                     if(categorie.getNom().equals("Exchange")){
+                        Categories.remove(categorie);
                         type = "Exchange";
                         break ;
                     } else if (categorie.getNom().equals("Donation")) {
+                        Categories.remove(categorie);
                         type ="Donation";
                         break;
                     }
                 }
                 TextpostType.setText(type);
+
+                CategorieAdapter Cadapter = new CategorieAdapter(getApplicationContext(), Categories);
+                rv.setAdapter(Cadapter);
 
             }
 
@@ -231,14 +235,19 @@ public class DetailedOfferActivity extends AppCompatActivity {
         ImageUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),OtherProfileActivity.class);
-                intent.putExtra("id_utilisateur", id_utilisateur);
-                intent.putExtra("user_login",login);
-                intent.putExtra("user_image",photo_de_profil);
-                intent.putExtra("user_note", note);
-                intent.putExtra("user_nbr_vote",nbr_vote);
-                intent.putExtra("number",number);
-                startActivity(intent);
+                if(id_utilisateur== Integer.parseInt(sessionManager.getId())){
+                    Intent intent = new Intent(getApplicationContext(), MyProfileActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), OtherProfileActivity.class);
+                    intent.putExtra("id_utilisateur", id_utilisateur);
+                    intent.putExtra("user_login", login);
+                    intent.putExtra("user_image", photo_de_profil);
+                    intent.putExtra("user_note", note);
+                    intent.putExtra("user_nbr_vote", nbr_vote);
+                    intent.putExtra("number", number);
+                    startActivity(intent);
+                }
             }
         });
 

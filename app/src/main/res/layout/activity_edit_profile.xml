@@ -95,7 +95,7 @@
                         android:id="@+id/profile_image"
                         android:layout_width="135dp"
                         android:layout_height="135dp"
-                        android:src="@drawable/chien"
+                        android:src="@drawable/no_profile_picture"
                         android:layout_marginTop="20dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

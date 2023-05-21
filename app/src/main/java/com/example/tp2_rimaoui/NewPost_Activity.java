@@ -151,7 +151,7 @@ public class NewPost_Activity extends AppCompatActivity {
         completedText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finalEtat = 1 ;
+                finalEtat = 2;
                 completedText.setBackgroundColor(getResources().getColor(R.color.light_peche));
                 uncompletedText.setBackgroundColor(getResources().getColor(R.color.white));
             }
@@ -190,7 +190,11 @@ public class NewPost_Activity extends AppCompatActivity {
             CatList = request.getPostsCategories(id_annonce, new Myrequest.GetPostsCategoriesCallback() {
                 @Override
                 public void onSucces(String message) {
-
+                    for(Categorie cat : CatList){
+                        if(cat.getId()==12 || cat.getId()==13 ){
+                            CatList.remove(cat);
+                        }
+                    }
                     Categories_choisies.addAll(CatList);
                     Cadapter.notifyDataSetChanged();
                 }
@@ -323,8 +327,12 @@ public class NewPost_Activity extends AppCompatActivity {
                     base64Image=cheminImage;
                 }
 
-                String titre = TitrePost.getText().toString().trim();
-                String desc = DescPost.getText().toString().trim();
+                String titre0 = TitrePost.getText().toString().trim();
+                String titre = titre0.replace("'", "''");
+
+                String desc0 = DescPost.getText().toString().trim();
+                String desc = desc0.replace("'", "''");
+
 
                 if (titre.length() > 0 && desc.length() > 0 && base64Image.length() > 0) {
                     loading.setVisibility(View.VISIBLE);

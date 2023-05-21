@@ -162,9 +162,11 @@ public class Home_page extends AppCompatActivity {
                 Favoris = request.getFavoris(sessionManager.getPseudo(), new Myrequest.GetFavorisCallback() {
                     @Override
                     public void onSucces(String message) {
+                        AnnoncesHP = null ;
                         AnnoncesHP = request.getPostsInfo(Favoris, new Myrequest.GetPostsInfoCallback() {
                             @Override
                             public void onSucces(String message) {
+                                app.setAnnoncesHP(AnnoncesHP);
                                 annonceAdapterHP = new AnnonceAdapter(getApplicationContext(), AnnoncesHP);
                                 rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                                 rv.setAdapter(annonceAdapterHP);
@@ -222,6 +224,7 @@ public class Home_page extends AppCompatActivity {
                             Result.add(annonce);
                         }
                     }
+                    app.setAnnoncesHP(Result);
                     annonceAdapterHP = new AnnonceAdapter(getApplicationContext(), Result);
                     rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                     rv.setAdapter(annonceAdapterHP);

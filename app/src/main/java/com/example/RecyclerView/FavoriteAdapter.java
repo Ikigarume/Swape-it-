@@ -65,6 +65,10 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
         if(annonce.getEtat()==0){
             holder.completed_text.setVisibility(View.INVISIBLE);
             holder.principal_cardview.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
+        } else if (annonce.getEtat()==1){
+            holder.completed_text.setText("CLOSED");
+        } else {
+            holder.completed_text.setText("COMPLETED");
         }
 
 

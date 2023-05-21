@@ -250,7 +250,7 @@
                     android:minHeight="40dp"
                     android:padding="15dp"
                     android:paddingLeft="20dp"
-                    android:singleLine="false" />
+                     />
 
             </androidx.cardview.widget.CardView>
 

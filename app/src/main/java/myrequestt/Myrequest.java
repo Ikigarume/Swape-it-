@@ -953,10 +953,9 @@ public class Myrequest {
                                 JSONObject object = array.getJSONObject(i);
                                 String nom = object.getString("nom");
                                 int id = object.getInt("id");
-                                if(id!=12 && id!=13) {
-                                    Categorie categorie = new Categorie(id, nom);
-                                    Categories.add(categorie);
-                                }
+                                Categorie categorie = new Categorie(id, nom);
+                                Categories.add(categorie);
+
                             }
                             callback.onSucces("Informations downloaded successfully.");
 

@@ -31,7 +31,7 @@
                 android:layout_height="65dp"
                 android:layout_marginLeft="05dp"
                 android:layout_marginTop="8dp"
-                android:src="@drawable/chien"
+                android:src="@drawable/no_profile_picture"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 />
@@ -64,18 +64,6 @@
                 app:layout_constraintStart_toEndOf="@id/other_user_profile_image"
                 />
 
-            <TextView
-                android:id="@+id/discussions_date"
-                android:layout_marginLeft="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/comfortaa_regular"
-                android:text="date"
-                android:textSize="14dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                />
 
 
 

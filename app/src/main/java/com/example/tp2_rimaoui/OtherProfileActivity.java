@@ -52,6 +52,7 @@ public class OtherProfileActivity extends AppCompatActivity {
     private List<Integer> Favoris ;
     private RequestQueue queue;
     private Myrequest request ;
+    private ImageView imageBack;
 
     @Override
     protected void onResume() {
@@ -120,6 +121,7 @@ public class OtherProfileActivity extends AppCompatActivity {
         user_image = findViewById(R.id.profile_image);
         user_ratingBar = findViewById(R.id.ratingBar);
         user_nbr_vote = findViewById(R.id.nbr_vote);
+        imageBack = findViewById(R.id.imageBack);
 
         rv =findViewById(R.id.offers_list);
 
@@ -137,7 +139,12 @@ public class OtherProfileActivity extends AppCompatActivity {
         user_nbr_vote.setText("("+nbr_vote+")");
         user_number.setText("+212"+number);
 
-
+        imageBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         messageButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,8 +46,11 @@ import com.example.database_animals.Annonce;
 import com.example.database_animals.Message;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,6 +64,7 @@ public class Message_Activity extends AppCompatActivity implements PopupMenu.OnM
 
     private ImageView otherUserProfileImage ;
     private int Sender_LastIdMessage = 0 ;
+    private String SentImagePath = null ;
     private int ExchangeState = 0 ;
     private FrameLayout fl ;
     private View view;
@@ -274,6 +279,8 @@ public class Message_Activity extends AppCompatActivity implements PopupMenu.OnM
                 );
             }
         });
+
+        /*
         ActivityResultLauncher<Intent> cameratakenPicture =registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                     @Override
@@ -286,6 +293,8 @@ public class Message_Activity extends AppCompatActivity implements PopupMenu.OnM
                     }
                 }
         ) ;
+
+
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -295,26 +304,80 @@ public class Message_Activity extends AppCompatActivity implements PopupMenu.OnM
             }
         });
 
-        ActivityResultLauncher<Intent> activityResultLauncher =registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+         */
+
+        // this part allows to send images in the conversation
+        ActivityResultLauncher<Intent> activityResultLauncher =
+                registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if(result.getResultCode() == Activity.RESULT_OK){
                             Intent data = result.getData();
                             Uri uri = data.getData();
-                            Intent intent = new Intent(Message_Activity.this, DisplayImg_Activity.class);
-                            intent.putExtra("imageUri", uri.toString());
-                            startActivity(intent);
+                            try {
+                                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
+                                ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+                                String base64Image = null;
+                                if(bitmap!= null) {
+                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArray);
+                                    byte[] bytes = byteArray.toByteArray();
+                                    base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
+                                }
+                                request.sendTextMessage(currentUserId, otherUserId, base64Image, 1, new myMessageRequest.SendTextMessageCallBack() {
+                                    @Override
+                                    public void onSucces(String message) {
+                                        getSentImage(IPV4_serv, currentUserId, otherUserId, new GetSentImageCallback() {
+                                            @Override
+                                            public void onSucces(String message) {
+                                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                                Date date = new Date();
+                                                String heureActuelle = dateFormat.format(date);
+                                                Message msg = new Message(currentUserId, otherUserId, SentImagePath, heureActuelle, 1 );
+                                                messages.add(msg);
+                                                myAdapter.notifyDataSetChanged();
+                                                nestedScrollView.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        // Faire défiler le NestedScrollView jusqu'à la fin
+                                                        nestedScrollView.fullScroll(View.FOCUS_DOWN);
+                                                    }
+                                                });
+
+                                            }
+
+                                            @Override
+                                            public void inputErrors(Map<String, String> errors) {
+
+                                            }
+
+                                            @Override
+                                            public void onError(String message) {
+
+                                            }
+                                        });
+
+                                    }
+
+                                    @Override
+                                    public void onError(String message) {
+                                        Toast.makeText(Message_Activity.this, "There has been an error", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                //ImgGallery.setImageBitmap(bitmap);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+
+
                         }
                     }
-                }
-        ) ;
+                }) ;
         uploadPictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent selectFromGallery = new Intent(Intent.ACTION_PICK);
-                selectFromGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                activityResultLauncher.launch(selectFromGallery) ;
+            public void onClick(View view) {
+                Intent iGallery = new Intent(Intent.ACTION_PICK);
+                iGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                activityResultLauncher.launch(iGallery);
             }
         });
 
@@ -568,6 +631,80 @@ public class Message_Activity extends AppCompatActivity implements PopupMenu.OnM
             default:
                 return false ;
         }
+
+
+
+    }
+
+    private void getSentImage(String IPV4_serv,int currentUserId, int otherUserId, GetSentImageCallback
+            callback){
+        String BASE_URL = "http://"+IPV4_serv+"/swapeit/getSentImage.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, BASE_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONObject json = new JSONObject(response);
+                            Boolean error = json.getBoolean("error");
+                            if(!error){
+                                SentImagePath = json.getString("path");
+                            } else {
+                                String message = json.getString("message");
+                                Toast.makeText(Message_Activity.this, message, Toast.LENGTH_SHORT).show();
+                            }
+
+                            callback.onSucces("Informations downloaded successfully.");
+
+                            //Toast.makeText(Home_page.this, "piste1 :"+cheminImage, Toast.LENGTH_SHORT).show();
+
+
+
+
+                        }catch (Exception e){
+                            callback.onError("Volley Error.");
+                            //Toast.makeText(Home_page.this, "Volley Error", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(Home_page.this, error.toString(),Toast.LENGTH_LONG).show();
+                Log.d("APP","ERROR :"+error);
+
+                if(error instanceof NetworkError){
+                    callback.onError("Impossible de se connecter");
+                } else if(error instanceof VolleyError){
+                    callback.onError("Une erreur s'est produite");
+                }
+
+            }
+        }){
+            //C'est dans cette mÃ©thode qu'on envoie les paramÃ¨tres que l'on veut tester dans le script PHP
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> map = new HashMap<>();
+                map.put("serveurIP", IPV4_serv); // Ajoutez ce paramètre
+                map.put("current_user_id", String.valueOf(currentUserId)) ;
+                map.put("other_user_id", String.valueOf(otherUserId)) ;
+                return map;
+            }
+        };
+
+        Volley.newRequestQueue(this).add(stringRequest);
+
+
+    }
+
+
+
+    public interface GetSentImageCallback{
+        void onSucces(String message);
+        void inputErrors(Map<String,String> errors);
+        void onError(String message);
     }
 
 

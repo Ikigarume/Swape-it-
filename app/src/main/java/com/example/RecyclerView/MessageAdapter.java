@@ -197,7 +197,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
             } else {
                 Container_SendMessage.setVisibility(GONE);
                 Container_PostMessage.setVisibility(GONE);
-                Toast.makeText(context, "position : "+position, Toast.LENGTH_SHORT).show();
                 clearRatingBar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -210,7 +209,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
                                 request.doneRating(currentUserId, otherUserId, position, new myMessageRequest.doneRatingCallback() {
                                     @Override
                                     public void onSuccess(String message) {
-                                        Toast.makeText(context, "deleted from database successfully", Toast.LENGTH_SHORT).show();
                                     }
 
                                     @Override

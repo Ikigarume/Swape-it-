@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/imageBack"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -63,7 +63,7 @@
                     android:layout_height="140dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="14dp"
-                    android:src="@drawable/chien"/>
+                    android:src="@drawable/no_profile_picture"/>
 
             </RelativeLayout>
 
@@ -86,7 +86,7 @@
                     android:baselineAligned="false"
                     android:fontFamily="@font/comfortaa_regular"
                     android:padding="10dp"
-                    android:text="Juliana Silva"
+                    android:text="Pseudo Name"
                     android:textColor="@color/dark_blue"
                     android:textSize="20dp"
                     android:textStyle="bold"
