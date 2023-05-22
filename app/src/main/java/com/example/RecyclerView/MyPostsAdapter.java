@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -58,7 +59,7 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
 
         Annonce annonce= (Annonce) Annonces.get(position);
         holder.titre_annonce.setText(annonce.getTitre());
-        holder.desc_annonce.setText(annonce.getDescription());
+        //holder.desc_annonce.setText(annonce.getDescription());
         Picasso.get()
                 .load(annonce.getChemin_image())
                 .placeholder(R.drawable.placeholder)
@@ -72,11 +73,7 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
         } else {
             holder.completed_text.setText("COMPLETED");
         }
-        if(annonce.getFavorite()==1){
-            holder.favorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.favorite_gold));
-        } else {
-            holder.favorite.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.favorite_gray));
-        }
+
 
 
     }
@@ -84,11 +81,9 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
     public class MyViewHolder extends RecyclerView.ViewHolder  {
 
         private final TextView titre_annonce;
-        private final TextView desc_annonce;
         private final ImageView photo_annonce ;
         private final TextView completed_text ;
         private final CardView principal_cardview ;
-        private final ImageView favorite ;
         private Annonce currentAnnonce;
 
 
@@ -96,11 +91,11 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
         public MyViewHolder(final View itemView) {
             super(itemView);
             titre_annonce = itemView.findViewById(R.id.offer_title);
-            desc_annonce=  itemView.findViewById(R.id.description_annonce);
+            //desc_annonce=  itemView.findViewById(R.id.description_annonce);
             photo_annonce = itemView.findViewById(R.id.img);
             completed_text = itemView.findViewById(R.id.completed_text);
             principal_cardview = itemView.findViewById(R.id.principal_cardview);
-            favorite = itemView.findViewById(R.id.favorite);
+            //favorite = itemView.findViewById(R.id.favorite);
 
 
             //         itemView.setOnClickListener(this);
@@ -111,6 +106,7 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.MyViewHo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Toast.makeText(context, "you clicked on me", Toast.LENGTH_SHORT).show();
 
                     currentAnnonce = (Annonce) Annonces.get(getLayoutPosition());
                     Intent intent = new Intent(context, DetailedOfferActivity.class);

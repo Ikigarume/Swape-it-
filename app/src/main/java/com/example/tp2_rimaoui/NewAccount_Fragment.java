@@ -1,7 +1,6 @@
 package com.example.tp2_rimaoui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -105,7 +104,7 @@ public class NewAccount_Fragment extends Fragment {
                         @Override
                         public void onSucces(String message) {
                             progressbar.setVisibility(View.GONE);
-                            NewAccount_OTP_Send_Fragment fragmentB = new NewAccount_OTP_Send_Fragment();
+                            OTP_Send_Fragment fragmentB = new OTP_Send_Fragment();
                             Bundle args = new Bundle();
                             args.putString("pseudo", pseudo);
                             args.putString("password", password);

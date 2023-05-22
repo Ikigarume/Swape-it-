@@ -97,18 +97,27 @@ public class ChatPostsAdapter extends RecyclerView.Adapter<ChatPostsAdapter.MyVi
             desc_annonce=  itemView.findViewById(R.id.description_annonce);
             photo_annonce = itemView.findViewById(R.id.img);
 
-
-
-            //         itemView.setOnClickListener(this);
-            //  item = (TextView) itemView.findViewById(R.id.row_item);
-
-
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     currentAnnonce = (Annonce) Annonces.get(getLayoutPosition());
+                    Intent intent = new Intent(context, DetailedOfferActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("login", currentAnnonce.getLogin_utilisateur());
+                    intent.putExtra("photo_de_profil",currentAnnonce.getPhoto_de_profil());
+                    intent.putExtra("photo_annonce",currentAnnonce.getChemin_image());
+                    intent.putExtra("titre",currentAnnonce.getTitre());
+                    intent.putExtra("description",currentAnnonce.getDescription());
+                    intent.putExtra("note",currentAnnonce.getNote());
+                    intent.putExtra("nbr_vote",currentAnnonce.getNbr_vote());
+                    intent.putExtra("id_annonce", currentAnnonce.getId_annonce());
+                    intent.putExtra("number", currentAnnonce.getNumber());
+                    intent.putExtra("etat",currentAnnonce.getEtat());
+                    intent.putExtra("favorite", currentAnnonce.getFavorite());
+                    
+                    context.startActivity(intent);
+
 
 
                 }

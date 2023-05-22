@@ -26,10 +26,10 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link NewAccount_OTP_Send_Fragment#newInstance} factory method to
+ * Use the {@link OTP_Send_Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewAccount_OTP_Send_Fragment extends Fragment {
+public class OTP_Send_Fragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,7 +45,7 @@ public class NewAccount_OTP_Send_Fragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public NewAccount_OTP_Send_Fragment() {
+    public OTP_Send_Fragment() {
         // Required empty public constructor
     }
 
@@ -58,8 +58,8 @@ public class NewAccount_OTP_Send_Fragment extends Fragment {
      * @return A new instance of fragment BlankFragment2.
      */
     // TODO: Rename and change types and number of parameters
-    public static NewAccount_OTP_Send_Fragment newInstance(String param1, String param2) {
-        NewAccount_OTP_Send_Fragment fragment = new NewAccount_OTP_Send_Fragment();
+    public static OTP_Send_Fragment newInstance(String param1, String param2) {
+        OTP_Send_Fragment fragment = new OTP_Send_Fragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -144,7 +144,7 @@ public class NewAccount_OTP_Send_Fragment extends Fragment {
                 resendToken = token;
 
 
-                NewAccount_OTP_Receive_Fragment fragmentB = new NewAccount_OTP_Receive_Fragment();
+                OTP_Receive_Fragment fragmentB = new OTP_Receive_Fragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("storedVerificationId",storedVerificationId); //ajouter des données dans le bundle
                 bundle.putString("pseudo", pseudo);

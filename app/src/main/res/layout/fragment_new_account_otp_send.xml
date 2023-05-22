@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/orange_gradient_background"
-    tools:context=".NewAccount_OTP_Send_Fragment"
+    tools:context=".OTP_Send_Fragment"
     android:accessibilityTraversalBefore="@+id/imageView"
     android:accessibilityTraversalAfter="@+id/button_get_otp">
 

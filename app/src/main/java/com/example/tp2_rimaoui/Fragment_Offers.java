@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
+import com.example.RecyclerView.FavAdapter;
 import com.example.RecyclerView.MyPostsAdapter;
 import com.example.database_animals.Annonce;
 

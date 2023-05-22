@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/orange_gradient_background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".NewAccount_OTP_Receive_Fragment">
+    tools:context=".OTP_Receive_Fragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

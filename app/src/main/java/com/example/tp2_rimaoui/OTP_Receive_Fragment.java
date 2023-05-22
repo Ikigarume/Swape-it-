@@ -30,10 +30,10 @@ import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link NewAccount_OTP_Receive_Fragment#newInstance} factory method to
+ * Use the {@link OTP_Receive_Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewAccount_OTP_Receive_Fragment extends Fragment {
+public class OTP_Receive_Fragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -58,7 +58,7 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
         }
     }
 
-    public NewAccount_OTP_Receive_Fragment() {
+    public OTP_Receive_Fragment() {
         // Required empty public constructor
     }
 
@@ -71,8 +71,8 @@ public class NewAccount_OTP_Receive_Fragment extends Fragment {
      * @return A new instance of fragment NewAccount_OTP_Receive_Fragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NewAccount_OTP_Receive_Fragment newInstance(String param1, String param2) {
-        NewAccount_OTP_Receive_Fragment fragment = new NewAccount_OTP_Receive_Fragment();
+    public static OTP_Receive_Fragment newInstance(String param1, String param2) {
+        OTP_Receive_Fragment fragment = new OTP_Receive_Fragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

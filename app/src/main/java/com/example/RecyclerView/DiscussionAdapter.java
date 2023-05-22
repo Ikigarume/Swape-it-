@@ -67,8 +67,6 @@ public class DiscussionAdapter extends RecyclerView.Adapter<DiscussionAdapter.My
 
 
 
-
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView username ;
@@ -87,7 +85,8 @@ public class DiscussionAdapter extends RecyclerView.Adapter<DiscussionAdapter.My
                 public void onClick(View view){
                     currentDiscussion = (Discussion) discussions.get(getLayoutPosition())   ;
                     Intent intent = new Intent(context, Message_Activity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Toast.makeText(context, "You clicked on me", Toast.LENGTH_SHORT).show();
+
                     intent.putExtra("otherUserId",currentDiscussion.getOtherChatterId()) ;
                     intent.putExtra("otherUserlogin",currentDiscussion.getOtherChatter());
                     intent.putExtra("otherUserImg",currentDiscussion.getImg_rep());

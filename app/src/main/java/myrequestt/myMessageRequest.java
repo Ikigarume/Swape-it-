@@ -181,7 +181,6 @@ public class myMessageRequest {
                     public void onErrorResponse(VolleyError error) {
                         Log.d("APP","ERROR :"+error);
 
-                        Toast.makeText(context, "this is teh ErrorListner of sndMsg ", Toast.LENGTH_SHORT).show();
                         if(error instanceof NetworkError){
                             callBack.onError("Impossible de se connecter");
                         } else if(error instanceof VolleyError){
@@ -333,7 +332,6 @@ public class myMessageRequest {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, "this is teh middle of ErrorListener of getMsg" , Toast.LENGTH_SHORT).show();
                         callBack.onError("a connection problem has occured please wait");
                     }
                 }){
