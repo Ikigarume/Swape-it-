@@ -38,6 +38,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="25dp"
                     android:paddingVertical="6dp"
+                    android:contentDescription="more options"
                     android:drawableTop="@drawable/ic_more"
                     android:gravity="center"
                     android:onClick="showPopUpMenu"
@@ -55,6 +56,7 @@
                     android:background="@color/white"
                     android:gravity="center"
                     android:onClick="goingBack"
+                    android:contentDescription="go back button"
                     android:src="@drawable/ic_back"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -69,6 +71,7 @@
                     android:layout_marginStart="10dp"
                     android:gravity="center_vertical"
                     android:src="@drawable/chien"
+                    android:contentDescription="user's profile image"
                     app:civ_border_color="#00000000"
                     app:civ_border_width="0dp"
                     app:layout_constraintStart_toEndOf="@+id/imageBack"
@@ -152,6 +155,7 @@
                     android:background="@drawable/round_edittext_messages"
                     android:backgroundTint="@color/light_peche"
                     android:hint="Type your message"
+                    android:contentDescription="write a message to this user"
                     android:padding="14dp"
                     android:textSize="16sp"
                     android:inputType="textMultiLine"/>
@@ -181,7 +185,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:clickable="true"
-                android:contentDescription="Upload images or videos button"
+                android:contentDescription="Upload images"
                 android:onClick="onUploadButtonClick"
                 android:src="@drawable/gallary_icon"
                  />
@@ -192,6 +196,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:clickable="true"
+                android:contentDescription="take a picture "
                 android:onClick="onUploadButtonClick"
                 android:src="@drawable/camera_icon"
                 />
