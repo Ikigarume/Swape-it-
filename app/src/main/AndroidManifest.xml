@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".ServeurIP"
@@ -15,12 +17,25 @@
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCT_LCNVYT2Va13akfuo6_0CiUjqxkncTo" />
+
+        <activity
+            android:name=".MapsActivity_NewPost"
+            android:exported="false"
+            android:label="@string/title_activity_maps_new_post" />
+        <activity
+            android:name=".MapsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".DetailedOfferActivity"
             android:exported="false" />
         <activity
             android:name=".Message_Activity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".NewPost_Activity"
             android:exported="false" />
@@ -58,6 +73,7 @@
         <activity
             android:name=".SecondActivity"
             android:exported="false" />
+
         <service
             android:name="com.example.firebase.MessagingService"
             android:exported="false">

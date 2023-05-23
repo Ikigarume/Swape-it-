@@ -54,6 +54,7 @@ public class DetailedOfferActivity extends AppCompatActivity {
     private int annonceid ;
     private ImageView ImageOffer;
     private ImageView ImageUser;
+    private ImageView Localis;
     private TextView Textlogin;
     private TextView Textdesc;
     private RatingBar ratingBar;
@@ -97,7 +98,8 @@ public class DetailedOfferActivity extends AppCompatActivity {
         String number = intent.getStringExtra("number");
         int etat = intent.getIntExtra("etat",0);
         int favorite = intent.getIntExtra("favorite",0);
-
+        double latitude = intent.getDoubleExtra("latitude",0);
+        double longitude = intent.getDoubleExtra("longitude",0);
 
         TextOfferTitle = findViewById(R.id.offer_title);
         ratingBar = findViewById(R.id.ratingBar);
@@ -111,6 +113,25 @@ public class DetailedOfferActivity extends AppCompatActivity {
         Cardprincipal = findViewById(R.id.offer_details_container);
         Imagefavorie = findViewById(R.id.icone_favorie);
         Imageback = findViewById(R.id.imageBack);
+        Localis = findViewById(R.id.icone_map);
+
+        Localis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                    intent.putExtra("id_utilisateur", id_utilisateur);
+                    intent.putExtra("user_login", login);
+                    intent.putExtra("user_image", photo_de_profil);
+                    intent.putExtra("user_note", note);
+                    intent.putExtra("user_nbr_vote", nbr_vote);
+                    intent.putExtra("number", number);
+                    intent.putExtra("latitude",latitude);
+                    intent.putExtra("longitude",longitude);
+                    startActivity(intent);
+
+            }
+        });
 
 
         Imageback.setOnClickListener(new View.OnClickListener() {

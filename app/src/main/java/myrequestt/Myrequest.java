@@ -253,7 +253,7 @@ public class Myrequest {
     }
 
 
-    public void newPost(String pseudo_utilisateur, String titre, String image, String description, ArrayList<Integer> categories, newPostCallback callback ) {
+    public void newPost(String pseudo_utilisateur, String longitude , String latitude,  String titre, String image, String description, ArrayList<Integer> categories, newPostCallback callback ) {
         //URL pour aller chercher le script PHP
         String url = "http://"+IPV4_serv+"/swapeit/newPost.php" ;
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -309,8 +309,8 @@ public class Myrequest {
                 }
                 String categoriesStr = sb.toString();
                 map.put("categories", categoriesStr);
-
-
+                map.put("longitude",longitude);
+                map.put("latitude",latitude);
                 return map;
             }
         } ;
@@ -621,6 +621,8 @@ public class Myrequest {
                                 String id_categories = object.getString("id_categories");
                                 int id_annonce = object.getInt("id_annonce");
                                 String number = object.getString("telephone");
+                                double longitude = object.getDouble("longitude");
+                                double latitude = object.getDouble("latitude");
 
                                 int favorite = 0 ;
                                 if (Favoris.contains(id_annonce)) {
@@ -629,7 +631,7 @@ public class Myrequest {
                                     favorite = 0 ;
                                 }
 
-                                Annonce annonce = new Annonce(id_annonce,id_utilisateur,login, photo_de_profil, chemin_image,titre, description, rating, nbr_vote,id_categories,number,0, favorite);
+                                Annonce annonce = new Annonce(id_annonce,id_utilisateur,login, photo_de_profil, chemin_image,titre, description, rating, nbr_vote,id_categories,number,0, favorite, longitude, latitude);
                                 Annonces.add(annonce);
 
                                 callback.onSucces("Informations downloaded successfully.");

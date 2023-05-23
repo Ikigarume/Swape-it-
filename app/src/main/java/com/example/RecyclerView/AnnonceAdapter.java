@@ -137,9 +137,8 @@ public class AnnonceAdapter extends RecyclerView.Adapter<AnnonceAdapter.MyViewHo
                     intent.putExtra("number", currentAnnonce.getNumber());
                     intent.putExtra("etat",currentAnnonce.getEtat());
                     intent.putExtra("favorite",currentAnnonce.getFavorite());
-
-
-
+                    intent.putExtra("longitude", currentAnnonce.getLongitude());
+                    intent.putExtra("latitude", currentAnnonce.getLatitude());
 
                     context.startActivity(intent);
 

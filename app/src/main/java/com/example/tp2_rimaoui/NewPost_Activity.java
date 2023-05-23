@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -56,6 +57,7 @@ public class NewPost_Activity extends AppCompatActivity {
     private ImageView btnGoBack ;
     private SessionManager  sessionManager ;
     private ImageView ImgGallery;
+    private ImageView localisat;
     private RequestQueue queue ;
     private Myrequest request ;
     private ArrayList<Categorie> CatList ;
@@ -76,6 +78,8 @@ public class NewPost_Activity extends AppCompatActivity {
     private TextView pageTitle ,subTitle, uncompletedText, completedText ;
 
 
+    private String latitude ;
+    private String longitude ;
 
     Bitmap bitmap ;
 
@@ -121,7 +125,21 @@ public class NewPost_Activity extends AppCompatActivity {
         etat_annonce.setVisibility(View.GONE);
         loading.setVisibility(View.INVISIBLE);
 
+        localisat = findViewById(R.id.icone_map);
 
+
+
+
+
+        localisat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getApplicationContext(), MapsActivity_NewPost.class);
+                startActivity(intent);
+
+            }
+        });
 
 
         btnGoBack.setOnClickListener(new View.OnClickListener() {
@@ -300,20 +318,15 @@ public class NewPost_Activity extends AppCompatActivity {
         });
 
 
-
-
         UploadPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
 
                 ArrayList<Integer> categories = new ArrayList<>();
                 for ( Categorie categorie : Categories_choisies ) {
                     categories.add(categorie.getId());
                 }
                 categories.add(TypePost);
-
 
                 String base64Image = null;
                 ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
@@ -339,7 +352,7 @@ public class NewPost_Activity extends AppCompatActivity {
                     UploadPost.setVisibility(View.INVISIBLE);
 
                     if(editMode==0) {
-                        request.newPost(sessionManager.getPseudo(), titre, base64Image, desc, categories, new Myrequest.newPostCallback() {
+                        request.newPost(sessionManager.getPseudo(), longitude, latitude, titre, base64Image, desc, categories, new Myrequest.newPostCallback() {
 
                             @Override
                             public void onSucces(String message) {
@@ -391,16 +404,12 @@ public class NewPost_Activity extends AppCompatActivity {
                             }
                         });
 
-
                     }
                 } else {
                     Toast.makeText(NewPost_Activity.this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-
-
 
     }
 
@@ -428,7 +437,6 @@ public class NewPost_Activity extends AppCompatActivity {
                                 }
                             }
 
-
                         }catch (Exception e){
                             Toast.makeText(NewPost_Activity.this, "Volley Error", Toast.LENGTH_SHORT).show();
 
@@ -455,5 +463,12 @@ public class NewPost_Activity extends AppCompatActivity {
 
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("Login", 0);
+         latitude = pref.getString("latitude", "");
+         longitude = pref.getString("longitude", "");
+        //Toast.makeText(this, "" + latitude + "et ca " + longitude, Toast.LENGTH_SHORT).show();
+    }
 }
