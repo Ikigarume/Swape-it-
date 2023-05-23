@@ -26,4 +26,4 @@ jobs:
         cache: gradle
 
     - name: Build Dev Application
-      run: ./gradlew build
+      run: ./gradlew buildDevDebug
