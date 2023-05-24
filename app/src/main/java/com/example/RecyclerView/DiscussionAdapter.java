@@ -85,7 +85,6 @@ public class DiscussionAdapter extends RecyclerView.Adapter<DiscussionAdapter.My
                 public void onClick(View view){
                     currentDiscussion = (Discussion) discussions.get(getLayoutPosition())   ;
                     Intent intent = new Intent(context, Message_Activity.class);
-                    Toast.makeText(context, "You clicked on me", Toast.LENGTH_SHORT).show();
 
                     intent.putExtra("otherUserId",currentDiscussion.getOtherChatterId()) ;
                     intent.putExtra("otherUserlogin",currentDiscussion.getOtherChatter());

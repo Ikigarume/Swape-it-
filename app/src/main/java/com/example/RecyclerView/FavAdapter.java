@@ -104,7 +104,6 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.MyViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(context, "you clicked on me", Toast.LENGTH_SHORT).show();
 
                     currentAnnonce = (Annonce) AnnoncesFav.get(getLayoutPosition());
                     Intent intent = new Intent(context, DetailedOfferActivity.class);

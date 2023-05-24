@@ -118,14 +118,7 @@ public class DetailedOfferActivity extends AppCompatActivity {
         Localis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                     Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                    intent.putExtra("id_utilisateur", id_utilisateur);
-                    intent.putExtra("user_login", login);
-                    intent.putExtra("user_image", photo_de_profil);
-                    intent.putExtra("user_note", note);
-                    intent.putExtra("user_nbr_vote", nbr_vote);
-                    intent.putExtra("number", number);
                     intent.putExtra("latitude",latitude);
                     intent.putExtra("longitude",longitude);
                     startActivity(intent);

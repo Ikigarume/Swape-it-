@@ -73,6 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = getIntent();
         double latitude = intent.getDoubleExtra("latitude",0);
         double longitude = intent.getDoubleExtra("longitude",0);
+
         LatLng loc = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         myLocationMarker = mMap.addMarker(new MarkerOptions().position(loc).title("My localisation"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15));
@@ -130,6 +131,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMarkerDragStart(@NonNull Marker marker) {
-        Toast.makeText(this, "Lat: " + marker.getPosition().latitude + " Lng: " + marker.getPosition().longitude, Toast.LENGTH_SHORT).show();
     }
 }

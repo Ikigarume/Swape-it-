@@ -95,7 +95,6 @@ public class Fragment_Chat_Offers extends Fragment {
         Annonces = request.getUserChatPosts(sessionManager.getPseudo(), new Myrequest.GetUserChatPostsCallback() {
             @Override
             public void onSucces(String message) {
-
                 myAdapter = new ChatPostsAdapter(getContext(), Annonces, (OnItemClickListener) getActivity());
                 rv.setLayoutManager(new LinearLayoutManager(getContext()));
                 rv.setAdapter(myAdapter);

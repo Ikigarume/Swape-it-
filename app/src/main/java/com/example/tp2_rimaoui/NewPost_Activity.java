@@ -352,7 +352,7 @@ public class NewPost_Activity extends AppCompatActivity {
                     UploadPost.setVisibility(View.INVISIBLE);
 
                     if(editMode==0) {
-                        request.newPost(sessionManager.getPseudo(), longitude, latitude, titre, base64Image, desc, categories, new Myrequest.newPostCallback() {
+                        request.newPost(sessionManager.getPseudo(), latitude, longitude, titre, base64Image, desc, categories, new Myrequest.newPostCallback() {
 
                             @Override
                             public void onSucces(String message) {
