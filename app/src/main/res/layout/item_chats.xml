@@ -31,6 +31,7 @@
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:layout_marginLeft="05dp"
+                android:contentDescription="user's image"
                 android:focusable="true"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/no_profile_picture"

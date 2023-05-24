@@ -98,7 +98,6 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cambria"
                 android:nextFocusRight="@+id/imgGallery"
-                android:contentDescription="exchange or charity"
                 android:text="Exchange"
                 android:textSize="16dp"
                 android:textColor="@color/dark_gray"
